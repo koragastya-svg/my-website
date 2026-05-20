@@ -3209,14 +3209,36 @@
     };
     const memo = document.getElementById('apply-memo')?.value?.trim() || '';
 
-    // 지문 base64 획득
+    // ── 지문 이미지 URL 준비 ──
+    // base64를 leaf_readings에 직접 저장하지 않는다. 원본 파일을 업로드하고 URL만 보관한다.
+    // 업로드가 끝난 뒤에만 insert를 실행해 "1장만 빠지는" 부분 저장 버그를 막는다.
     let fingerprintImage = '';
     try {
-      fingerprintImage = hasNewFile ? await fileToBase64(_fpFile) : _preloadedFpData;
-    } catch(e) { console.error('[fp base64]', e); }
+      if (hasNewFile) {
+        // 새로 첨부한 파일: 원본 그대로 업로드 (압축/리사이즈 없음)
+        fingerprintImage = await uploadFingerprintFile(_fpFile);
+      } else if (typeof _preloadedFpData === 'string' && _preloadedFpData.indexOf('/uploads/') === 0) {
+        // 이미 업로드된 URL이면 그대로 사용
+        fingerprintImage = _preloadedFpData;
+      } else if (typeof _preloadedFpData === 'string' && _preloadedFpData.indexOf('data:') === 0) {
+        // 사전등록 지문이 base64(data:)면 blob으로 변환 후 같은 API로 업로드해 URL만 확보
+        const blob = dataUrlToBlob(_preloadedFpData);
+        if (blob) {
+          const ext = (blob.type && blob.type.split('/')[1]) || 'png';
+          const fname = 'fingerprint.' + (ext === 'jpeg' ? 'jpg' : ext);
+          fingerprintImage = await uploadFingerprintFile(new File([blob], fname, { type: blob.type || 'image/png' }));
+        }
+      }
+    } catch(e) {
+      console.error('[fp upload]', e);
+      Toast.show('지문 이미지 업로드 실패: ' + (e && e.message ? e.message : e), 'error');
+      _isSubmitting = false;
+      if (btn) { btn.disabled = false; btn.textContent = '✦ 신청하기'; }
+      return;
+    }
 
     try {
-      // 지문 이미지는 leaf_readings 첫 번째 row에만 압축 저장합니다.
+      // 지문 이미지 URL은 leaf_readings 첫 번째 row에만 저장한다 (base64 저장 금지).
 
       // ── group_id 생성 (2장 이상이면 묶음 ID, 1장이면 빈 문자열) ──
       const groupId = _cart.length > 1
@@ -3237,7 +3259,7 @@
         appointment_date:  selectedDate,
         payment_status:    '접수중',
         payment_amount:    CHAPTER_PRICES[ch] || 0,
-        fingerprint_image: '',
+        fingerprint_image: idx === 0 ? fingerprintImage : '',
         memo:              memo,
         group_id:          groupId
       }));
@@ -3271,7 +3293,7 @@
     }
   }
 
-  /* 파일을 base64 dataURL로 변환 */
+  /* 파일을 base64 dataURL로 변환 (지문 패널 미리보기 등에서만 사용. 신청 저장에는 사용하지 않음) */
   function fileToBase64(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -3279,6 +3301,42 @@
       reader.onerror = reject;
       reader.readAsDataURL(file);
     });
+  }
+
+  /* 지문 이미지 파일을 원본 그대로 서버에 업로드하고 URL을 반환한다.
+     (압축/리사이즈/base64 저장 없음 — 화질 보존) */
+  async function uploadFingerprintFile(file) {
+    const fd = new FormData();
+    fd.append('fingerprint', file);
+    const res = await fetch(window.location.origin + '/api/upload-fingerprint.php', {
+      method: 'POST',
+      body: fd
+    });
+    let json = null;
+    try { json = await res.json(); } catch(_) { /* 비 JSON 응답 */ }
+    if (!res.ok || !json || !json.success || !json.url) {
+      const msg = (json && json.message) ? json.message : ('HTTP ' + res.status);
+      throw new Error(msg);
+    }
+    return json.url;
+  }
+
+  /* data:base64 dataURL → Blob 변환 (사전등록 base64 지문을 파일 업로드로 전환할 때 사용) */
+  function dataUrlToBlob(dataUrl) {
+    try {
+      const parts = String(dataUrl).split(',');
+      const meta = parts[0] || '';
+      const mimeMatch = meta.match(/data:([^;]+);base64/);
+      const mime = mimeMatch ? mimeMatch[1] : 'image/png';
+      const binary = atob(parts[1] || '');
+      const len = binary.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) bytes[i] = binary.charCodeAt(i);
+      return new Blob([bytes], { type: mime });
+    } catch(e) {
+      console.error('[dataUrlToBlob]', e);
+      return null;
+    }
   }
 
   /* 파일을 간단한 첨부 메모 형태로 변환 (파일명+크기 메모) */
