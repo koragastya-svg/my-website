@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>결제 | 한국 아가스티아 협회</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .payment-wrap {
+      max-width: 680px;
+      margin: 60px auto 100px;
+      padding: 0 20px;
+    }
+    .payment-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+    }
+    .payment-card__header {
+      background: var(--navy);
+      padding: 28px 32px;
+      color: white;
+    }
+    .payment-card__header h2 {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.25rem;
+      font-weight: 400;
+      margin-bottom: 4px;
+    }
+    .payment-card__header p {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.65);
+    }
+    .payment-card__body {
+      padding: 32px;
+    }
+    .info-section {
+      margin-bottom: 28px;
+    }
+    .info-section__title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 9px 0;
+      font-size: 0.85rem;
+      border-bottom: 1px solid #f3f0eb;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-row__label {
+      color: var(--text-light);
+      flex-shrink: 0;
+      min-width: 90px;
+    }
+    .info-row__value {
+      color: var(--text-dark);
+      font-weight: 500;
+      text-align: right;
+      word-break: break-all;
+    }
+    .chapter-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(200,151,58,0.1);
+      color: var(--gold);
+      border: 1px solid rgba(200,151,58,0.3);
+      border-radius: 4px;
+      padding: 3px 10px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin: 2px 3px 2px 0;
+    }
+    .amount-box {
+      background: linear-gradient(135deg, #1a2845 0%, #1e3a5f 100%);
+      border-radius: 10px;
+      padding: 22px 26px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .amount-box__label {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 4px;
+    }
+    .amount-box__price {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: var(--gold);
+      font-family: 'Noto Serif KR', serif;
+    }
+    .amount-box__note {
+      font-size: 0.72rem;
+      color: rgba(255,255,255,0.45);
+      margin-top: 3px;
+    }
+    .bank-box {
+      background: #f8f9fc;
+      border: 1.5px solid #e2c97e;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 20px;
+    }
+    .bank-box__title {
+      font-size: 0.77rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .bank-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 0;
+      font-size: 0.85rem;
+      border-bottom: 1px solid #ede8dc;
+    }
+    .bank-row:last-child { border-bottom: none; }
+    .bank-row__key { color: var(--text-light); }
+    .bank-row__val {
+      font-weight: 600;
+      color: var(--text-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .copy-btn {
+      font-size: 0.68rem;
+      padding: 2px 8px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: white;
+      color: var(--text-mid);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .copy-btn:hover { background: var(--gold); color: white; border-color: var(--gold); }
+    .notice-box {
+      background: #fffbeb;
+      border: 1px solid #fcd34d;
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+    }
+    .notice-box__title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #92400e;
+      margin-bottom: 8px;
+    }
+    .notice-box ul {
+      margin: 0; padding: 0 0 0 16px;
+    }
+    .notice-box li {
+      font-size: 0.78rem;
+      color: #78350f;
+      line-height: 1.7;
+    }
+    .lock-timer {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff3cd;
+      border: 1px solid #ffd06a;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      font-size: 0.82rem;
+      color: #7a4f00;
+    }
+    .lock-timer__time {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #b45309;
+      min-width: 40px;
+      text-align: center;
+    }
+    .expired-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+    .expired-overlay.show { display: flex; }
+    .expired-box {
+      background: white;
+      border-radius: 14px;
+      padding: 40px 36px;
+      text-align: center;
+      max-width: 360px;
+    }
+    .expired-box h3 {
+      font-size: 1.15rem;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+    }
+    .expired-box p {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    .confirm-btn-row {
+      display: flex;
+      gap: 12px;
+    }
+    .btn--full { width: 100%; justify-content: center; }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+      font-weight: 600;
+    }
+    .status-badge--locked { background: #fff3cd; color: #7a4f00; border: 1px solid #ffd06a; }
+    .status-badge--expired { background: #fef2f2; color: #c53030; border: 1px solid #fca5a5; }
+    .status-badge--available { background: #f0fff4; color: #1a7a3a; border: 1px solid #68d391; }
+    @media (max-width: 640px) {
+      .payment-card__body { padding: 22px 18px; }
+      .amount-box { flex-direction: column; align-items: flex-start; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+<div id="navbar-placeholder"></div>
+
+<main class="payment-wrap">
+  <!-- 선점 타이머 -->
+  <div class="lock-timer" id="lock-timer-bar" style="display:none;">
+    <span>⏱</span>
+    <div style="flex:1;">
+      <div style="font-weight:600;margin-bottom:1px;">날짜 선점 중</div>
+      <div style="font-size:0.75rem;opacity:0.8;">선점 시간 내 결제를 완료해 주세요. 시간 초과 시 다른 분께 날짜 우선권이 넘어갑니다.</div>
+    </div>
+    <span class="lock-timer__time" id="lock-countdown">05:00</span>
+  </div>
+
+  <div class="payment-card">
+    <!-- 헤더 -->
+    <div class="payment-card__header">
+      <h2>💳 잎 리딩 결제</h2>
+      <p>결제 수단을 선택하신 후 완료 버튼을 눌러주세요.</p>
+    </div>
+
+    <div class="payment-card__body">
+      <!-- 로딩 상태 -->
+      <div id="payment-loading" style="text-align:center;padding:40px 0;color:var(--text-light);">
+        <div style="font-size:2rem;margin-bottom:12px;">⏳</div>
+        <div>결제 정보를 불러오는 중...</div>
+      </div>
+
+      <!-- 실제 내용 (로딩 후 표시) -->
+      <div id="payment-content" style="display:none;">
+
+        <!-- 13·14장 카르마 안내문 -->
+        <div style="background:#fdfaf4;border:1.5px solid #e2c97e;border-radius:10px;padding:16px 18px;margin-bottom:24px;line-height:1.85;font-size:0.8rem;color:#5a3e00;">
+          <div style="font-size:0.74rem;font-weight:700;color:#92400e;margin-bottom:8px;letter-spacing:0.02em;">📌 의식·부적 대행(13·14장) 신청 안내</div>
+          13·14장의 대행 신청은 <strong>《본인의 카르마 해소》</strong>이므로, 회사의 돈이나 경비로 행하는 것을 원칙적으로 금지하고 있습니다.<br>
+          여러 사정이 있어 회사 경비로 행하시고자 하는 경우에는 어쩔 수 없으나, 카르마 해소는 개인으로 행하는 것보다 낮아짐을 이해해 주신 후에 신청해 주시기 바랍니다.
+        </div>
+
+        <!-- 날짜 / 슬롯 정보 -->
+        <div class="info-section">
+          <div class="info-section__title">📅 예약 날짜</div>
+          <div class="info-row">
+            <span class="info-row__label">날짜</span>
+            <span class="info-row__value" id="pay-date">-</span>
+          </div>
+          <div class="info-row">
+            <span class="info-row__label">시간</span>
+            <span class="info-row__value" id="pay-time">-</span>
+          </div>
+          <div class="info-row">
+            <span class="info-row__label">예약 상태</span>
+            <span class="info-row__value" id="pay-slot-status">-</span>
+          </div>
+        </div>
+
+        <!-- 신청 장 목록 -->
+        <div class="info-section">
+          <div class="info-section__title">📖 신청 내역</div>
+          <div class="info-row">
+            <span class="info-row__label">신청자</span>
+            <span class="info-row__value" id="pay-username">-</span>
+          </div>
+          <div class="info-row" style="align-items:flex-start;padding-top:11px;">
+            <span class="info-row__label" style="padding-top:3px;">신청 장</span>
+            <div id="pay-chapters" style="text-align:right;"></div>
+          </div>
+          <div class="info-row">
+            <span class="info-row__label">신청일</span>
+            <span class="info-row__value" id="pay-created">-</span>
+          </div>
+        </div>
+
+        <!-- 결제 금액 -->
+        <div class="amount-box">
+          <div>
+            <div class="amount-box__label">총 결제 금액</div>
+            <div class="amount-box__price" id="pay-total-amount">-</div>
+            <div class="amount-box__note" id="pay-amount-note"></div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:0.75rem;color:rgba(255,255,255,0.5);margin-bottom:6px;">선택 결제 수단</div>
+            <div style="font-size:0.88rem;font-weight:600;color:white;" id="pay-method-label">결제 수단 선택 ↓</div>
+          </div>
+        </div>
+
+        <!-- ━━━ 결제 수단 선택 ━━━ -->
+        <div style="margin-bottom:22px;">
+          <div style="font-size:0.78rem;font-weight:700;color:var(--text-dark);margin-bottom:12px;">💳 결제 수단 선택</div>
+          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
+
+            <!-- 카카오페이 -->
+            <button id="method-btn-kakao" onclick="selectPayMethod('kakao')"
+              style="border:2px solid var(--border);border-radius:10px;padding:14px 8px;background:white;cursor:pointer;transition:all 0.18s;text-align:center;">
+              <div style="font-size:1.5rem;margin-bottom:6px;">💛</div>
+              <div style="font-size:0.78rem;font-weight:700;color:#3a1d00;">카카오페이</div>
+              <div style="font-size:0.65rem;color:var(--text-light);margin-top:3px;">간편결제</div>
+            </button>
+
+            <!-- 계좌이체 -->
+            <button id="method-btn-transfer" onclick="selectPayMethod('transfer')"
+              style="border:2px solid var(--border);border-radius:10px;padding:14px 8px;background:white;cursor:pointer;transition:all 0.18s;text-align:center;">
+              <div style="font-size:1.5rem;margin-bottom:6px;">🏦</div>
+              <div style="font-size:0.78rem;font-weight:700;color:var(--text-dark);">계좌이체</div>
+              <div style="font-size:0.65rem;color:var(--text-light);margin-top:3px;">무통장입금</div>
+            </button>
+
+          </div>
+        </div>
+
+        <!-- ━━━ 카카오페이 결제 패널 ━━━ -->
+        <div id="panel-kakao" style="display:none;">
+          <div class="bank-box" style="border-color:#fee500;background:#fffde7;text-align:center;padding:24px 20px;">
+            <div style="font-size:1.5rem;margin-bottom:8px;">💛</div>
+            <div style="font-size:0.95rem;font-weight:700;color:#3a1d00;margin-bottom:6px;">카카오페이로 결제하기</div>
+            <div style="font-size:0.82rem;color:#5a3e00;line-height:1.7;">
+              아래 <strong>"결제 완료 신고"</strong> 버튼을 누르면<br>카카오페이 결제 페이지로 연결됩니다.
+            </div>
+          </div>
+        </div>
+
+
+
+        <!-- ━━━ 계좌이체 안내 패널 ━━━ -->
+        <div id="panel-transfer" style="display:none;">
+          <div class="bank-box">
+            <div class="bank-box__title">🏦 입금 계좌 정보</div>
+            <div class="bank-row">
+              <span class="bank-row__key">은행</span>
+              <span class="bank-row__val">기업은행</span>
+            </div>
+            <div class="bank-row">
+              <span class="bank-row__key">계좌번호</span>
+              <span class="bank-row__val">
+                <span id="bank-account">635-036959-01-016</span>
+                <button class="copy-btn" onclick="copyAccount()">복사</button>
+              </span>
+            </div>
+            <div class="bank-row">
+              <span class="bank-row__key">예금주</span>
+              <span class="bank-row__val">(주)빛의아갈탄</span>
+            </div>
+            <div class="bank-row">
+              <span class="bank-row__key">입금자명</span>
+              <span class="bank-row__val" id="pay-depositor-name" style="color:var(--gold);">-</span>
+            </div>
+          </div>
+          <div class="notice-box">
+            <div class="notice-box__title">⚠️ 계좌이체 안내</div>
+            <ul>
+              <li>위 계좌로 정확한 금액을 입금해 주세요.</li>
+              <li>입금자명은 반드시 <strong>신청자 성함</strong>으로 입력해 주세요.</li>
+              <li>입금 확인 후 관리자가 결제 상태를 업데이트합니다.</li>
+              <li>확인까지 1~2 영업일이 소요될 수 있습니다.</li>
+              <li>취소·환불은 협회 문의 폼으로 접수해 주세요.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- 공통 안내 -->
+        <div class="notice-box" style="margin-top:4px;">
+          <div class="notice-box__title">📌 공통 안내</div>
+          <ul>
+            <li>결제 수단 선택 후 <strong>결제 완료 신고</strong> 버튼을 눌러주세요.</li>
+            <li>취소·환불은 <a href="contact.html?type=cancel" style="color:#92400e;">협회 문의 폼</a>으로 접수해 주세요.</li>
+          </ul>
+        </div>
+
+        <!-- 결제 완료 버튼 -->
+        <div class="confirm-btn-row" style="margin-top:20px;">
+          <button class="btn btn--outline btn--full" onclick="history.back()">← 돌아가기</button>
+          <button class="btn btn--gold btn--full" id="pay-confirm-btn" onclick="confirmPayment()" disabled
+            style="opacity:0.5;cursor:not-allowed;">
+            ✅ 결제 완료 신고
+          </button>
+        </div>
+        <p style="font-size:0.73rem;color:var(--text-light);text-align:center;margin-top:12px;" id="pay-confirm-hint">
+          위에서 결제 수단을 먼저 선택해 주세요.
+        </p>
+      </div>
+
+      <!-- 오류 상태 -->
+      <div id="payment-error" style="display:none;text-align:center;padding:40px 0;">
+        <div style="font-size:2.5rem;margin-bottom:14px;">⚠️</div>
+        <div style="font-size:1rem;font-weight:600;color:var(--text-dark);margin-bottom:8px;" id="error-title">오류</div>
+        <div style="font-size:0.85rem;color:var(--text-light);margin-bottom:24px;" id="error-msg">결제 정보를 불러올 수 없습니다.</div>
+        <a href="mypage.html" class="btn btn--gold">마이페이지로 돌아가기</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- 선점 만료 팝업 -->
+<div class="expired-overlay" id="expired-overlay">
+  <div class="expired-box">
+    <div style="font-size:3rem;margin-bottom:12px;">⏰</div>
+    <h3>선점 시간이 만료되었습니다</h3>
+    <p>다른 분에게 날짜 우선권이 넘어갔습니다.<br>마이페이지에서 다른 날짜를 선택해 주세요.</p>
+    <a href="mypage.html#leaf-schedule" class="btn btn--gold btn--full">날짜 다시 선택하기</a>
+  </div>
+</div>
+
+<!-- 결제 완료 팝업 -->
+<div class="expired-overlay" id="success-overlay">
+  <div class="expired-box">
+    <div style="font-size:3rem;margin-bottom:12px;">🎉</div>
+    <h3>입금 완료 신고 완료</h3>
+    <p>입금 완료 신고가 접수되었습니다.<br>관리자 확인 후 결제 상태가 업데이트됩니다.<br><br>문의 사항은 협회 문의 폼을 이용해 주세요.</p>
+    <a href="mypage.html" class="btn btn--gold btn--full" style="margin-top:4px;">마이페이지로 이동</a>
+  </div>
+</div>
+
+<div id="footer-placeholder"></div>
+
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  renderNavbar('');
+  renderFooter();
+
+  if (!Auth.requireLogin('payment.html')) { /* redirect */ }
+  const session = Auth.getSession();
+
+  /* ── URL 파라미터 파싱 ── */
+  const params   = new URLSearchParams(location.search);
+  const slotId   = params.get('slot_id')   || '';
+  const slotDate = params.get('slot_date') || '';
+  const slotTime = params.get('slot_time') || '';
+
+  /* ── 선점 타이머 (5분) ── */
+  const LOCK_MINUTES = 5;
+  let _lockExpireTs = null; // 만료 타임스탬프
+  let _timerInterval = null;
+  let _lockReleased  = false;
+
+  function startLockTimer(expireTs) {
+    _lockExpireTs = expireTs;
+    document.getElementById('lock-timer-bar').style.display = 'flex';
+
+    _timerInterval = setInterval(() => {
+      const remain = _lockExpireTs - Date.now();
+      if (remain <= 0) {
+        clearInterval(_timerInterval);
+        if (!_lockReleased) onLockExpired();
+        return;
+      }
+      const m = String(Math.floor(remain / 60000)).padStart(2, '0');
+      const s = String(Math.floor((remain % 60000) / 1000)).padStart(2, '0');
+      document.getElementById('lock-countdown').textContent = `${m}:${s}`;
+    }, 1000);
+  }
+
+  async function onLockExpired() {
+    _lockReleased = true;
+    // DB 선점 해제
+    try {
+      await SB.update('reading_slots', slotId, { locked_by: '', locked_until: 0 });
+    } catch(_) {}
+    document.getElementById('expired-overlay').classList.add('show');
+  }
+
+  // 페이지 이탈(닫기/뒤로가기) 시 선점 해제 — fetch keepalive로 fire-and-forget
+  window.addEventListener('beforeunload', () => {
+    if (!slotId || _lockReleased) return;
+    // sendBeacon / fetch keepalive 로 API 호출 (페이지 언로드 후에도 요청 유지)
+    const url = `tables/reading_slots/${slotId}`;
+    try {
+      navigator.sendBeacon
+        ? navigator.sendBeacon(url) // sendBeacon은 PATCH 불가 — fetch fallback 사용
+        : null;
+      fetch(url, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ locked_by: '', locked_until: 0 }),
+        keepalive: true   // 페이지 언로드 후에도 요청 완료 보장
+      }).catch(() => {});
+    } catch(_) {}
+  });
+
+  /* ── 장 레이블 ── */
+  function chLabel(ch) {
+    const map = {
+      '1':'1장','2':'2장','3':'3장','4':'4장','5':'5장',
+      '6':'6장','7':'7장','8':'8장','9':'9장','10':'10장','11':'11장',
+      '12':'12장','13':'13장','14':'14장',
+      'ritual_13':'의식대행','ritual_14':'부적대행'
+    };
+    return map[String(ch)] || (ch ? ch : '-');
+  }
+
+  /* ── 기준 금액 ── */
+  const BASE_PRICES = {
+    '1':500000,'13':500000,'14':500000,
+    'ritual_13':2000000,'ritual_14':2000000
+  };
+  function getPrice(ch) { return BASE_PRICES[String(ch)] || 0; }
+
+  /* ── 결제 수단 선택 ── */
+  let _selectedPayMethod = ''; // 'kakao' | 'cash' | 'transfer'
+
+  function selectPayMethod(method) {
+    _selectedPayMethod = method;
+    const labels = { kakao: '카카오페이', transfer: '계좌이체' };
+    const panels = ['kakao', 'transfer'];
+
+    // 버튼 스타일 토글
+    panels.forEach(m => {
+      const btn = document.getElementById('method-btn-' + m);
+      if (!btn) return;
+      if (m === method) {
+        btn.style.borderColor = 'var(--gold)';
+        btn.style.background  = 'rgba(200,151,58,0.07)';
+        btn.style.boxShadow   = '0 0 0 2px rgba(200,151,58,0.22)';
+      } else {
+        btn.style.borderColor = 'var(--border)';
+        btn.style.background  = 'white';
+        btn.style.boxShadow   = 'none';
+      }
+      // 패널 토글
+      const panel = document.getElementById('panel-' + m);
+      if (panel) panel.style.display = m === method ? 'block' : 'none';
+    });
+
+    // 금액 박스 라벨 업데이트
+    const lbl = document.getElementById('pay-method-label');
+    if (lbl) lbl.textContent = labels[method] || '';
+
+    // 신청하기 버튼 활성화
+    const btn = document.getElementById('pay-confirm-btn');
+    if (btn) {
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      btn.style.cursor  = 'pointer';
+    }
+    const hint = document.getElementById('pay-confirm-hint');
+    if (hint) hint.textContent = '결제 완료 후 아래 버튼을 눌러 주세요.';
+  }
+
+  /* ── 계좌번호 복사 ── */
+  function copyAccount() {
+    const acc = document.getElementById('bank-account').textContent;
+    navigator.clipboard.writeText(acc.replace(/\s/g,'')).then(() => {
+      Toast.show('계좌번호가 복사되었습니다.', 'success');
+    }).catch(() => {
+      Toast.show('복사에 실패했습니다. 직접 선택해 복사해 주세요.', 'error');
+    });
+  }
+
+  /* ── 오류 표시 ── */
+  function showError(title, msg) {
+    document.getElementById('payment-loading').style.display  = 'none';
+    document.getElementById('payment-content').style.display  = 'none';
+    document.getElementById('payment-error').style.display    = 'block';
+    document.getElementById('error-title').textContent = title;
+    document.getElementById('error-msg').textContent   = msg;
+  }
+
+  /* ── 메인 로드 ── */
+  async function loadPaymentInfo() {
+    if (!session) { showError('로그인 필요', '로그인 후 이용해 주세요.'); return; }
+    if (!slotId || !slotDate) {
+      showError('잘못된 접근', '마이페이지에서 날짜를 선택한 후 결제 페이지로 이동해 주세요.');
+      return;
+    }
+
+    try {
+      /* 1. 슬롯 정보 조회 */
+      const slot = await SB.getOne('reading_slots', slotId);
+      if (!slot) { showError('슬롯 없음', '해당 날짜 슬롯을 찾을 수 없습니다.'); return; }
+
+      /* 2. 선점 확인 — 이미 다른 사람이 잠금 중인지 체크 */
+      const now = Date.now();
+      const isLockedByOther = slot.locked_by && slot.locked_by !== session.id &&
+                              slot.locked_until && Number(slot.locked_until) > now;
+      if (isLockedByOther) {
+        showError('선점 중', '현재 다른 분이 이 날짜를 선점하고 있습니다. 잠시 후 다시 시도하거나 다른 날짜를 선택해 주세요.');
+        return;
+      }
+
+      /* 3. 잔여 자리 확인 */
+      const maxB = parseInt(slot.max_bookings) || 1;
+      const curB = parseInt(slot.current_bookings) || 0;
+      const isMyLock = slot.locked_by === session.id && Number(slot.locked_until) > now;
+      // 이미 내가 선점하고 있으면 잔여 재확인 불필요, 새 선점 시에만 체크
+      if (!isMyLock && curB >= maxB) {
+        showError('마감', '이 날짜는 이미 마감되었습니다. 다른 날짜를 선택해 주세요.');
+        return;
+      }
+
+      /* 4. 선점 DB 업데이트 (아직 내 선점이 아닌 경우) */
+      const lockExpire = now + LOCK_MINUTES * 60 * 1000;
+      if (!isMyLock) {
+        await SB.update('reading_slots', slotId, {
+          locked_by: session.id,
+          locked_until: lockExpire
+        });
+      }
+      const timerExpire = isMyLock ? Number(slot.locked_until) : lockExpire;
+
+      /* 5. 내 신청 목록 조회 */
+      const allApps = await SB.getAll('leaf_readings', { limit: 300 });
+
+      // ① 이 슬롯에 이미 연결된 신청 (재결제 진입 경우)
+      const linkedApps = allApps.filter(a =>
+        a.user_id === session.id && !a.deleted &&
+        a.slot_id === slotId
+      );
+
+      // ② 취소/종료되지 않은 내 모든 신청 (확정일 취소 후 재선택 포함)
+      //    slot_id 조건 없음 — 관리자가 확정일 취소 시 slot_id가 이전 값으로 남을 수 있음
+      const myApps = allApps.filter(a =>
+        a.user_id === session.id && !a.deleted &&
+        !['취소','종료'].includes(a.payment_status)
+      );
+
+      // ① 우선, 없으면 ② 사용
+      const targetApps = linkedApps.length > 0 ? linkedApps : myApps;
+
+      if (targetApps.length === 0) {
+        showError('신청 내역 없음', '연결된 잎 리딩 신청이 없습니다. 먼저 잎 리딩을 신청해 주세요.');
+        return;
+      }
+
+      /* 6. UI 채우기 */
+      const timeDisplay = slotTime
+        ? slotTime.replace('~', ' ~ ')
+        : (slot.slot_time_start && slot.slot_time_end
+            ? `${slot.slot_time_start} ~ ${slot.slot_time_end}`
+            : (slot.slot_time || '시간 미정'));
+
+      document.getElementById('pay-date').textContent = slotDate;
+      document.getElementById('pay-time').textContent = timeDisplay;
+      document.getElementById('pay-slot-status').innerHTML =
+        `<span class="status-badge status-badge--locked">⏱ 선점 중 (결제 대기)</span>`;
+
+      document.getElementById('pay-username').textContent =
+        session.name + (session.phone ? '  ·  ' + session.phone : '');
+      // 계좌이체 입금자명 + 카카오 입금자명
+      const depositorEl = document.getElementById('pay-depositor-name');
+      if (depositorEl) depositorEl.textContent = session.name;
+      // kakao-depositor 제거됨 (카카오페이 직접 결제 방식으로 변경)
+
+      // ── 패키지 조합 표기: 기본장 통합 + 원형숫자 오름차순 정렬 ──
+      const _payCircled = ['①','②','③','④','⑤','⑥','⑦','⑧','⑨','⑩',
+        '⑪','⑫','⑬','⑭','⑮','⑯','⑰','⑱','⑲','⑳',
+        '㉑','㉒','㉓','㉔','㉕','㉖','㉗','㉘','㉙','㉚',
+        '㉛','㉜','㉝','㉞','㉟','㊱','㊲','㊳','㊴','㊵',
+        '㊶','㊷','㊸','㊹','㊺','㊻','㊼','㊽','㊾','㊿'];
+      const _payCStr = _payCircled.join('');
+      const _paySort = (ch) => { const n=parseInt(ch); return (!isNaN(n)&&n>=1&&n<=14)?n:(ch==='ritual_13'?15:ch==='ritual_14'?16:99); };
+      const _payIsBasic = (ch) => _paySort(ch) <= 16;
+      const _payBasicLbl = (ch) => { const n=parseInt(ch); return (!isNaN(n)&&n>=1&&n<=14)?_payCircled[n-1]:(ch==='ritual_13'?'의식':ch==='ritual_14'?'부적':ch); };
+      const _payParseLbl = (lbl) => { if(!lbl) return {prefix:'',suffix:''}; for(let i=0;i<lbl.length;i++){if(_payCStr.includes(lbl[i])) return {prefix:lbl.slice(0,i),suffix:lbl[i]};} return {prefix:lbl,suffix:''}; };
+      const sortedApps = [...targetApps].sort((a,b) => _paySort(a.chapter)-_paySort(b.chapter));
+      const _basics = sortedApps.filter(a => _payIsBasic(a.chapter));
+      const _specials = sortedApps.filter(a => !_payIsBasic(a.chapter));
+      const _payBadges = [];
+      if (_basics.length > 0) {
+        _payBadges.push('<span class="chapter-chip">기본장 ' + _basics.map(a=>_payBasicLbl(a.chapter)).join('+') + '</span>');
+      }
+
+      if (_specials.length > 0) {
+        const pO=[], pM={};
+        _specials.forEach(a => {
+          const lbl = a.chapter_label || chLabel(a.chapter);
+          const {prefix,suffix} = _payParseLbl(lbl);
+          if(!pM[prefix]){pM[prefix]=[];pO.push(prefix);}
+          if(suffix) pM[prefix].push(suffix);
+        });
+        pO.forEach(p => {
+          pM[p].sort((a,b)=>_payCircled.indexOf(a)-_payCircled.indexOf(b));
+          _payBadges.push('<span class="chapter-chip">'+(pM[p].length>0?p+' '+pM[p].join('+'):p)+'</span>');
+        });
+      }
+      document.getElementById('pay-chapters').innerHTML = _payBadges.join('');
+
+      const firstCreated = targetApps[0].created_at;
+      document.getElementById('pay-created').textContent = firstCreated
+        ? new Date(Number(firstCreated)).toLocaleDateString('ko-KR', {year:'numeric',month:'2-digit',day:'2-digit'})
+        : '-';
+
+      // 금액 계산
+      const totalAmt = targetApps.reduce((s, a) =>
+        s + (Number(a.payment_amount) || getPrice(a.chapter) || 0), 0);
+      document.getElementById('pay-total-amount').textContent =
+        totalAmt ? totalAmt.toLocaleString('ko-KR') + '원' : '금액 미정 (관리자 안내 예정)';
+      if (targetApps.length > 1) {
+        document.getElementById('pay-amount-note').textContent =
+          `총 ${targetApps.length}건 합산 금액`;
+      }
+
+      // 앱 ID 저장 (결제 확인 시 사용)
+      window._payTargetIds = targetApps.map(a => a.id);
+      window._paySlotId    = slotId;
+      window._paySlotDate  = slotDate;
+
+      /* 7. 타이머 시작 */
+      startLockTimer(timerExpire);
+
+      /* 8. 콘텐츠 표시 */
+      document.getElementById('payment-loading').style.display = 'none';
+      document.getElementById('payment-content').style.display = 'block';
+
+    } catch(e) {
+      showError('오류 발생', '결제 정보를 불러오지 못했습니다: ' + e.message);
+      console.error('[payment] 로드 실패:', e);
+    }
+  }
+
+  /* ── 결제 완료 신고 ── */
+  async function confirmPayment() {
+    const ids   = window._payTargetIds;
+    const sId   = window._paySlotId;
+    const sDate = window._paySlotDate;
+    if (!ids || !ids.length) { Toast.show('신청 정보를 찾을 수 없습니다.', 'error'); return; }
+
+    if (!_selectedPayMethod) {
+      Toast.show('결제 수단을 먼저 선택해 주세요.', 'error'); return;
+    }
+
+    const methodLabel = { kakao:'카카오페이', transfer:'계좌이체' }[_selectedPayMethod] || _selectedPayMethod;
+
+    const btn = document.getElementById('pay-confirm-btn');
+    btn.disabled = true;
+    btn.textContent = '처리 중...';
+
+    try {
+      // leaf_readings 상태 업데이트 — 결제수단 기록
+      await Promise.all(ids.map(id =>
+        SB.update('leaf_readings', id, {
+          payment_status: '결제대기',
+          payment_method: methodLabel,
+          slot_id: sId,
+          appointment_date: sDate
+        })
+      ));
+
+      // 슬롯 current_bookings +1, 선점 해제, 마감(is_open=false)
+      const slot = await SB.getOne('reading_slots', sId);
+      if (slot) {
+        await SB.update('reading_slots', sId, {
+          current_bookings: (parseInt(slot.current_bookings) || 0) + 1,
+          is_open:    false,
+          locked_by:  '',
+          locked_until: 0
+        });
+      }
+
+      // ── 나머지 후보 슬롯 자동 삭제 ──
+      // 입금완료 신고 시점에 같은 사용자(target_user_id)의 나머지 후보 슬롯 즉시 삭제
+      try {
+        const allSlots = await SB.getAll('reading_slots', { limit: 500 });
+        const othersToDelete = allSlots.filter(s =>
+          !s.deleted &&
+          s.target_user_id === session.id &&
+          s.id !== sId
+        );
+        if (othersToDelete.length > 0) {
+          await Promise.all(othersToDelete.map(s => SB.remove('reading_slots', s.id)));
+        }
+      } catch(slotErr) {
+        console.warn('[후보슬롯정리]', slotErr.message);
+      }
+
+      _lockReleased = true;
+      clearInterval(_timerInterval);
+      document.getElementById('success-overlay').classList.add('show');
+    } catch(e) {
+      btn.disabled = false;
+      btn.textContent = '✅ 결제 완료 신고';
+      Toast.show('처리 실패: ' + e.message, 'error');
+    }
+  }
+
+  /* ── 초기 실행 ── */
+  loadPaymentInfo();
+</script>
+</body>
+</html>

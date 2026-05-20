@@ -1,0 +1,45 @@
+Options -Indexes
+RewriteEngine On
+
+# .html 주소를 확장자 없는 주소로 리다이렉트
+# 예: /about.html -> /about
+RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
+RewriteRule ^(.+)\.html$ /$1 [R=301,L]
+
+# test 도메인: /www/www-test 폴더로 내부 연결
+RewriteCond %{HTTP_HOST} ^test\.agastya-kr\.com$ [NC]
+RewriteCond %{REQUEST_URI} !^/www-test/
+RewriteRule ^(.*)$ www-test/$1 [L]
+
+# 운영 도메인에서 테스트 폴더 직접 접근 차단
+RewriteCond %{HTTP_HOST} !^test\.agastya-kr\.com$ [NC]
+RewriteRule ^www-test/ - [F,L]
+
+# 운영 도메인은 HTTPS로 이동
+# test는 SSL 설치 전이므로 제외
+RewriteCond %{HTTP_HOST} !^test\.agastya-kr\.com$ [NC]
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# 확장자 없는 주소를 실제 .html 파일로 내부 연결
+# 예: /about -> /about.html
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.+?)/?$ $1.html [L]
+
+# API: /tables/table 또는 /tables/table/id -> /api/index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^tables/(.*)$ api/index.php?_route=$1 [QSA,L]
+
+# 보안 헤더
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# 보안: config.php 직접 접근 차단
+<Files "config.php">
+  Require all denied
+</Files>

@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>소식 상세 | 한국 아가스티아 협회</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { opacity: 0; transition: opacity 0.25s ease; }
+    .detail-wrap {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 56px;
+      align-items: start;
+    }
+    /* 메인 기사 */
+    .article-hero {
+      width: 100%; height: 420px; object-fit: cover;
+      border-radius: 2px; margin-bottom: 36px;
+      display: block;
+    }
+    .article-meta {
+      display: flex; align-items: center; gap: 16px;
+      margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .article-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 400; line-height: 1.5;
+      color: var(--text-dark); margin-bottom: 12px;
+    }
+    .article-subtitle {
+      font-size: 1rem; color: var(--text-mid);
+      margin-bottom: 28px; line-height: 1.7;
+    }
+    .article-divider {
+      height: 1px; background: var(--border);
+      margin: 28px 0;
+    }
+    .article-body {
+      font-size: 0.95rem; color: var(--text-mid);
+      line-height: 2; white-space: pre-wrap;
+    }
+    /* 공유 & 태그 */
+    .article-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 32px; }
+    .article-tag {
+      padding: 4px 12px;
+      background: var(--bg-cream); border: 1px solid var(--border);
+      border-radius: 20px; font-size: 0.75rem; color: var(--text-mid);
+    }
+    .share-bar {
+      display: flex; align-items: center; gap: 10px;
+      margin-top: 32px; padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+    .share-bar__label { font-size: 0.8rem; color: var(--text-light); margin-right: 4px; }
+    .share-btn {
+      padding: 8px 16px; border-radius: 4px;
+      font-size: 0.78rem; font-weight: 500;
+      cursor: pointer; transition: var(--transition);
+      border: 1px solid var(--border); background: white;
+      color: var(--text-mid);
+    }
+    .share-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .share-btn--insta:hover { border-color: #c13584 !important; color: #c13584 !important; }
+    /* 관련 기사 (사이드) */
+    .sidebar-section { position: sticky; top: 96px; }
+    .sidebar-title {
+      font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--text-light); margin-bottom: 16px; font-weight: 600;
+    }
+    .related-item {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 14px 0; border-bottom: 1px solid var(--border);
+      cursor: pointer; transition: var(--transition);
+    }
+    .related-item:hover { transform: translateX(3px); }
+    .related-item:last-child { border-bottom: none; }
+    .related-item__img {
+      width: 72px; height: 56px; object-fit: cover;
+      border-radius: 2px; flex-shrink: 0;
+    }
+    .related-item__title {
+      font-size: 0.83rem; font-weight: 500;
+      color: var(--text-dark); line-height: 1.5;
+      margin-bottom: 4px;
+    }
+    .related-item__date { font-size: 0.72rem; color: var(--text-light); }
+    /* 세미나 CTA 박스 */
+    .cta-box {
+      background: var(--navy); border-radius: 4px;
+      padding: 28px; text-align: center; margin-top: 28px;
+    }
+    .cta-box__label {
+      font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 8px;
+    }
+    .cta-box__title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1rem; color: white; margin-bottom: 16px; line-height: 1.5;
+    }
+    /* 이전/다음 네비게이션 */
+    .article-nav {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px; margin-top: 48px;
+    }
+    .article-nav__item {
+      padding: 20px; border: 1px solid var(--border);
+      border-radius: 4px; cursor: pointer;
+      transition: var(--transition); background: white;
+    }
+    .article-nav__item:hover { border-color: var(--gold); box-shadow: var(--shadow-sm); }
+    .article-nav__dir {
+      font-size: 0.7rem; color: var(--text-light);
+      letter-spacing: 0.1em; margin-bottom: 6px;
+    }
+    .article-nav__title {
+      font-size: 0.88rem; color: var(--text-dark);
+      font-weight: 500; line-height: 1.4;
+    }
+    .article-nav__item--next { text-align: right; }
+    /* 스켈레톤 */
+    .skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite; border-radius: 3px;
+    }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+    @media (max-width: 900px) {
+      .detail-wrap { grid-template-columns: 1fr; }
+      .sidebar-section { position: static; }
+      .article-nav { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 600px) {
+      .article-hero { height: 240px; }
+      .article-title { font-size: 1.3rem; }
+    }
+    @media (max-width: 480px) {
+      .article-hero { height: 200px; }
+      .article-title { font-size: clamp(1.15rem, 5.5vw, 1.4rem); word-break: keep-all; }
+      .article-body { font-size: 0.9rem; line-height: 1.95; }
+    }
+  </style>
+</head>
+<body>
+
+<section class="section" style="padding-top: 100px;">
+  <div class="container">
+    <!-- 브레드크럼 -->
+    <div style="font-size:0.8rem; color:var(--text-light); margin-bottom:32px;">
+      <a href="index.html" style="color:var(--text-light);">홈</a>
+      <span style="margin:0 8px;">›</span>
+      <a href="news.html" style="color:var(--text-light);">소식 · 기사</a>
+      <span style="margin:0 8px;">›</span>
+      <span id="breadcrumb-title" style="color:var(--text-dark);">기사 제목</span>
+    </div>
+
+    <div class="detail-wrap">
+      <!-- 메인 콘텐츠 -->
+      <article id="article-main">
+        <!-- 스켈레톤 -->
+        <div class="skeleton" style="height:420px;margin-bottom:36px;border-radius:2px;"></div>
+        <div class="skeleton" style="height:20px;width:80px;margin-bottom:16px;"></div>
+        <div class="skeleton" style="height:40px;width:90%;margin-bottom:12px;"></div>
+        <div class="skeleton" style="height:20px;width:70%;margin-bottom:28px;"></div>
+        <div class="skeleton" style="height:1px;margin-bottom:28px;"></div>
+        <div class="skeleton" style="height:16px;width:100%;margin-bottom:10px;"></div>
+        <div class="skeleton" style="height:16px;width:95%;margin-bottom:10px;"></div>
+        <div class="skeleton" style="height:16px;width:88%;margin-bottom:10px;"></div>
+      </article>
+
+      <!-- 사이드바 -->
+      <aside class="sidebar-section" id="sidebar">
+        <div class="sidebar-title">관련 기사</div>
+        <div id="related-list">
+          <div class="skeleton" style="height:60px;margin-bottom:12px;"></div>
+          <div class="skeleton" style="height:60px;margin-bottom:12px;"></div>
+          <div class="skeleton" style="height:60px;"></div>
+        </div>
+        <div class="cta-box" style="margin-top:28px;">
+          <div class="cta-box__label">APPLY</div>
+          <div class="cta-box__title">세미나·이벤트에<br>참여해보세요</div>
+          <a href="seminar-apply.html" class="btn btn--gold btn--full btn--sm">신청하기</a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  renderNavbar('news');
+  renderFooter();
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const newsId = urlParams.get('id');
+  let allNews = [];
+
+  async function loadArticle() {
+    if (!newsId) { window.location.href = 'news.html'; return; }
+    try {
+      // 전체 뉴스 로드 (이전/다음, 관련 기사용)
+      const rows = await SB.getAll('news', { limit: 200, order: 'published_date.desc' });
+      allNews = rows.filter(n => n.status === '발행');
+
+      // 현재 기사
+      const article = allNews.find(n => n.id === newsId);
+      if (!article) { window.location.href = 'news.html'; return; }
+
+      // 페이지 타이틀 업데이트
+      document.title = `${article.title} | 한국 아가스티아 협회`;
+      document.getElementById('breadcrumb-title').textContent = article.title;
+
+      renderArticle(article);
+      renderRelated(article);
+      renderNav(article);
+    } catch(e) {
+      document.getElementById('article-main').innerHTML =
+        '<p style="color:var(--text-light);">기사를 불러오지 못했습니다.</p>';
+    }
+  }
+
+  function renderArticle(a) {
+    // 미디어 우선순위: YouTube > 이미지
+    let mediaHtml = '';
+    if (a.youtube_url) {
+      const ytId = extractYouTubeId(a.youtube_url);
+      if (ytId) {
+        mediaHtml = buildYtPlayer(ytId, a.title, a.youtube_url);
+      }
+    } else if (a.image_url && a.image_url.startsWith('http')) {
+      mediaHtml = `<img src="${a.image_url}" alt="${a.title}" class="article-hero"
+        onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800'">`;
+    }
+
+    document.getElementById('article-main').innerHTML = `
+      ${mediaHtml}
+      <div class="article-meta">
+        <span class="badge badge--gold">${a.category || ''}</span>
+        <span style="font-size:0.78rem;color:var(--text-light);">📅 ${a.published_date || ''}</span>
+        ${a.is_featured ? '<span class="badge badge--navy">주요 기사</span>' : ''}
+      </div>
+      <h1 class="article-title">${a.title}</h1>
+      ${a.subtitle ? `<p class="article-subtitle">${a.subtitle}</p>` : ''}
+      <div class="article-divider"></div>
+      <div class="article-body">${linkify(a.content || '')}</div>
+      ${a.tags ? `<div class="article-tags">${a.tags.split(',').map(t => `<span class="article-tag">#${t.trim()}</span>`).join('')}</div>` : ''}
+      <div class="share-bar">
+        <span class="share-bar__label">공유하기</span>
+        <button class="share-btn" onclick="copyUrl()">🔗 링크 복사</button>
+
+        <button class="share-btn" onclick="shareFacebook()">📘 페이스북</button>
+        <button class="share-btn share-btn--insta" onclick="shareInstagram()">📷 인스타그램</button>
+      </div>
+      <div id="article-nav-wrap"></div>`;
+    renderNav(a);
+  }
+
+  function renderRelated(current) {
+    const related = allNews
+      .filter(n => n.id !== current.id && n.category === current.category)
+      .slice(0, 4);
+    const all3 = related.length ? related : allNews.filter(n => n.id !== current.id).slice(0, 3);
+
+    document.getElementById('related-list').innerHTML = all3.length
+      ? all3.map(n => `
+        <div class="related-item" onclick="window.location.href='news-detail.html?id=${n.id}'">
+          <img src="${(n.image_url && n.image_url.startsWith('http')) ? n.image_url : 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200'}"
+               alt="${n.title}" class="related-item__img"
+               onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200'">
+          <div>
+            <div class="related-item__title">${n.title}</div>
+            <div class="related-item__date">${n.published_date || ''}</div>
+          </div>
+        </div>`).join('')
+      : '<p style="color:var(--text-light);font-size:0.82rem;">관련 기사가 없습니다.</p>';
+  }
+
+  function renderNav(current) {
+    const idx = allNews.findIndex(n => n.id === current.id);
+    const prev = allNews[idx + 1];
+    const next = allNews[idx - 1];
+    const wrap = document.getElementById('article-nav-wrap');
+    if (!wrap) return;
+    wrap.innerHTML = `
+      <div class="article-nav" style="margin-top:48px;">
+        ${prev
+          ? `<div class="article-nav__item" onclick="window.location.href='news-detail.html?id=${prev.id}'">
+              <div class="article-nav__dir">← 이전 기사</div>
+              <div class="article-nav__title">${prev.title}</div>
+            </div>`
+          : '<div></div>'}
+        ${next
+          ? `<div class="article-nav__item article-nav__item--next" onclick="window.location.href='news-detail.html?id=${next.id}'">
+              <div class="article-nav__dir">다음 기사 →</div>
+              <div class="article-nav__title">${next.title}</div>
+            </div>`
+          : '<div></div>'}
+      </div>
+      <div style="text-align:center;margin-top:24px;">
+        <a href="news.html" class="btn btn--outline btn--sm">← 목록으로 돌아가기</a>
+      </div>`;
+  }
+
+  /* ── YouTube URL → embed 변환 ── */
+  function extractYouTubeId(url) {
+    // youtu.be/ID 또는 youtube.com/watch?v=ID 또는 youtube.com/embed/ID
+    const patterns = [
+      /youtu\.be\/([a-zA-Z0-9_-]{11})/,
+      /youtube\.com\/watch\?(?:.*&)?v=([a-zA-Z0-9_-]{11})/,
+      /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,
+      /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/
+    ];
+    for (const p of patterns) {
+      const m = url.match(p);
+      if (m) return m[1];
+    }
+    return null;
+  }
+
+  /* YouTube 클릭시 임베드 시도 → 실패 시 주노쪽 링크로 대체 */
+  /*
+   * 썸네일 클릭 → 인라인 iframe 로드 방식
+   * 임베드 차단(오류 153) 영상도 YouTube 링크로 바로 이동 가능
+   */
+  function buildYtPlayer(videoId, title, originalUrl) {
+    const watchUrl = originalUrl || `https://www.youtube.com/watch?v=${videoId}`;
+    // youtube-nocookie.com + origin 파라미터로 오류 153 최소화
+    const origin = encodeURIComponent(window.location.origin || 'https://www.genspark.ai');
+    const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&enablejsapi=1&origin=${origin}`;
+    const thumbLow  = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+    const thumbHigh = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+    const safeTitle = (title || 'YouTube').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    const encEmbed  = encodeURIComponent(embedUrl);
+    return `<div id="yt-wrap-${videoId}"
+      style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:8px;margin-bottom:36px;background:#111;cursor:pointer;"
+      onclick="loadYtEmbed('${videoId}','${encEmbed}')" title="클릭하여 재생">
+      <img src="${thumbHigh}" alt="${safeTitle}"
+        onerror="this.src='${thumbLow}'"
+        style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;border-radius:8px;opacity:0.88;">
+      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+        background:rgba(220,0,0,0.92);border-radius:50%;width:72px;height:72px;
+        display:flex;align-items:center;justify-content:center;box-shadow:0 2px 16px rgba(0,0,0,0.55);
+        transition:transform 0.15s;">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+      <div style="position:absolute;top:10px;right:12px;background:rgba(0,0,0,0.55);border-radius:4px;padding:3px 8px;font-size:0.7rem;color:rgba(255,255,255,0.8);">
+        클릭하여 재생
+      </div>
+      <a href="${watchUrl}" target="_blank" rel="noopener" onclick="event.stopPropagation()"
+        style="position:absolute;bottom:0;left:0;right:0;padding:9px 16px;
+          background:linear-gradient(to top,rgba(0,0,0,0.75),transparent);color:#fff;font-size:0.78rem;border-radius:0 0 8px 8px;
+          text-decoration:none;display:flex;align-items:center;gap:6px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="#ff3333"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.77a4.85 4.85 0 0 1-1.01-.08z"/></svg>
+        YouTube에서 열기 &nbsp;<span style="color:rgba(255,255,255,0.5);font-size:0.7rem;">(재생 오류 시 클릭)</span>
+      </a>
+    </div>`;
+  }
+
+  function loadYtEmbed(videoId, encEmbedUrl) {
+    const wrap = document.getElementById('yt-wrap-' + videoId);
+    if (!wrap) return;
+    const embedUrl = decodeURIComponent(encEmbedUrl);
+    wrap.onclick = null;
+    wrap.style.cursor = 'default';
+    // sandbox 속성 제거, allow 속성 최대한 허용
+    wrap.innerHTML = `<iframe src="${embedUrl}"
+      style="position:absolute;top:0;left:0;width:100%;height:100%;border:none;border-radius:8px;"
+      allowfullscreen
+      allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+      referrerpolicy="no-referrer-when-downgrade"
+      loading="lazy"
+      title="YouTube 동영상"></iframe>`;
+  }
+
+  function renderYouTube(videoId) {
+    return buildYtPlayer(videoId, 'YouTube 동영상', null);
+  }
+
+  /* ── URL → 링크/유튜브 변환 ── */
+  function linkify(text) {
+    // 1) 유튜브 URL은 임베드 플레이어로 변환
+    const ytRegex = /(https?:\/\/(?:www\.)?(?:youtube\.com\/watch\?[^\s]+|youtu\.be\/[^\s]+|youtube\.com\/shorts\/[^\s]+))/g;
+    text = text.replace(ytRegex, url => {
+      const ytId = extractYouTubeId(url);
+      if (ytId) return renderYouTube(ytId);
+      return `<a href="${url}" target="_blank" rel="noopener noreferrer"
+         style="color:var(--gold);word-break:break-all;text-decoration:underline;">${url}</a>`;
+    });
+    // 2) 나머지 일반 URL은 링크로 변환
+    const urlRegex = /(https?:\/\/[^\s\u3000\uff01\uff09\u300d\u300f<"]+)/g;
+    text = text.replace(urlRegex, url =>
+      `<a href="${url}" target="_blank" rel="noopener noreferrer"
+         style="color:var(--gold);word-break:break-all;text-decoration:underline;">${url}</a>`
+    );
+    return text;
+  }
+
+  /* ── 공유 기능 ── */
+  function copyUrl() {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      Toast.show('링크가 복사되었습니다!', 'success');
+    });
+  }
+  function shareFacebook() {
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank');
+  }
+  function shareInstagram() {
+    // 인스타그램은 외부 URL 직접 공유 웹 API를 공식 제공하지 않음
+    // → 링크 클립보드 복사 후 안내 메시지 표시
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      Toast.show('링크가 복사되었습니다! 인스타그램 앱에서 게시물/스토리에 붙여넣기 해주세요.', 'info');
+    }).catch(() => {
+      Toast.show('링크 복사에 실패했습니다. 주소창에서 직접 복사해 주세요.', 'error');
+    });
+  }
+  loadArticle().finally(() => { document.body.style.opacity = '1'; });
+</script>
+</body>
+</html>

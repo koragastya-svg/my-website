@@ -1,0 +1,33 @@
+Options -Indexes
+RewriteEngine On
+
+# 테스트 서버에서는 HTTPS 강제 리다이렉트 사용 안 함
+# SSL 설치 후 필요하면 다시 켤 수 있음
+
+# .html 주소를 확장자 없는 주소로 리다이렉트
+# 예: /about.html -> /about
+RewriteCond %{THE_REQUEST} \s/+(.+?)\.html[\s?] [NC]
+RewriteRule ^(.+)\.html$ /$1 [R=301,L]
+
+# 확장자 없는 주소를 실제 .html 파일로 내부 연결
+# 예: /about -> /about.html
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.+?)/?$ $1.html [L]
+
+# API: /tables/table 또는 /tables/table/id -> /api/index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^tables/(.*)$ api/index.php?_route=$1 [QSA,L]
+
+# 보안 헤더
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# 보안: config.php 직접 접근 차단
+<Files "config.php">
+  Require all denied
+</Files>

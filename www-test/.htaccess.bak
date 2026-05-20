@@ -1,0 +1,26 @@
+Options -Indexes
+RewriteEngine On
+
+# HTTPS 강제 리다이렉트
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# 긴급 차단: users 테이블 직접 접근 금지
+# RewriteRule ^tables/users/?(.*)$ - [F,L]
+
+# API: /tables/table 또는 /tables/table/id -> /api/index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^tables/(.*)$ api/index.php?_route=$1 [QSA,L]
+
+# 보안 헤더
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# 보안: config.php 직접 접근 차단
+<Files "config.php">
+  Require all denied
+</Files>

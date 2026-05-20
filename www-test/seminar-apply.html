@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>세미나 신청 | 한국 아가스티아 협회</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { opacity: 0; transition: opacity 0.25s ease; }
+    .apply-layout {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 48px;
+      align-items: start;
+    }
+    /* 스텝 표시 */
+    .steps {
+      display: flex; align-items: center; gap: 0;
+      margin-bottom: 40px;
+    }
+    .step {
+      display: flex; align-items: center; gap: 10px;
+      flex: 1;
+    }
+    .step__num {
+      width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.78rem; font-weight: 600;
+      border: 2px solid var(--border);
+      color: var(--text-light);
+      background: white;
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+    .step__label { font-size: 0.78rem; color: var(--text-light); }
+    .step--active .step__num { border-color: var(--gold); background: var(--gold); color: white; }
+    .step--active .step__label { color: var(--text-dark); font-weight: 500; }
+    .step--done .step__num { border-color: var(--gold); background: white; color: var(--gold); }
+    .step--done .step__label { color: var(--text-mid); }
+    .step-line {
+      flex: 1; height: 1px; background: var(--border); margin: 0 8px;
+    }
+    .step-line--done { background: var(--gold); }
+
+    /* 섹션 패널 */
+    .apply-panel { background: white; border: 1px solid var(--border); border-radius: 4px; padding: 32px; }
+    .apply-panel__title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.1rem; font-weight: 500;
+      margin-bottom: 24px; padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .apply-panel__title-num {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--navy); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; flex-shrink: 0;
+    }
+
+    /* 사이드 요약 박스 */
+    .summary-box {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+      position: sticky;
+      top: 96px;
+    }
+    .summary-box__img { width: 100%; height: 180px; object-fit: cover; }
+    .summary-box__body { padding: 24px; }
+    .summary-box__cat {
+      font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 6px;
+    }
+    .summary-box__title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1rem; font-weight: 500;
+      margin-bottom: 16px; line-height: 1.4;
+    }
+    .summary-box__info { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+    .summary-box__info-row {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.82rem; color: var(--text-mid);
+    }
+    .summary-hr { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+    .summary-total {
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .summary-total__label { font-size: 0.85rem; color: var(--text-mid); }
+    .summary-total__price {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.4rem; color: var(--gold);
+    }
+
+    /* 결제 수단 선택 */
+    .payment-methods { display: flex; flex-direction: column; gap: 12px; }
+    .payment-method {
+      border: 2px solid var(--border);
+      border-radius: 4px;
+      padding: 16px 20px;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex; align-items: center; gap: 14px;
+    }
+    .payment-method:hover { border-color: var(--gold-light); }
+    .payment-method.selected { border-color: var(--gold); background: rgba(200,151,58,0.04); }
+    .payment-method input[type="radio"] { accent-color: var(--gold); width: 16px; height: 16px; }
+    .payment-method__icon { font-size: 1.4rem; }
+    .payment-method__info {}
+    .payment-method__name { font-size: 0.9rem; font-weight: 500; color: var(--text-dark); }
+    .payment-method__desc { font-size: 0.78rem; color: var(--text-light); }
+
+    /* 카드 입력 폼 */
+    .card-form { display: none; }
+    .card-form.show { display: block; }
+    .card-input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    /* 카드 종류 선택 버튼 */
+    .card-type-btn {
+      border: 1.5px solid var(--border); border-radius: 6px; background: white;
+      padding: 7px 14px; cursor: pointer; transition: all 0.18s;
+      min-width: 64px; text-align: center;
+    }
+    .card-type-btn:hover { border-color: var(--gold); }
+    .card-type-btn.selected { border-color: var(--gold); background: rgba(200,151,58,0.08); box-shadow: 0 0 0 2px rgba(200,151,58,0.2); }
+    .card-type-btn--custom { border-style: dashed; color: var(--text-light); }
+
+    /* 계좌이체 안내 */
+    .bank-info { display: none; }
+    .bank-info.show { display: block; }
+    .bank-info-box {
+      background: var(--bg-cream);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 20px;
+      margin-top: 16px;
+    }
+    .bank-info-row {
+      display: flex; justify-content: space-between;
+      font-size: 0.88rem; padding: 6px 0;
+      border-bottom: 1px dashed var(--border);
+    }
+    .bank-info-row:last-child { border-bottom: none; }
+    .bank-info-row label { color: var(--text-light); }
+    .bank-info-row strong { color: var(--text-dark); }
+
+    /* 완료 화면 */
+    .complete-screen {
+      display: none;
+      text-align: center;
+      padding: 60px 20px;
+    }
+    .complete-screen.show { display: block; }
+    .complete-icon {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: rgba(200,151,58,0.12);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; margin: 0 auto 24px;
+    }
+
+    /* 체크박스 동의 */
+    .agree-row {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 0.85rem; color: var(--text-mid);
+      cursor: pointer;
+    }
+    .agree-row input { margin-top: 3px; accent-color: var(--gold); }
+    .agree-row a { color: var(--gold); text-decoration: underline; }
+
+    /* 서약 항목 */
+    .pledge-item {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 13px 16px;
+      border-bottom: 1px solid #f0e8d0;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .pledge-item:last-child { border-bottom: none; }
+    .pledge-item:hover { background: #fef5df; }
+    .pledge-item.checked { background: #fef9ec; }
+    .pledge-item input[type="checkbox"] {
+      margin-top: 2px; flex-shrink: 0;
+      accent-color: var(--gold); width: 16px; height: 16px;
+    }
+    .pledge-item__num {
+      flex-shrink: 0; width: 22px; height: 22px; border-radius: 50%;
+      background: var(--navy); color: white;
+      font-size: 0.7rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      margin-top: 1px;
+    }
+    .pledge-item.checked .pledge-item__num { background: var(--gold); }
+    .pledge-item__text {
+      font-size: 0.83rem; color: var(--text-dark); line-height: 1.7; flex: 1;
+    }
+
+    /* 응답 항목 패널 번호 뱃지 */
+    #custom-fields-panel .apply-panel__title-num {
+      background: var(--gold);
+      font-size: 0.9rem;
+    }
+    /* 패널 간 구분선 역할 */
+    #custom-fields-panel .apply-panel {
+      border-top: 2px solid var(--gold);
+    }
+
+    @media (max-width: 900px) {
+      .apply-layout { grid-template-columns: 1fr; }
+      .summary-box { position: static; }
+      .card-input-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <span class="page-header__label">SEMINAR APPLICATION</span>
+  <h1 class="page-header__title">세미나 신청</h1>
+</div>
+
+<section class="section">
+  <div class="container">
+    <!-- 스텝 -->
+    <div class="steps" id="steps">
+      <div class="step step--active" id="step1">
+        <div class="step__num">1</div>
+        <div class="step__label">신청자 정보</div>
+      </div>
+      <div class="step-line" id="line1"></div>
+      <div class="step" id="step2">
+        <div class="step__num">2</div>
+        <div class="step__label">결제 방법</div>
+      </div>
+      <div class="step-line" id="line2"></div>
+      <div class="step" id="step3">
+        <div class="step__num">3</div>
+        <div class="step__label">신청 완료</div>
+      </div>
+    </div>
+
+    <div class="apply-layout">
+      <!-- 왼쪽: 신청 폼 -->
+      <div>
+        <!-- STEP 1: 신청자 정보 -->
+        <div id="form-step1">
+          <!-- 신청 폼 헤더 블록 제거됨 -->
+          <!-- 미성년자 안내 배너 -->
+          <div style="background:#f0f4ff;border:1px solid #b8c8ef;border-radius:8px;padding:16px 20px;margin-bottom:14px;font-size:0.82rem;color:#2d3a6e;line-height:1.8;">
+            <div style="font-size:0.86rem;font-weight:700;margin-bottom:10px;color:#1e2d6e;">👶 미성년 자녀를 동반하시는 경우, 아래 사항을 꼭 확인해 주세요.</div>
+            <ul style="margin:0 0 10px 4px;padding-left:18px;list-style:disc;display:flex;flex-direction:column;gap:8px;">
+              <li>
+                미성년 자녀는 온라인 예약 및 결제가 어렵습니다.<br>
+                <strong>문의 게시판 또는 주최측에 직접 연락(문자 등)을 통해 신청</strong>해 주시고, 결제는 현장에서 진행해 주시기 바랍니다.
+              </li>
+              <li>
+                동반 자녀와 함께 친목회 참석을 원하시는 경우에도 주최측에 문의 후 신청해 주세요.<br>
+                <span style="color:#4a5ba8;">이 페이지의 문의폼으로 접수하시면 담당자가 안내드리겠습니다.</span>
+              </li>
+            </ul>
+            <div style="text-align:right;"><a href="/contact" style="color:var(--gold);font-size:0.78rem;">→ 문의 페이지에서 문의하기</a></div>
+          </div>
+          <!-- 비회원 안내 배너 (로그인 시 숨김) -->
+          <div id="guest-notice" style="background:#fffbf0;border:1px solid #f6e05e;border-radius:6px;padding:14px 18px;margin-bottom:16px;font-size:0.84rem;color:#744210;display:none;">
+            👋 비회원으로 신청하실 수 있습니다. 아래 정보를 직접 입력해주세요.<br>
+            <span style="font-size:0.78rem;color:#92400e;">회원이시라면 <a href="/login" style="color:var(--gold);text-decoration:underline;">로그인</a> 후 신청하시면 정보가 자동 입력됩니다.</span>
+          </div>
+          <!-- ① 응답 항목 패널 (세미나별 설문/질문 필드, survey_fields 있을 때만 표시) -->
+          <div id="custom-fields-panel" style="display:none;margin-bottom:16px;">
+            <div class="apply-panel">
+              <div class="apply-panel__title">
+                <div class="apply-panel__title-num" style="background:var(--gold);">Q</div>
+                응답 항목
+              </div>
+              <div id="custom-fields-wrap"></div>
+            </div>
+          </div>
+
+          <!-- ② 신청자 정보 패널 -->
+          <div class="apply-panel">
+            <div class="apply-panel__title">
+              <div class="apply-panel__title-num">1</div>
+              신청자 정보 입력
+            </div>
+            <div class="form-group">
+              <label class="form-label">이름 <span class="required">*</span></label>
+              <input type="text" class="form-input" id="f-name" placeholder="홍길동">
+              <div class="form-error" id="e-name">이름을 입력해주세요.</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">이메일 <span class="required">*</span></label>
+              <input type="email" class="form-input" id="f-email" placeholder="example@email.com">
+              <div class="form-error" id="e-email">올바른 이메일을 입력해주세요.</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">전화번호 <span class="required">*</span></label>
+              <input type="tel" class="form-input" id="f-phone" placeholder="010-0000-0000" oninput="formatPhone(this)" maxlength="13">
+              <div class="form-error" id="e-phone">전화번호를 입력해주세요.</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">생년월일 <span class="required">*</span></label>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <input type="text" class="form-input" id="f-birthdate"
+                  style="max-width:180px;"
+                  placeholder="예: 1993-03-18"
+                  maxlength="10"
+                  autocomplete="off"
+                  oninput="formatBirthdateInput(this); updateBirthdateDisplay(this.value)">
+                <span id="f-birthdate-display" style="font-size:0.82rem;color:var(--text-light);white-space:nowrap;"></span>
+              </div>
+              <div style="font-size:0.75rem;color:var(--text-light);margin-top:4px;">숫자만 입력하면 자동으로 - 가 붙습니다 (예: 19930318 → 1993-03-18)</div>
+              <div class="form-error" id="e-birthdate">생년월일을 입력해주세요.</div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">주소 <span class="required">*</span></label>
+              <div style="display:flex;gap:8px;margin-bottom:8px;">
+                <input type="text" class="form-input" id="f-postcode" placeholder="우편번호" style="width:140px;flex-shrink:0;" readonly>
+                <button type="button" class="btn btn--outline btn--sm" onclick="searchAddress()" style="white-space:nowrap;" id="btn-addr-search">
+                  주소 검색
+                </button>
+              </div>
+              <!-- iOS Safari 팝업 차단 대응: 인라인 임베드 레이어 방식 -->
+              <div id="addr-layer-wrap" style="display:none;position:relative;width:100%;border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:8px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg-light);border-bottom:1px solid var(--border);">
+                  <span style="font-size:0.82rem;font-weight:600;color:var(--text);">📮 주소 검색</span>
+                  <button type="button" onclick="closeAddrLayer()" style="background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--text-light);padding:2px 6px;line-height:1;">✕</button>
+                </div>
+                <div id="addr-layer" style="width:100%;height:400px;"></div>
+              </div>
+              <input type="text" class="form-input" id="f-addr1" placeholder="도로명 주소" style="margin-bottom:8px;" readonly>
+              <input type="text" class="form-input" id="f-addr2" placeholder="상세주소 (동/호수 등)">
+              <div class="form-error" id="e-addr">주소를 입력해주세요.</div>
+            </div>
+          </div>
+
+          <button class="btn btn--primary btn--full mt-16" onclick="goStep2()">다음 단계 →</button>
+        </div>
+
+        <!-- STEP 2: 결제 방법 -->
+        <div id="form-step2" style="display:none;">
+          <div class="apply-panel">
+            <div class="apply-panel__title">
+              <div class="apply-panel__title-num">2</div>
+              결제 방법 선택
+            </div>
+
+            <div class="payment-methods">
+              <!-- 계좌이체 (첫 번째) -->
+              <label class="payment-method selected" id="pm-transfer" onclick="selectPayment('transfer')">
+                <input type="radio" name="payment" value="transfer" checked>
+                <div class="payment-method__icon">🏦</div>
+                <div class="payment-method__info">
+                  <div class="payment-method__name">계좌이체</div>
+                  <div class="payment-method__desc">무통장 입금 후 확인까지 1~2시간 소요</div>
+                </div>
+              </label>
+              <!-- 카카오페이 / 카드 (심사중) -->
+              <label class="payment-method" id="pm-card" onclick="selectPayment('card')">
+                <input type="radio" name="payment" value="card">
+                <div class="payment-method__icon">💳</div>
+                <div class="payment-method__info">
+                  <div class="payment-method__name">카카오페이 / 카드 <span style="font-size:0.7rem;background:#fee500;color:#3c1e1e;padding:2px 7px;border-radius:3px;margin-left:6px;font-weight:600;">결제 심사중 · 선택가능</span></div>
+                  <div class="payment-method__desc">카카오페이 결제 심사 완료 후 이용 가능합니다</div>
+                </div>
+              </label>
+              <!-- 현장 현금결제 -->
+              <label class="payment-method" id="pm-cash" onclick="selectPayment('cash')">
+                <input type="radio" name="payment" value="cash">
+                <div class="payment-method__icon">💵</div>
+                <div class="payment-method__info">
+                  <div class="payment-method__name">현장 현금결제</div>
+                  <div class="payment-method__desc">세미나 당일 현장에서 현금으로 결제합니다</div>
+                </div>
+              </label>
+            </div>
+
+            <!-- 카카오페이 안내 (카드 선택 시 표시) -->
+            <div class="card-form mt-24" id="card-form">
+              <div style="background:#fffde7;border:1px solid #fee500;border-radius:10px;padding:20px 22px;display:flex;align-items:flex-start;gap:14px;">
+                <div style="font-size:2rem;flex-shrink:0;">🟡</div>
+                <div>
+                  <div style="font-weight:700;color:#3c1e1e;margin-bottom:6px;font-size:0.95rem;">카카오페이 결제 심사 진행 중</div>
+                  <p style="font-size:0.84rem;color:#5a4000;line-height:1.8;margin:0;">심사 완료 후 홈페이지 내에서 결제를 이용하실 수 있으며, 현재는 결제가 불가합니다. <strong>5월 중 결제 링크를 별도로 안내드릴 예정입니다.</strong></p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 현장 현금결제 안내 -->
+            <div class="card-form mt-24" id="cash-info">
+              <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:20px 22px;display:flex;align-items:flex-start;gap:14px;">
+                <div style="font-size:2rem;flex-shrink:0;">💵</div>
+                <div>
+                  <div style="font-weight:700;color:#166534;margin-bottom:6px;font-size:0.95rem;">현장 현금결제 안내</div>
+                  <p style="font-size:0.84rem;color:#166534;line-height:1.8;margin:0;">세미나 당일 현장에서 현금으로 결제해 주세요.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 계좌이체 안내 (DB에서 동적 로드) -->
+            <div class="bank-info show mt-24" id="bank-info">
+              <p style="font-size:0.85rem; color:var(--text-mid); margin-bottom:12px;">아래 계좌로 입금 후 신청이 완료됩니다.</p>
+              <div class="bank-info-box">
+                <div class="bank-info-row"><label>은행</label><strong id="bank-name-display">-</strong></div>
+                <div class="bank-info-row"><label>계좌번호</label><strong id="bank-account-display">-</strong></div>
+                <div class="bank-info-row"><label>예금주</label><strong id="bank-holder-display">-</strong></div>
+                <div class="bank-info-row"><label>입금금액</label><strong id="bank-amount">-</strong></div>
+                <div class="bank-info-row"><label>입금기한</label><strong id="bank-deadline-display">신청 후 24시간 이내</strong></div>
+              </div>
+              <p id="bank-memo-display" style="font-size:0.8rem;color:var(--text-light);margin-top:10px;line-height:1.7;"></p>
+            </div>
+
+            <hr class="summary-hr" style="margin:28px 0;">
+
+            <!-- 환불 규정 -->
+            <div style="margin-bottom:24px;">
+              <div style="font-size:0.8rem;font-weight:700;color:var(--navy);letter-spacing:0.06em;margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+                📋 환불 규정
+                <span style="font-size:0.7rem;font-weight:400;color:var(--text-light);">한국 공정거래위원회 표준약관 기준 · <strong style="color:#c53030;">신청일 기준 적용</strong></span>
+              </div>
+              <table style="width:100%;border-collapse:collapse;font-size:0.8rem;">
+                <thead>
+                  <tr style="background:var(--navy);">
+                    <th style="padding:10px 14px;text-align:left;color:white;font-weight:600;border:1px solid #2a3560;">취소 시점</th>
+                    <th style="padding:10px 14px;text-align:left;color:white;font-weight:600;border:1px solid #2a3560;">환불 금액</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="background:white;">
+                    <td style="padding:10px 14px;border:1px solid var(--border);color:var(--text-dark);">결제 후 7일 이내 &amp; 세미나 30일 이전</td>
+                    <td style="padding:10px 14px;border:1px solid var(--border);color:#2a7a2a;font-weight:600;">전액 환불</td>
+                  </tr>
+                  <tr style="background:#f9f9f9;">
+                    <td style="padding:10px 14px;border:1px solid var(--border);color:var(--text-dark);">세미나 30일 ~ 15일 이전</td>
+                    <td style="padding:10px 14px;border:1px solid var(--border);color:var(--text-dark);">70% 환불 <span style="color:var(--text-light);font-size:0.75rem;">(위약금 10만원 기준)</span></td>
+                  </tr>
+                  <tr style="background:white;">
+                    <td style="padding:10px 14px;border:1px solid var(--border);color:var(--text-dark);">세미나 14일 ~ 7일 이전</td>
+                    <td style="padding:10px 14px;border:1px solid var(--border);color:var(--text-dark);">50% 환불 <span style="color:var(--text-light);font-size:0.75rem;">(위약금 15만원 기준)</span></td>
+                  </tr>
+                  <tr style="background:#f9f9f9;">
+                    <td style="padding:10px 14px;border:1px solid var(--border);color:var(--text-dark);">세미나 6일 ~ 3일 이전</td>
+                    <td style="padding:10px 14px;border:1px solid var(--border);color:var(--text-dark);">30% 환불 <span style="color:var(--text-light);font-size:0.75rem;">(위약금 21만원 기준)</span></td>
+                  </tr>
+                  <tr style="background:white;">
+                    <td style="padding:10px 14px;border:1px solid var(--border);color:var(--text-dark);">세미나 2일 이전 ~ 당일</td>
+                    <td style="padding:10px 14px;border:1px solid var(--border);color:#c53030;font-weight:600;">환불 불가</td>
+                  </tr>
+                </tbody>
+              </table>
+              <div style="margin-top:10px;padding:10px 14px;background:#f5f5f5;border-radius:6px;font-size:0.76rem;color:var(--text-mid);line-height:1.8;">
+                <strong style="color:var(--navy);">환불 불가 예외 인정 사유 (전액 환불)</strong><br>
+                · 천재지변, 갑작스러운 입원/수술 등 불가항력적 사유 (증빙 제출 시)<br>
+                · 주최 측 사정으로 세미나가 취소되거나 일정이 변경될 경우<br>
+                <br>
+                <strong style="color:var(--navy);">양도 허용 조항</strong><br>
+                · 환불 대신 지인에게 참가권 양도 허용 (세미나 3일 전까지, 사전 통보 조건)<br>
+                <br>
+                <strong style="color:var(--navy);">결제 수단별 처리 기준</strong><br>
+                · 계좌이체: 영업일 기준 3~5일 내 환불 &nbsp;· 카드결제: 카드사 기준에 따라 처리
+              </div>
+            </div>
+
+            <!-- ── 참가자 서약서 ── -->
+            <div id="pledge-section" style="display:none;margin-bottom:28px;">
+              <div style="font-size:0.8rem;font-weight:700;color:var(--navy);letter-spacing:0.06em;margin-bottom:14px;display:flex;align-items:center;gap:6px;">
+                🤝 참가자 서약서
+                <span style="font-size:0.7rem;font-weight:400;color:var(--text-light);">아래 항목을 모두 읽고 체크해주세요</span>
+              </div>
+              <div style="border:1.5px solid #e8d5a3;border-radius:10px;overflow:hidden;background:#fffdf5;">
+                <div id="pledge-list" style="padding:0;"></div>
+              </div>
+              <label class="agree-row" style="margin-top:14px;padding:14px 16px;background:#fef9ec;border:1.5px solid #e8d5a3;border-radius:8px;">
+                <input type="checkbox" id="pledge-all-check" onchange="toggleAllPledge(this.checked)">
+                <span style="font-weight:700;color:#7a5c1e;">위 서약 항목을 모두 확인하였으며 이에 동의합니다. <span class="required">*</span></span>
+              </label>
+            </div>
+
+            <!-- 동의 -->
+            <label class="agree-row mb-24">
+              <input type="checkbox" id="agree-check">
+              <span><a href="#" onclick="openPrivacyModal();return false;" style="color:var(--gold);text-decoration:underline;cursor:pointer;">개인정보 처리방침</a> 및 위 <strong>환불 규정</strong>에 동의합니다. <span class="required">*</span></span>
+            </label>
+
+            <div style="display:flex; gap:12px;">
+              <button class="btn btn--outline" onclick="goStep1()">← 이전</button>
+              <button class="btn btn--gold btn--full" id="submit-btn" onclick="submitApplication()">신청 완료하기</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: 완료 -->
+        <div id="form-step3" style="display:none;">
+          <div class="apply-panel">
+            <div class="complete-screen show">
+              <div class="complete-icon">✓</div>
+              <h2 class="serif" style="font-size:1.5rem; margin-bottom:12px;">신청이 완료되었습니다!</h2>
+              <p style="color:var(--text-mid); font-size:0.9rem; line-height:1.9; margin-bottom:8px;">
+                세미나 신청을 완료해 주셔서 감사합니다.
+              </p>
+              <p id="complete-payment-notice" style="color:var(--gold); font-size:0.85rem; margin-bottom:32px;"></p>
+              <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+                <a href="/mypage" class="btn btn--primary">마이페이지에서 확인</a>
+                <a href="/seminar" class="btn btn--outline">다른 세미나 보기</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 오른쪽: 요약 박스 -->
+      <div class="summary-box" id="summary-box">
+        <img src="" alt="" class="summary-box__img" id="sum-img">
+        <div class="summary-box__body">
+          <div class="summary-box__cat" id="sum-cat"></div>
+          <div class="summary-box__title" id="sum-title">세미나 정보를 불러오는 중...</div>
+          <div class="summary-box__info">
+            <div class="summary-box__info-row"><span>📅</span><span id="sum-date">-</span></div>
+            <div class="summary-box__info-row"><span>⏰</span><span id="sum-time">-</span></div>
+            <div class="summary-box__info-row"><span>📍</span><span id="sum-location">-</span></div>
+            <div class="summary-box__info-row" id="sum-organizer-row" style="display:none;"><span>🏢</span><span id="sum-organizer">-</span></div>
+            <div class="summary-box__info-row"><span>👥</span><span id="sum-cap">-</span></div>
+          </div>
+          <hr class="summary-hr">
+          <div class="summary-total">
+            <div class="summary-total__label">참가비 (1인)</div>
+            <div class="summary-total__price" id="sum-price">-</div>
+          </div>
+          <div id="extra-price-info" style="display:none;text-align:right;margin-top:4px;line-height:1.7;"></div>
+          <div style="font-size:0.75rem; color:var(--text-light); text-align:right; margin-top:4px;">부가세 포함</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<!-- CryptoJS: AES-256 카드 정보 암호화 -->
+<script src="https://cdn.jsdelivr.net/npm/crypto-js@4.2.0/crypto-js.min.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  renderNavbar('seminar');
+  renderFooter();
+
+  // 비회원도 신청 가능 — 로그인 체크 제거
+  // 로그인 상태이면 정보 자동 입력, 비회원이면 직접 입력
+
+  let seminarData = null;
+  let siteSettings = {};
+  const urlParams = new URLSearchParams(window.location.search);
+  const seminarId = urlParams.get('id');
+
+  /* ── 사이트 설정 (계좌·이메일·커스텀 필드) 로드 ── */
+  async function loadSiteSettings() {
+    try {
+      const rows = await SB.getAll('site_content', { limit: 300 });
+      rows.forEach(item => { siteSettings[item.key] = item.content; });
+      // 계좌 정보 표시
+      const g = (k, fb) => siteSettings[k] || fb;
+      document.getElementById('bank-name-display').textContent = g('bank_name', '기업은행');
+      document.getElementById('bank-account-display').textContent = g('bank_account', '635-036959-01-016');
+      document.getElementById('bank-holder-display').textContent = g('bank_holder', '(주)빛의아갈탄');
+      document.getElementById('bank-deadline-display').textContent = g('bank_deadline', '신청 후 48시간 이내');
+      const memo = g('bank_memo', '');
+      const memoEl = document.getElementById('bank-memo-display');
+      if (memo) { memoEl.textContent = memo; memoEl.style.display = 'block'; } else { memoEl.style.display = 'none'; }
+      // 세미나 로드 후 survey_fields로 렌더링됨 (renderSeminarSurveyFields)
+    } catch(e) { /* 기본값 유지 */ }
+  }
+
+  /* ── 커스텀 필드 렌더링 ── */
+  function renderApplyCustomFields() {
+    const wrap = document.getElementById('custom-fields-wrap');
+    if (!wrap) return;
+    let fields = [];
+    try {
+      const raw = siteSettings['apply_custom_fields'] || '';
+      fields = raw ? JSON.parse(raw) : [{ id:'cf_memo', label:'참가 동기 / 문의 사항', type:'textarea', required:false, options:'' }];
+    } catch(e) {
+      fields = [{ id:'cf_memo', label:'참가 동기 / 문의 사항', type:'textarea', required:false, options:'' }];
+    }
+    wrap.innerHTML = fields.map(f => {
+      const req = f.required ? '<span class="required">*</span>' : '';
+      let input = '';
+      if (f.type === 'textarea') {
+        input = `<textarea class="form-textarea" id="apply-cf-${f.id}" placeholder="${escapeAttr(f.label)}"></textarea>`;
+      } else if (f.type === 'select') {
+        const opts = (f.options||'').split(',').map(o => o.trim()).filter(Boolean);
+        input = `<select class="form-select" id="apply-cf-${f.id}"><option value="">선택해 주세요</option>${opts.map(o=>`<option value="${escapeAttr(o)}">${o}</option>`).join('')}</select>`;
+      } else {
+        input = `<input type="text" class="form-input" id="apply-cf-${f.id}" placeholder="${escapeAttr(f.label)}">`;
+      }
+      return `<div class="form-group">
+        <label class="form-label">${f.label} ${req}</label>
+        ${input}
+        ${f.required ? `<div class="form-error" id="e-cf-${f.id}">${f.label}을(를) 입력해주세요.</div>` : ''}
+      </div>`;
+    }).join('');
+
+    // 커스텀 필드 패널 항상 표시 (기본 필드도 포함)
+    const panel = document.getElementById('custom-fields-panel');
+    if (panel) panel.style.display = 'block';
+  }
+
+  function formatPhone(input) {
+    let v = input.value.replace(/\D/g, '');
+    if (v.length <= 3) { input.value = v; }
+    else if (v.length <= 7) { input.value = v.slice(0,3)+'-'+v.slice(3); }
+    else {
+      if (v.startsWith('02')) input.value = v.slice(0,2)+'-'+v.slice(2,6)+(v.length>6?'-'+v.slice(6,10):'');
+      else input.value = v.slice(0,3)+'-'+v.slice(3,7)+(v.length>7?'-'+v.slice(7,11):'');
+    }
+  }
+  function escapeAttr(str) {
+    return String(str||'').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  /* ── 커스텀 필드 값 수집 ── */
+  function collectCustomFieldValues() {
+    let fields = [];
+    try {
+      const raw = siteSettings['apply_custom_fields'] || '';
+      fields = raw ? JSON.parse(raw) : [{ id:'cf_memo', label:'참가 동기 / 문의 사항', type:'textarea', required:false }];
+    } catch(e) {
+      fields = [{ id:'cf_memo', label:'참가 동기 / 문의 사항', type:'textarea', required:false }];
+    }
+    const parts = [];
+    for (const f of fields) {
+      const el = document.getElementById(`apply-cf-${f.id}`);
+      if (!el) continue;
+      const val = el.value.trim();
+      if (val) parts.push(`[${f.label}] ${val}`);
+    }
+    return parts.join('\n');
+  }
+
+  /* ── 커스텀 필드 유효성 검사 ── */
+  function validateCustomFields() {
+    let ok = true;
+    let fields = [];
+    try {
+      const raw = siteSettings['apply_custom_fields'] || '';
+      fields = raw ? JSON.parse(raw) : [];
+    } catch(e) { fields = []; }
+    for (const f of fields) {
+      if (!f.required) continue;
+      const el = document.getElementById(`apply-cf-${f.id}`);
+      const errEl = document.getElementById(`e-cf-${f.id}`);
+      if (!el) continue;
+      const empty = !el.value.trim();
+      if (errEl) errEl.classList.toggle('show', empty);
+      if (empty) ok = false;
+    }
+    return ok;
+  }
+
+  /* ── 세미나 정보 로드 ── */
+  async function loadSeminar() {
+    if (!seminarId) {
+      Toast.show('세미나를 찾을 수 없습니다.', 'error');
+      setTimeout(() => window.location.href = '/seminar', 1500);
+      return;
+    }
+    try {
+      seminarData = await SB.getOne('seminars', seminarId);
+      if (!seminarData) throw new Error('not found');
+
+      // ── 회원 전용 세미나: 비로그인 시 차단 ──
+      if (seminarData.member_only === 'member' && !Auth.isLoggedIn()) {
+        document.querySelector('.apply-layout') && (document.querySelector('.apply-layout').style.display = 'none');
+        const steps = document.getElementById('steps');
+        if (steps) steps.style.display = 'none';
+        // 차단 메시지 표시
+        const blockDiv = document.createElement('div');
+        blockDiv.style.cssText = 'max-width:480px;margin:60px auto;text-align:center;padding:40px 32px;background:white;border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-sm);';
+        blockDiv.innerHTML = `
+          <div style="font-size:2.5rem;margin-bottom:16px;">🔒</div>
+          <div style="font-family:'Noto Serif KR',serif;font-size:1.2rem;font-weight:500;color:var(--text-dark);margin-bottom:12px;">회원 전용 세미나입니다</div>
+          <p style="font-size:0.88rem;color:var(--text-mid);line-height:1.8;margin-bottom:24px;">이 세미나는 회원만 신청하실 수 있습니다.<br>로그인 후 신청해 주세요.</p>
+          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+            <a href="login.html?redirect=${encodeURIComponent('/seminar-apply?id='+seminarId)}" class="btn btn--gold">로그인하기</a>
+            <a href="/register" class="btn btn--outline">회원가입</a>
+            <a href="/seminar" class="btn btn--outline">세미나 목록</a>
+          </div>`;
+        document.querySelector('.section .container').prepend(blockDiv);
+        return;
+      }
+
+      updateSummary();
+      prefillUserInfo();
+      renderSeminarSurveyFields(); // 세미나별 설문 필드 렌더링
+      await renderPledgeSection();  // 서약 항목 렌더링
+    } catch (e) {
+      Toast.show('세미나 정보를 불러오지 못했습니다.', 'error');
+    }
+  }
+
+  /* ════════════════════════════════════════
+     참가자 서약서 렌더링
+  ════════════════════════════════════════ */
+  const DEFAULT_PLEDGE_ITEMS = [
+    '본 세미나에서 알게 된 모든 정보(기도·호흡법, 다른 참가자의 개인정보, 자료, 신청 폼, 홈페이지 등)를 제3자에게 누설·공개·전용하지 않겠습니다.',
+    '허가 없이 녹음·녹화·촬영·스크린샷을 하거나, SNS 등 미디어에 게재·전재하지 않겠습니다.',
+    '세미나 참석을 위해 개인정보(이름·주소·연락처 등) 및 신분증명서 제출에 동의합니다.',
+    '세미나 당일, 각 의식이 전체 참가자와 주최자의 에너지에 영향을 미침을 이해하고, 전날부터 아가스티아 성자에게 마음을 맞추어 준비하겠습니다.',
+    '세미나 당일, 강의·의식 중 사담을 삼가고 주최자와 아가스티아 성자에게 집중하겠습니다.',
+    '모임 참가자에게 비즈니스·상품 판매 등 일체의 권유 행위를 하지 않겠습니다.',
+    '준비 및 정리에 적극적으로 협력합니다.',
+    '참가자 간 분쟁이나 물품 분실에 대해 주최 측은 책임을 지지 않음을 인지합니다.',
+    '위 약속을 위반하여 주의를 받았음에도 반복할 경우, 퇴실 조치 및 손해배상·법적 조치가 취해질 수 있음에 동의합니다.',
+    '가벼운 언행이 카르마를 만들 수 있음을 인식하고 순수한 마음으로 참여하겠습니다.',
+    '본 서약에 관한 분쟁이 생길 경우, 민법을 준거법으로 하고 서울 지방법원을 전속 합의 관할 법원으로 하는 것에 동의합니다.'
+  ];
+
+  async function renderPledgeSection() {
+    // 1) 세미나 전용 서약이 있으면 그걸 사용, 없으면 기본 서약 로드
+    let pledgeItems = [];
+    if (seminarData && seminarData.pledge_items) {
+      try {
+        const pd = typeof seminarData.pledge_items === 'string'
+          ? JSON.parse(seminarData.pledge_items) : seminarData.pledge_items;
+        if (Array.isArray(pd) && pd.length) pledgeItems = pd;
+      } catch(e) {}
+    }
+
+    // 기본 서약 사용 (세미나 전용 없을 때) - loadContentMap 방식으로 안정적으로 로드
+    if (!pledgeItems.length) {
+      try {
+        const map = await SB.loadContentMap(300);
+        const pledgeRow = map['default_pledge_items'];
+        if (pledgeRow && pledgeRow.content) {
+          let raw = pledgeRow.content;
+          // API가 이미 배열로 파싱한 경우 그대로 사용
+          let parsed;
+          if (Array.isArray(raw)) {
+            parsed = raw;
+          } else if (typeof raw === 'string') {
+            // HTML 엔티티 디코딩 대비
+            raw = raw.replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>');
+            parsed = JSON.parse(raw);
+          }
+          if (Array.isArray(parsed) && parsed.length) pledgeItems = parsed;
+        }
+      } catch(e) { console.warn('[Pledge] DB 로드 실패, 기본값 사용:', e.message); }
+    }
+
+    // 기본값도 없으면 하드코딩된 기본 서약 사용
+    if (!pledgeItems.length) pledgeItems = DEFAULT_PLEDGE_ITEMS;
+
+    // 렌더링
+    const section = document.getElementById('pledge-section');
+    const list = document.getElementById('pledge-list');
+    list.innerHTML = '';
+    pledgeItems.forEach((text, i) => {
+      const div = document.createElement('div');
+      div.className = 'pledge-item';
+      div.innerHTML = `
+        <input type="checkbox" id="pledge-${i}" onchange="onPledgeCheck()">
+        <div class="pledge-item__num">${i + 1}</div>
+        <label for="pledge-${i}" class="pledge-item__text">${text}</label>
+      `;
+      div.querySelector('input').addEventListener('change', function() {
+        div.classList.toggle('checked', this.checked);
+        onPledgeCheck();
+      });
+      list.appendChild(div);
+    });
+    section.style.display = 'block';
+  }
+
+  function onPledgeCheck() {
+    const all = [...document.querySelectorAll('#pledge-list input[type="checkbox"]')];
+    const allChecked = all.length > 0 && all.every(c => c.checked);
+    document.getElementById('pledge-all-check').checked = allChecked;
+  }
+
+  function toggleAllPledge(checked) {
+    document.querySelectorAll('#pledge-list input[type="checkbox"]').forEach(c => {
+      c.checked = checked;
+      c.closest('.pledge-item').classList.toggle('checked', checked);
+    });
+  }
+
+  function validatePledge() {
+    const section = document.getElementById('pledge-section');
+    if (!section || section.style.display === 'none') return true;
+    const items = [...document.querySelectorAll('#pledge-list input[type="checkbox"]')];
+    if (!items.length) return true;
+    const unchecked = items.filter(c => !c.checked);
+    if (unchecked.length) {
+      Toast.show(`서약 항목 ${unchecked.length}개를 아직 체크하지 않으셨습니다.`, 'error');
+      document.getElementById('pledge-section').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return false;
+    }
+    return true;
+  }
+
+  // 추가금 합계 (전역)
+  let _extraPriceTotal = 0;
+
+  function moneyToNumber(value) {
+    if (typeof value === "number") return value;
+    return Number(String(value || "").replace(/[^0-9.-]/g, "")) || 0;
+  }
+
+  /* ── 추가금 재계산 및 UI 업데이트 ── */
+  function recalcExtraPrice() {
+    if (!seminarData) return;
+    let extra = 0;
+    let fields = [];
+    try {
+      const sf = seminarData.survey_fields;
+      if (Array.isArray(sf)) fields = sf;
+      else if (typeof sf === 'string' && sf.trim()) fields = JSON.parse(sf);
+    } catch(e) {}
+    fields.forEach(f => {
+      if (!f.hasExtraPrice || !['radio','checkbox','select'].includes(f.type)) return;
+      const opts = (f.options||[]).map(o => typeof o === 'string' ? {label:o, extraPrice:0} : o);
+      if (f.type === 'radio') {
+        const checked = document.querySelector(`input[name="apply-sf-${f.id}"]:checked`);
+        if (checked) {
+          const opt = opts.find(o => o.label === checked.value);
+          if (opt && opt.extraPrice) extra += moneyToNumber(opt.extraPrice);
+        }
+      } else if (f.type === 'checkbox') {
+        document.querySelectorAll(`input[name="apply-sf-${f.id}"]:checked`).forEach(cb => {
+          const opt = opts.find(o => o.label === cb.value);
+          if (opt && opt.extraPrice) extra += moneyToNumber(opt.extraPrice);
+        });
+      } else if (f.type === 'select') {
+        const sel = document.getElementById(`apply-sf-${f.id}`);
+        if (sel && sel.value) {
+          const opt = opts.find(o => o.label === sel.value);
+          if (opt && opt.extraPrice) extra += moneyToNumber(opt.extraPrice);
+        }
+      }
+    });
+    _extraPriceTotal = extra;
+    const basePrice = moneyToNumber(seminarData.price);
+    const total = basePrice + extra;
+    // 가격 요약 업데이트
+    const sumPriceEl = document.getElementById('sum-price');
+    const extraPriceInfoEl = document.getElementById('extra-price-info');
+    if (sumPriceEl) sumPriceEl.textContent = formatPrice(total);
+    if (extraPriceInfoEl) {
+      if (extra > 0) {
+        extraPriceInfoEl.innerHTML = `<span style="color:var(--text-light);font-size:0.8rem;">기본: ${formatPrice(basePrice)}</span> <span style="color:#d69e2e;font-size:0.8rem;font-weight:600;">+ 추가: ${formatPrice(extra)}</span>`;
+        extraPriceInfoEl.style.display = 'block';
+      } else {
+        extraPriceInfoEl.style.display = 'none';
+      }
+    }
+    // 계좌이체 입금 금액도 업데이트
+    const bankAmountEl = document.getElementById('bank-amount');
+    if (bankAmountEl) bankAmountEl.textContent = formatPrice(total);
+  }
+
+  /* ── 세미나별 설문 필드 렌더링 ── */
+  function renderSeminarSurveyFields() {
+    const wrap = document.getElementById('custom-fields-wrap');
+    if (!wrap || !seminarData) return;
+    let fields = [];
+    if (seminarData.survey_fields) {
+      const sf = seminarData.survey_fields;
+      if (Array.isArray(sf)) {
+        fields = sf; // API가 이미 배열로 파싱해서 반환한 경우
+      } else if (typeof sf === 'string' && sf.trim()) {
+        try { fields = JSON.parse(sf); } catch(e) { fields = []; }
+      }
+    }
+    // survey_fields가 없으면 패널 숨김
+    if (!fields.length) {
+      const panel = document.getElementById('custom-fields-panel');
+      if (panel) panel.style.display = 'none';
+      return;
+    }
+    wrap.innerHTML = fields.map(f => {
+      const req = f.required ? '<span class="required">*</span>' : '';
+      // 옵션 정규화: string[] → {label, extraPrice}[]
+      const normalizedOpts = (f.options||[]).map(o => typeof o === 'string' ? {label:o,extraPrice:0} : o);
+      const hasExtra = f.hasExtraPrice;
+      let inputHtml = '';
+      if (f.type === 'textarea') {
+        inputHtml = `<textarea class="form-textarea" id="apply-sf-${f.id}" placeholder="${escapeAttr(f.label)}" style="min-height:80px;"></textarea>`;
+      } else if (f.type === 'radio') {
+        const opts = normalizedOpts.map((o, i) => {
+          const badge = (hasExtra && o.extraPrice) ? `<span style="margin-left:6px;font-size:0.75rem;color:#d69e2e;font-weight:600;">+${formatPrice(o.extraPrice)}</span>` : '';
+          return `<label style="display:flex;align-items:center;gap:8px;font-size:0.88rem;cursor:pointer;padding:6px 10px;border-radius:6px;border:1px solid transparent;transition:all 0.15s;" onmouseover="this.style.background='#fffbf0'" onmouseout="this.style.background=''"
+            >
+            <input type="radio" name="apply-sf-${f.id}" value="${escapeAttr(o.label)}" id="apply-sf-${f.id}-${i}" style="accent-color:var(--gold);" onchange="recalcExtraPrice()">
+            ${o.label}${badge}
+           </label>`;
+        }).join('');
+        inputHtml = `<div style="display:flex;flex-direction:column;gap:2px;">${opts}</div>`;
+      } else if (f.type === 'checkbox') {
+        const opts = normalizedOpts.map((o, i) => {
+          const badge = (hasExtra && o.extraPrice) ? `<span style="margin-left:6px;font-size:0.75rem;color:#d69e2e;font-weight:600;">+${formatPrice(o.extraPrice)}</span>` : '';
+          return `<label style="display:flex;align-items:center;gap:8px;font-size:0.88rem;cursor:pointer;padding:6px 10px;border-radius:6px;border:1px solid transparent;transition:all 0.15s;" onmouseover="this.style.background='#fffbf0'" onmouseout="this.style.background=''">
+            <input type="checkbox" name="apply-sf-${f.id}" value="${escapeAttr(o.label)}" style="accent-color:var(--gold);" onchange="recalcExtraPrice()">
+            ${o.label}${badge}
+           </label>`;
+        }).join('');
+        inputHtml = `<div style="display:flex;flex-direction:column;gap:2px;">${opts}</div>`;
+      } else if (f.type === 'select') {
+        const opts = normalizedOpts.map(o => {
+          const priceTag = (hasExtra && o.extraPrice) ? ` (+${formatPrice(o.extraPrice)})` : '';
+          return `<option value="${escapeAttr(o.label)}">${o.label}${priceTag}</option>`;
+        }).join('');
+        inputHtml = `<select class="form-select" id="apply-sf-${f.id}" onchange="recalcExtraPrice()"><option value="">선택해 주세요</option>${opts}</select>`;
+      } else if (f.type === 'date') {
+        inputHtml = `<input type="date" class="form-input" id="apply-sf-${f.id}">`;
+      } else if (f.type === 'number') {
+        inputHtml = `<input type="number" class="form-input" id="apply-sf-${f.id}" placeholder="${escapeAttr(f.label)}">`;
+      } else {
+        inputHtml = `<input type="text" class="form-input" id="apply-sf-${f.id}" placeholder="${escapeAttr(f.label)}">`;
+      }
+      const extraNote = hasExtra ? `<div style="font-size:0.75rem;color:#d69e2e;margin-top:4px;">💰 선택 항목에 따라 추가 결제 금액이 자동 반영됩니다.</div>` : '';
+      const sublabelHtml = f.sublabel ? `<div style="font-size:0.78rem;color:var(--text-light);margin-top:2px;margin-bottom:6px;line-height:1.6;">${f.sublabel}</div>` : '';
+      return `<div class="form-group">
+        <label class="form-label">${f.label} ${req}</label>
+        ${sublabelHtml}
+        ${inputHtml}
+        ${extraNote}
+        ${f.required ? `<div class="form-error" id="e-sf-${f.id}" style="display:none;">${f.label}을(를) 입력해주세요.</div>` : ''}
+      </div>`;
+    }).join('');
+
+    // 응답 항목 패널: 필드 있을 때만 표시
+    const panel = document.getElementById('custom-fields-panel');
+    if (panel) panel.style.display = wrap.innerHTML.trim() ? 'block' : 'none';
+  }
+
+  /* ── 세미나별 설문 필드 값 수집 ── */
+  function collectSeminarSurveyValues() {
+    if (!seminarData || !seminarData.survey_fields) {
+      return '';
+    }
+    let fields = [];
+    const sf = seminarData.survey_fields;
+    if (Array.isArray(sf)) {
+      fields = sf;
+    } else if (typeof sf === 'string' && sf.trim()) {
+      try { fields = JSON.parse(sf); } catch(e) {}
+    }
+    if (!fields.length) return '';
+    const parts = [];
+    let extraSummary = [];
+    for (const f of fields) {
+      const normalizedOpts = (f.options||[]).map(o => typeof o === 'string' ? {label:o,extraPrice:0} : o);
+      if (f.type === 'radio') {
+        const checked = document.querySelector(`input[name="apply-sf-${f.id}"]:checked`);
+        if (checked) {
+          const opt = normalizedOpts.find(o => o.label === checked.value);
+          const extra = (f.hasExtraPrice && opt && opt.extraPrice) ? ` (추가금 +${formatPrice(opt.extraPrice)})` : '';
+          parts.push(`[${f.label}] ${checked.value}${extra}`);
+          if (extra) extraSummary.push(`${checked.value}: +${formatPrice(opt.extraPrice)}`);
+        }
+      } else if (f.type === 'checkbox') {
+        const checked = Array.from(document.querySelectorAll(`input[name="apply-sf-${f.id}"]:checked`));
+        if (checked.length) {
+          const vals = checked.map(c => {
+            const opt = normalizedOpts.find(o => o.label === c.value);
+            const extra = (f.hasExtraPrice && opt && opt.extraPrice) ? ` (+${formatPrice(opt.extraPrice)})` : '';
+            if (extra) extraSummary.push(`${c.value}: +${formatPrice(opt.extraPrice)}`);
+            return c.value + extra;
+          });
+          parts.push(`[${f.label}] ${vals.join(', ')}`);
+        }
+      } else if (f.type === 'select') {
+        const el = document.getElementById(`apply-sf-${f.id}`);
+        if (el && el.value) {
+          const opt = normalizedOpts.find(o => o.label === el.value);
+          const extra = (f.hasExtraPrice && opt && opt.extraPrice) ? ` (추가금 +${formatPrice(opt.extraPrice)})` : '';
+          parts.push(`[${f.label}] ${el.value}${extra}`);
+          if (extra) extraSummary.push(`${el.value}: +${formatPrice(opt.extraPrice)}`);
+        }
+      } else {
+        const el = document.getElementById(`apply-sf-${f.id}`);
+        if (el && el.value.trim()) parts.push(`[${f.label}] ${el.value.trim()}`);
+      }
+    }
+    // 추가금 합계 메모
+    if (extraSummary.length) {
+      parts.push(`[추가금 내역] ${extraSummary.join(' / ')} → 합계 +${formatPrice(_extraPriceTotal)}`);
+    }
+    return parts.join('\n');
+  }
+
+  /* ── 세미나별 설문 필드 유효성 검사 ── */
+  function validateSeminarSurveyFields() {
+    let fields = [];
+    if (seminarData && seminarData.survey_fields) {
+      const sf = seminarData.survey_fields;
+      if (Array.isArray(sf)) fields = sf;
+      else if (typeof sf === 'string' && sf.trim()) {
+        try { fields = JSON.parse(sf); } catch(e) {}
+      }
+    }
+    // survey_fields 없으면 검증 스킵
+    if (!fields.length) return true;
+    let ok = true;
+    for (const f of fields) {
+      if (!f.required) continue;
+      const errEl = document.getElementById(`e-sf-${f.id}`);
+      let empty = false;
+      if (f.type === 'radio') {
+        empty = !document.querySelector(`input[name="apply-sf-${f.id}"]:checked`);
+      } else if (f.type === 'checkbox') {
+        empty = !document.querySelector(`input[name="apply-sf-${f.id}"]:checked`);
+      } else if (f.type === 'select') {
+        const el = document.getElementById(`apply-sf-${f.id}`);
+        empty = !el || !el.value;
+      } else {
+        const el = document.getElementById(`apply-sf-${f.id}`);
+        empty = !el || !el.value.trim();
+      }
+      if (errEl) { errEl.style.display = empty ? 'block' : 'none'; }
+      if (empty) {
+        // 첫 번째 빈 필수 항목일 때만 스크롤
+        if (ok) {
+          const panel = document.getElementById('custom-fields-panel');
+          if (panel) panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        ok = false;
+      }
+    }
+    if (!ok) Toast.show('필수 응답 항목을 모두 입력해주세요.', 'error');
+    return ok;
+  }
+
+  function updateSummary() {
+    if (!seminarData) return;
+    const remaining = seminarData.capacity - seminarData.current_applicants;
+    document.getElementById('sum-img').src = seminarData.image_url || '';
+    document.getElementById('sum-cat').textContent = seminarData.category || '';
+    document.getElementById('sum-title').textContent = seminarData.title;
+    document.getElementById('sum-date').textContent = seminarData.date || '-';
+    document.getElementById('sum-time').textContent = seminarData.time || '-';
+    document.getElementById('sum-location').textContent = seminarData.location || '-';
+    document.getElementById('sum-cap').textContent = `잔여 ${remaining}석`;
+    document.getElementById('sum-price').textContent = formatPrice(moneyToNumber(seminarData.price));
+    document.getElementById('bank-amount').textContent = formatPrice(moneyToNumber(seminarData.price));
+
+    // 사이드 요약 주최자 표시
+    const organizer = seminarData.organizer || '';
+    const sumOrganizer = document.getElementById('sum-organizer');
+    const sumOrganizerRow = document.getElementById('sum-organizer-row');
+    if (sumOrganizer) sumOrganizer.textContent = organizer || '-';
+    if (sumOrganizerRow) sumOrganizerRow.style.display = organizer ? 'flex' : 'none';
+  }
+
+  /* ── 생년월일 자동 하이픈 포맷 ── */
+  function formatBirthdateInput(el) {
+    // 숫자만 추출
+    let v = el.value.replace(/\D/g, '');
+    if (v.length > 8) v = v.slice(0, 8);
+    // YYYY-MM-DD 형태로 자동 삽입
+    if (v.length >= 5) v = v.slice(0,4) + '-' + v.slice(4);
+    if (v.length >= 8) v = v.slice(0,7) + '-' + v.slice(7);
+    el.value = v;
+  }
+
+  /* ── 생년월일 표시 업데이트 ── */
+  function updateBirthdateDisplay(val) {
+    const el = document.getElementById('f-birthdate-display');
+    if (!el) return;
+    if (!val || val.length < 10) { el.textContent = ''; return; }
+    try {
+      const d = new Date(val);
+      if (isNaN(d.getTime())) { el.textContent = ''; return; }
+      const age = new Date().getFullYear() - d.getFullYear();
+      el.textContent = `(${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일 · 만 ${age}세)`;
+    } catch(e) { el.textContent = ''; }
+  }
+
+  function prefillUserInfo() {
+    const session = Auth.getSession();
+    if (!session) {
+      // 비회원 안내 표시
+      const notice = document.getElementById('guest-notice');
+      if (notice) notice.style.display = 'block';
+      return;
+    }
+    document.getElementById('f-name').value = session.name || '';
+    document.getElementById('f-email').value = session.email || '';
+    document.getElementById('f-phone').value = session.phone || '';
+    // 세션에 저장된 생년월일이 있으면 자동 입력
+    if (session.birthdate) {
+      const bdEl = document.getElementById('f-birthdate');
+      if (bdEl) { bdEl.value = session.birthdate; updateBirthdateDisplay(session.birthdate); }
+    }
+  }
+
+  /* ── 스텝 이동 ── */
+  function goStep2() {
+    if (!validateStep1()) return;
+    document.getElementById('form-step1').style.display = 'none';
+    document.getElementById('form-step2').style.display = 'block';
+    updateSteps(2);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function goStep1() {
+    document.getElementById('form-step2').style.display = 'none';
+    document.getElementById('form-step1').style.display = 'block';
+    updateSteps(1);
+  }
+
+  function updateSteps(current) {
+    [1,2,3].forEach(n => {
+      const el = document.getElementById(`step${n}`);
+      el.className = 'step';
+      if (n < current) el.classList.add('step--done');
+      else if (n === current) el.classList.add('step--active');
+    });
+    ['line1','line2'].forEach((id, i) => {
+      const el = document.getElementById(id);
+      el.className = 'step-line' + (i + 1 < current ? ' step-line--done' : '');
+    });
+  }
+
+  /* ── 다음 주소 API (Daum 카카오) ──
+     iOS Safari에서 popup.open()은 팝업이 새 탭/페이지로 인식되어
+     BFCache 또는 페이지 재로드를 유발, 폼 데이터가 초기화되는 버그 발생.
+     → display:'element' 옵션으로 현재 페이지 내 iframe 레이어에 임베드.
+     → 닫기 버튼(✕) 또는 주소 선택 완료 시 레이어를 숨김 처리.
+  ── */
+  function searchAddress() {
+    const wrap = document.getElementById('addr-layer-wrap');
+    const layer = document.getElementById('addr-layer');
+    if (!wrap || !layer) return;
+
+    // 레이어 표시
+    wrap.style.display = 'block';
+    // 스크롤을 레이어로 부드럽게 이동
+    setTimeout(function() {
+      wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 100);
+
+    // 기존 iframe 초기화 후 재생성
+    layer.innerHTML = '';
+
+    new daum.Postcode({
+      oncomplete: function(data) {
+        let addr = '';
+        if (data.userSelectedType === 'R') {
+          addr = data.roadAddress;
+        } else {
+          addr = data.jibunAddress;
+        }
+        document.getElementById('f-postcode').value = data.zonecode;
+        document.getElementById('f-addr1').value    = addr;
+        // 에러 메시지 숨기기
+        const errEl = document.getElementById('e-addr');
+        if (errEl) errEl.classList.remove('show');
+        // 레이어 닫기
+        closeAddrLayer();
+        // 상세주소 포커스
+        setTimeout(function() {
+          document.getElementById('f-addr2').focus();
+        }, 150);
+      },
+      onresize: function(size) {
+        // iframe 높이를 콘텐츠에 맞게 동적 조정
+        layer.style.height = size.height + 'px';
+      },
+      width:  '100%',
+      height: '400px',
+    }).embed(layer, { autoClose: false });
+  }
+
+  function closeAddrLayer() {
+    const wrap = document.getElementById('addr-layer-wrap');
+    const layer = document.getElementById('addr-layer');
+    if (wrap)  wrap.style.display = 'none';
+    if (layer) layer.innerHTML = ''; // iframe 메모리 해제
+  }
+
+  /* ── STEP 1 유효성 검사 ── */
+  function validateStep1() {
+    let ok = true;
+    const name = document.getElementById('f-name').value.trim();
+    const email = document.getElementById('f-email').value.trim();
+    const phone = document.getElementById('f-phone').value.trim();
+    const birthdate = document.getElementById('f-birthdate').value.trim();
+    const addr1 = document.getElementById('f-addr1').value.trim();
+    const showErr = (id, show) => {
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle('show', show);
+    };
+    if (!name) { showErr('e-name', true); ok = false; } else showErr('e-name', false);
+    if (!email || !/\S+@\S+\.\S+/.test(email)) { showErr('e-email', true); ok = false; } else showErr('e-email', false);
+    if (!phone) { showErr('e-phone', true); ok = false; } else showErr('e-phone', false);
+    // 생년월일 필수 검증 (YYYY-MM-DD 형식)
+    if (!birthdate || !/^\d{4}-\d{2}-\d{2}$/.test(birthdate)) { showErr('e-birthdate', true); ok = false; } else showErr('e-birthdate', false);
+    if (!addr1) { showErr('e-addr', true); ok = false; } else showErr('e-addr', false);
+    // 세미나별 설문 필드 검증
+    if (!validateSeminarSurveyFields()) ok = false;
+    return ok;
+  }
+
+  /* ── 결제 수단 선택 ── */
+  function selectPayment(type) {
+    document.querySelectorAll('.payment-method').forEach(el => el.classList.remove('selected'));
+    document.getElementById(`pm-${type}`).classList.add('selected');
+    document.getElementById('card-form').classList.toggle('show', type === 'card');
+    document.getElementById('bank-info').classList.toggle('show', type === 'transfer');
+    document.getElementById('cash-info').classList.toggle('show', type === 'cash');
+    // 카드 선택 시 radio 활성화
+    const radio = document.querySelector(`input[name="payment"][value="${type}"]`);
+    if (radio) radio.checked = true;
+  }
+
+
+
+  /* ── 신청 제출 ── */
+  async function submitApplication() {
+    // 응답 항목 필수 검증 (step2에 있으므로 submit 시점에 재검증)
+    if (!validateSeminarSurveyFields()) return;
+
+    // 서약 유효성 검사
+    if (!validatePledge()) return;
+
+    if (!document.getElementById('agree-check').checked) {
+      Toast.show('개인정보 처리방침 및 환불 정책에 동의해주세요.', 'error');
+      return;
+    }
+    const paymentType = document.querySelector('input[name="payment"]:checked').value;
+
+
+    const paymentNames = { card: '카드결제', transfer: '계좌이체', cash: '현금결제' };
+
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner"></div> 처리 중...';
+
+    try {
+      const session = Auth.getSession();
+      const addrFull = [
+        document.getElementById('f-addr1').value.trim(),
+        document.getElementById('f-addr2').value.trim()
+      ].filter(Boolean).join(' ');
+
+      const customMemo = collectSeminarSurveyValues();
+
+      const cardInfoMemo = ''; // 카드 결제: 선택 기록만, 별도 결제 링크 안내 예정
+
+      // 생년월일 수집
+      const birthdateVal = (document.getElementById('f-birthdate') || {}).value.trim() || '';
+      let birthdateMemo = '';
+      if (birthdateVal && birthdateVal.length >= 8) {
+        try {
+          const bd = new Date(birthdateVal);
+          const age = isNaN(bd.getTime()) ? '' : ` (만 ${new Date().getFullYear() - bd.getFullYear()}세)`;
+          birthdateMemo = `[생년월일] ${birthdateVal}${age}`;
+        } catch(e) { birthdateMemo = `[생년월일] ${birthdateVal}`; }
+      }
+
+      const appData = {
+        user_id: session ? session.id : 'guest',
+        seminar_id: seminarData.id,
+        seminar_title: seminarData.title,
+        seminar_date: seminarData.date,
+        applicant_name: document.getElementById('f-name').value.trim(),
+        applicant_email: document.getElementById('f-email').value.trim(),
+        applicant_phone: document.getElementById('f-phone').value.trim(),
+        payment_method: paymentNames[paymentType],
+        payment_status: '결제대기',
+        payment_amount: moneyToNumber(seminarData.price) + moneyToNumber(_extraPriceTotal),
+        memo: [customMemo, birthdateMemo, addrFull ? `[주소] ${addrFull}` : '', paymentType === 'card' ? '[카드결제 선택] 5월 중 결제 링크 별도 안내 예정' : ''].filter(Boolean).join('\n')
+      };
+
+      await SB.insert('applications', appData);
+
+      // 현재 신청자 수 업데이트: 메모리 값이 아닌 DB에서 실제 COUNT 후 갱신
+      // (동시 신청 시 카운트 누락 방지)
+      try {
+        const allAppsForSeminar = await SB.findMany('applications', 'seminar_id', seminarData.id);
+        // 취소 제외한 실제 신청자 수 계산
+        const realCount = allAppsForSeminar.filter(ap => ap.payment_status !== '결제취소').length;
+        await SB.update('seminars', seminarData.id, {
+          current_applicants: realCount
+        });
+        console.log('[submitApplication] 신청자 수 갱신:', realCount);
+      } catch(updateErr) {
+        console.warn('[submitApplication] 신청자 수 업데이트 실패 (신청 자체는 완료):', updateErr.message);
+      }
+
+      // 완료 화면
+      document.getElementById('form-step2').style.display = 'none';
+      document.getElementById('form-step3').style.display = 'block';
+      updateSteps(3);
+      if (paymentType === 'transfer') {
+        const bn = siteSettings['bank_name'] || '기업은행';
+        const ba = siteSettings['bank_account'] || '635-036959-01-016';
+        const bh = siteSettings['bank_holder'] || '(주)빛의아갈탄';
+        const bd = siteSettings['bank_deadline'] || '48시간 이내';
+        document.getElementById('complete-payment-notice').textContent =
+          `※ ${bn} ${ba} (${bh})으로 ${formatPrice((seminarData.price||0) + (_extraPriceTotal||0))}을 ${bd} 입금해 주세요.`;
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // EmailJS 자동 발송 시도
+      sendConfirmEmail(appData);
+
+    } catch (e) {
+      console.error('[submitApplication] 오류:', e);
+      let errMsg = (e && e.message) ? e.message : String(e);
+      // 더 구체적인 안내
+      if (errMsg.includes('405')) {
+        errMsg = '서버 오류(405): 데이터 저장이 차단되었습니다. 관리자에게 문의해주세요.';
+      } else if (errMsg.includes('400')) {
+        errMsg = '입력값 오류(400): 필수 항목을 확인해주세요.';
+      } else if (errMsg.includes('네트워크')) {
+        errMsg = '네트워크 오류: 인터넷 연결을 확인 후 다시 시도해주세요.';
+      }
+      Toast.show('신청 중 오류: ' + errMsg, 'error');
+      btn.disabled = false;
+      btn.innerHTML = '신청 완료하기';
+    }
+  }
+
+  async function sendConfirmEmail(appData) {
+    const publicKey = siteSettings['emailjs_public_key'] || '';
+    const serviceId = siteSettings['emailjs_service_id'] || '';
+    const templateId = siteSettings['emailjs_template_id'] || '';
+    if (!publicKey || !serviceId || !templateId) return; // 설정 없으면 스킵
+
+    try {
+      await loadEmailJSSdk(publicKey);
+      const bankInfo = appData.payment_method === '계좌이체'
+        ? `\n\n[입금 안내]\n은행: ${siteSettings['bank_name']||'-'}\n계좌: ${siteSettings['bank_account']||'-'}\n예금주: ${siteSettings['bank_holder']||'-'}\n기한: ${siteSettings['bank_deadline']||'-'}`
+        : '';
+      await emailjs.send(serviceId, templateId, {
+        to_email: appData.applicant_email,
+        applicant_name: appData.applicant_name,
+        seminar_title: appData.seminar_title,
+        seminar_date: appData.seminar_date,
+        payment_method: appData.payment_method,
+        message: `${appData.applicant_name}님, 세미나 신청이 정상적으로 접수되었습니다.${bankInfo}`
+      });
+    } catch(e) { /* 이메일 실패는 사용자에게 영향 없음 */ }
+  }
+
+  function loadEmailJSSdk(publicKey) {
+    return new Promise((resolve, reject) => {
+      if (window.emailjs) { emailjs.init(publicKey); resolve(); return; }
+      const s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js';
+      s.onload = () => { emailjs.init(publicKey); resolve(); };
+      s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+
+  Promise.all([loadSiteSettings(), loadSeminar()])
+    .finally(() => { document.body.style.opacity = '1'; });
+
+  /* ── 개인정보 처리방침 모달 ── */
+  function openPrivacyModal() {
+    const existing = document.getElementById('privacy-modal-overlay');
+    if (existing) { existing.style.display = 'flex'; return; }
+
+    const overlay = document.createElement('div');
+    overlay.id = 'privacy-modal-overlay';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.55);display:flex;align-items:center;justify-content:center;padding:20px;';
+    overlay.innerHTML = `
+      <div style="background:white;border-radius:12px;width:100%;max-width:720px;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 24px 72px rgba(0,0,0,0.35);overflow:hidden;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid #e8e0d0;background:#fafaf8;flex-shrink:0;">
+          <div style="font-family:'Noto Serif KR',serif;font-size:1.05rem;font-weight:600;color:#0b1629;">개인정보처리방침</div>
+          <button onclick="document.getElementById('privacy-modal-overlay').style.display='none'" style="background:none;border:none;font-size:1.4rem;color:#999;cursor:pointer;line-height:1;">✕</button>
+        </div>
+        <div style="overflow-y:auto;padding:22px 26px;flex:1;font-size:0.84rem;color:#444;line-height:2.05;">
+
+          <p style="font-size:0.78rem;color:#888;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid #eee;">버전: v0.1 &nbsp;|&nbsp; 공고일: 2026년 4월 12일 &nbsp;|&nbsp; 시행일: 2026년 4월 12일 &nbsp;|&nbsp; (주)빛의아갈탄</p>
+
+          <p style="margin-bottom:16px;">한국 아가스티아 협회(이하 '협회')는 이용자의 개인정보를 중요하게 생각하며, 「개인정보 보호법」 등 관련 법령을 준수하고 있습니다. 본 방침은 회사가 운영하는 서비스(세미나 예약 및 결제 서비스)와 관련하여 개인정보를 어떻게 수집·이용·보관·파기하는지 안내합니다.</p>
+
+          <!-- 1 -->
+          <h3 style="font-family:'Noto Serif KR',serif;font-size:0.93rem;font-weight:700;color:#0b1629;border-bottom:1px solid #e8e0d0;padding-bottom:7px;margin:20px 0 10px;">1. 정보 수집에 대한 동의</h3>
+          <p>회사는 개인정보를 개인의 동의 없이 수집하지 않습니다.</p>
+          <p>① 회사는 이용자들이 회사의 개인정보처리방침, 이용약관, 기타 회사 서비스 정책 내용에 대하여 &lt;동의&gt; 버튼 또는 &lt;취소&gt; 버튼을 클릭할 수 있는 절차를 마련하여, &lt;동의&gt; 버튼을 클릭하면 개인정보 수집에 대해 동의한 것으로 봅니다.</p>
+          <p>② 회사는 입력하신 정보를 이용자들에게 사전에 밝힌 목적 이외에 다른 목적으로는 사용하지 않으며, 외부로 유출하지 않습니다. 단, 회사에 링크되어 있는 웹사이트들이 개인정보를 수집하는 행위에 대해서는 본 회사의 '개인정보처리방침'이 적용되지 않음을 알려드립니다.</p>
+          <div style="background:#fafaf7;border-left:3px solid #c8973a;padding:11px 15px;margin:12px 0;font-size:0.82rem;line-height:2;border-radius:0 4px 4px 0;">
+            ※ 개인정보란 살아 있는 개인에 관한 정보로서 다음 어느 하나에 해당하는 정보를 말합니다.<br>
+            - 성명, 주민등록번호 및 영상 등을 통하여 개인을 알아볼 수 있는 정보<br>
+            - 해당 정보만으로는 특정 개인을 알아볼 수 없더라도 다른 정보와 쉽게 결합하여 알아볼 수 있는 정보. 이 경우 쉽게 결합할 수 있는지 여부는 다른 정보의 입수 가능성 등 개인을 알아보는 데 소요되는 시간, 비용, 기술 등을 합리적으로 고려하여야 합니다.
+          </div>
+
+          <!-- 2 -->
+          <h3 style="font-family:'Noto Serif KR',serif;font-size:0.93rem;font-weight:700;color:#0b1629;border-bottom:1px solid #e8e0d0;padding-bottom:7px;margin:20px 0 10px;">2. 개인정보의 수집 항목 및 이용 목적, 보유기간</h3>
+          <p>회사는 개인정보 수집 및 이용 목적이 달성된 후에는 해당 정보를 지체 없이 파기합니다. 단, 다음의 경우에는 해당 기간 동안 보관합니다.</p>
+          <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:0.8rem;margin:10px 0;min-width:500px;">
+            <thead><tr style="background:#f5f0e8;">
+              <th style="border:1px solid #ddd;padding:8px 10px;text-align:left;">수집 이용 시점</th>
+              <th style="border:1px solid #ddd;padding:8px 10px;text-align:left;">수집 항목</th>
+              <th style="border:1px solid #ddd;padding:8px 10px;text-align:left;">이용 목적</th>
+              <th style="border:1px solid #ddd;padding:8px 10px;text-align:left;">보유 및 이용기간</th>
+            </tr></thead>
+            <tbody>
+              <tr><td style="border:1px solid #ddd;padding:8px 10px;vertical-align:top;">회원가입 시</td><td style="border:1px solid #ddd;padding:8px 10px;vertical-align:top;">이름, 이메일, 연락처(휴대폰번호), 아이디, 비밀번호</td><td style="border:1px solid #ddd;padding:8px 10px;vertical-align:top;">회원 식별 및 서비스 이용</td><td style="border:1px solid #ddd;padding:8px 10px;vertical-align:top;">회원 탈퇴 시 즉시 파기</td></tr>
+              <tr style="background:#fafaf8;"><td style="border:1px solid #ddd;padding:8px 10px;vertical-align:top;">세미나 예약 신청 시</td><td style="border:1px solid #ddd;padding:8px 10px;vertical-align:top;">이름, 생년월일, 연락처(휴대폰번호), 이메일, 주소</td><td style="border:1px solid #ddd;padding:8px 10px;vertical-align:top;">세미나 예약 확인 및 안내<br>세미나 예약 서비스 이용</td><td style="border:1px solid #ddd;padding:8px 10px;vertical-align:top;">회원 탈퇴 시 즉시 파기</td></tr>
+              <tr><td style="border:1px solid #ddd;padding:8px 10px;vertical-align:top;">결제 처리 시</td><td style="border:1px solid #ddd;padding:8px 10px;vertical-align:top;">결제 관련 정보<br>(카카오페이를 통해 처리되며, 회사가 직접 수집하지 않음)</td><td style="border:1px solid #ddd;padding:8px 10px;vertical-align:top;">결제 처리 및 환불</td><td style="border:1px solid #ddd;padding:8px 10px;vertical-align:top;"><strong>5년</strong><br>(전자상거래 등에서의 소비자보호에 관한 법률 제6조)</td></tr>
+              <tr style="background:#fafaf8;"><td style="border:1px solid #ddd;padding:8px 10px;vertical-align:top;">문의 및 민원 처리 시</td><td style="border:1px solid #ddd;padding:8px 10px;vertical-align:top;">이름, 연락처(휴대폰번호), 이메일, 문의 내용</td><td style="border:1px solid #ddd;padding:8px 10px;vertical-align:top;">민원 처리, 불만 대응</td><td style="border:1px solid #ddd;padding:8px 10px;vertical-align:top;">3년<br>(전자상거래 등에서의 소비자보호에 관한 법률 제6조)</td></tr>
+              <tr><td style="border:1px solid #ddd;padding:8px 10px;vertical-align:top;">서비스 이용 시 (자동 수집)</td><td style="border:1px solid #ddd;padding:8px 10px;vertical-align:top;">IP 주소, 쿠키, 방문 일시, 이용 기록</td><td style="border:1px solid #ddd;padding:8px 10px;vertical-align:top;">통계 분석, 서비스 개선, 보안</td><td style="border:1px solid #ddd;padding:8px 10px;vertical-align:top;">3개월 이상<br>(통신비밀보호법 제15조의2)</td></tr>
+            </tbody>
+          </table>
+          </div>
+
+          <!-- 3 -->
+          <h3 style="font-family:'Noto Serif KR',serif;font-size:0.93rem;font-weight:700;color:#0b1629;border-bottom:1px solid #e8e0d0;padding-bottom:7px;margin:20px 0 10px;">3. 개인정보 자동 수집 장치(쿠키)의 설치 및 운영</h3>
+          <p>① 쿠키 사용의 목적</p>
+          <p>빠르고 편리한 웹사이트 사용을 지원하고 맞춤형 서비스를 제공하기 위해 쿠키를 사용합니다.</p>
+          <div style="background:#fafaf7;border-left:3px solid #c8973a;padding:11px 15px;margin:10px 0;font-size:0.82rem;line-height:2;border-radius:0 4px 4px 0;">
+            <strong>쿠키(Cookie)의 정의</strong><br>
+            쿠키(Cookie)는 웹사이트를 운영하는데 이용되는 서버가 이용자의 컴퓨터로 전송하는 아주 작은 텍스트 파일로서 이용자의 컴퓨터 하드디스크에 저장되고 있습니다. 따라서 이용자 스스로 쿠키의 설치 및 수집에 대해 자율적으로 선택할 수 있으므로 수집을 거부할 수 있습니다. 다만, 쿠키의 저장을 거부할 경우 로그인이 필요한 일부 서비스 이용에 제한이 생길 수 있습니다.
+          </div>
+          <p>② 귀하는 쿠키 설치에 대한 선택권을 가지고 있습니다. 따라서 귀하는 웹브라우저에서 옵션을 설정함으로써 쿠키에 의한 정보 수집 수준의 선택을 조정하실 수 있습니다.</p>
+          <p>③ 쿠키 설정 거부 방법 — 각 브라우저의 버전별로 설정 방법이 달라질 수 있으며 자세한 내용은 해당 브라우저의 도움말을 참고해주시기 바랍니다.<br>
+          Chrome: [설정] → [고급 설정 표시] → [개인정보 및 보안] → [사이트 설정] → [쿠키 및 기타 사이트 데이터]<br>
+          Safari(Mac): [Safari] → [환경설정] → [보안] 탭에서 쿠키 허용 여부 설정<br>
+          Safari(iOS): [설정] → [Safari] → [개인정보 및 보안]에서 쿠키 설정<br>
+          Chrome(Android): [더보기] → [설정] → [사이트 설정] → [쿠키]에서 설정</p>
+
+          <!-- 4 -->
+          <h3 style="font-family:'Noto Serif KR',serif;font-size:0.93rem;font-weight:700;color:#0b1629;border-bottom:1px solid #e8e0d0;padding-bottom:7px;margin:20px 0 10px;">4. 스크래핑 등 무단 데이터 수집 금지</h3>
+          <p>회사는 스크래핑(Scraping) 등의 기술적 수단을 이용하여 이용자의 데이터를 무단으로 수집하는 행위를 엄격히 불허합니다. 이를 위반한 경우 관련 법령에 따른 법적 책임을 질 수 있습니다.</p>
+
+          <!-- 5 -->
+          <h3 style="font-family:'Noto Serif KR',serif;font-size:0.93rem;font-weight:700;color:#0b1629;border-bottom:1px solid #e8e0d0;padding-bottom:7px;margin:20px 0 10px;">5. 개인정보의 제3자 제공</h3>
+          <p>회사는 이용자의 사전 동의 없이 개인정보를 외부에 제공하지 않습니다. 단, 이용자가 외부 제휴사의 서비스를 이용하기 위하여 개인정보 제공에 직접 동의를 한 경우, 관련 법령에 의거해 회사에 개인정보 제출 의무가 발생한 경우, 이용자의 생명이나 안전에 급박한 위험이 확인되어 이를 해소하기 위한 경우, 수사 목적으로 법령에서 정한 절차와 방법에 따라 수사기관의 요청이 있는 경우에 한하여 개인정보를 제공하고 있습니다.</p>
+
+          <!-- 6 -->
+          <h3 style="font-family:'Noto Serif KR',serif;font-size:0.93rem;font-weight:700;color:#0b1629;border-bottom:1px solid #e8e0d0;padding-bottom:7px;margin:20px 0 10px;">6. 개인정보 보유 및 이용기간, 파기절차 및 방법</h3>
+          <p>① 이용자의 개인정보는 원칙적으로 개인정보의 수집 및 이용목적이 달성되면 지체 없이 파기합니다. 회원 탈퇴를 요청하거나 동의를 철회하는 경우, 보유 및 이용기간이 종료한 경우 해당 개인정보를 지체 없이 파기합니다. 단, 관련 법령에 의하여 보존할 필요가 있는 경우 아래와 같이 보관합니다.</p>
+          <div style="background:#fafaf7;border-left:3px solid #c8973a;padding:11px 15px;margin:10px 0;font-size:0.82rem;line-height:2.2;border-radius:0 4px 4px 0;">
+            ㆍ서비스 이용 관련 개인정보 (로그인·방문 기록)<br>
+            &nbsp;&nbsp;- 보존 근거 : 통신비밀보호법 제15조의2<br>
+            &nbsp;&nbsp;- 보존 기간 : <strong>3개월 이상</strong><br>
+            ㆍ계약 또는 청약철회 등에 관한 기록<br>
+            &nbsp;&nbsp;- 보존 근거 : 전자상거래 등에서의 소비자보호에 관한 법률 제6조<br>
+            &nbsp;&nbsp;- 보존 기간 : <strong>5년</strong><br>
+            ㆍ대금결제 및 재화 등의 공급에 관한 기록<br>
+            &nbsp;&nbsp;- 보존 근거 : 전자상거래 등에서의 소비자보호에 관한 법률 제6조<br>
+            &nbsp;&nbsp;- 보존 기간 : <strong>5년</strong><br>
+            ㆍ소비자의 불만 또는 분쟁처리에 관한 기록<br>
+            &nbsp;&nbsp;- 보존 근거 : 전자상거래 등에서의 소비자보호에 관한 법률 제6조<br>
+            &nbsp;&nbsp;- 보존 기간 : <strong>3년</strong>
+          </div>
+          <p>② 회사는 개인정보의 수집 및 이용목적이 달성된 개인정보는 재생이 불가능한 방법으로 파기하고 있습니다. (전자 파일: 영구 삭제 / 서면: 분쇄 또는 소각)</p>
+
+          <!-- 7 -->
+          <h3 style="font-family:'Noto Serif KR',serif;font-size:0.93rem;font-weight:700;color:#0b1629;border-bottom:1px solid #e8e0d0;padding-bottom:7px;margin:20px 0 10px;">7. 개인정보 처리 위탁</h3>
+          <p>회사는 서비스 향상을 위해서 아래와 같이 개인정보 처리업무를 위탁하고 있으며, 위탁계약 체결 시 「개인정보 보호법」 제26조에 따라 위탁업무 수행목적 외 개인정보 처리금지, 기술적·관리적 보호조치, 재위탁 제한, 수탁자에 대한 관리·감독, 손해배상 등 책임에 관한 사항을 계약서 등 문서에 명시하고, 수탁자가 개인정보를 안전하게 처리하는지를 감독하고 있습니다. 변동사항 발생 시 공지사항 또는 개인정보처리방침을 통해 고지하도록 하겠습니다.</p>
+          <table style="width:100%;border-collapse:collapse;font-size:0.8rem;margin:10px 0;">
+            <thead><tr style="background:#f5f0e8;"><th style="border:1px solid #ddd;padding:8px 10px;text-align:left;">수탁업체</th><th style="border:1px solid #ddd;padding:8px 10px;text-align:left;">위탁 업무 내용</th></tr></thead>
+            <tbody><tr><td style="border:1px solid #ddd;padding:8px 10px;">카카오페이(주)</td><td style="border:1px solid #ddd;padding:8px 10px;">카카오 메시지 발송, 결제 처리 및 대금 정산</td></tr></tbody>
+          </table>
+
+          <!-- 8 -->
+          <h3 style="font-family:'Noto Serif KR',serif;font-size:0.93rem;font-weight:700;color:#0b1629;border-bottom:1px solid #e8e0d0;padding-bottom:7px;margin:20px 0 10px;">8. 정보주체의 권리 및 행사 방법</h3>
+          <p>이용자는 언제든지 다음의 권리를 행사할 수 있습니다.</p>
+          <ul style="padding-left:20px;margin:8px 0;">
+            <li><strong>개인정보 열람 요청</strong> : 언제든지 로그인하여 자신의 개인정보에 대한 열람을 요청할 수 있습니다.</li>
+            <li><strong>개인정보 수정·삭제</strong> : 언제든지 로그인하여 자신의 개인정보를 수정하거나 삭제할 수 있습니다.</li>
+            <li><strong>처리 정지 요청</strong> : 언제든지 개인정보 처리의 정지를 요청할 수 있으며, 법률에 특별한 규정이 있는 등의 경우에는 처리정지 요청을 거부할 수 있습니다.</li>
+            <li><strong>동의 철회</strong> : '회원탈퇴' 등을 통해 개인정보의 수집 및 이용 동의를 철회할 수 있습니다.</li>
+            <li><strong>오류 정정 요청</strong> : 이용자가 개인정보의 오류에 대한 정정을 요청한 경우, 정정을 완료하기 전까지 해당 개인정보를 이용 또는 제공하지 않습니다.</li>
+            <li><strong>개인정보 이동 요청</strong> : 회사는 요구 접수 후 <strong>30일 이내</strong>에 처리 결과를 통지합니다. 단, 법령에 특별한 규정이 있는 경우, 제3자의 권리를 침해할 우려가 있는 경우는 전송 요구를 거절할 수 있습니다.</li>
+          </ul>
+
+          <!-- 9 -->
+          <h3 style="font-family:'Noto Serif KR',serif;font-size:0.93rem;font-weight:700;color:#0b1629;border-bottom:1px solid #e8e0d0;padding-bottom:7px;margin:20px 0 10px;">9. 온라인 맞춤형 광고 서비스</h3>
+          <p>회사는 서비스 이용과정에서 이용자에게 최적화된 맞춤형 서비스 및 혜택, 온라인 맞춤형 광고 등을 제공하기 위하여 쿠키를 활용하여 개인을 식별하지 않고 행태정보를 수집·이용하고 있습니다.</p>
+          <div style="overflow-x:auto;">
+          <table style="width:100%;border-collapse:collapse;font-size:0.8rem;margin:10px 0;min-width:480px;">
+            <thead>
+              <tr style="background:#f5f0e8;"><th colspan="4" style="border:1px solid #ddd;padding:8px 10px;text-align:left;">제3자(광고사업자 등)에게 제공</th></tr>
+              <tr style="background:#fafaf5;"><th style="border:1px solid #ddd;padding:8px 10px;text-align:left;">제공받는 사업자</th><th style="border:1px solid #ddd;padding:8px 10px;text-align:left;">제공하는 행태정보 항목</th><th style="border:1px solid #ddd;padding:8px 10px;text-align:left;">행태정보 제공 목적</th><th style="border:1px solid #ddd;padding:8px 10px;text-align:left;">보유 및 이용기간</th></tr>
+            </thead>
+            <tbody><tr><td style="border:1px solid #ddd;padding:8px 10px;">카카오</td><td style="border:1px solid #ddd;padding:8px 10px;">한국 아가스티아 협회 홈페이지 방문이력</td><td style="border:1px solid #ddd;padding:8px 10px;">정보주체 관심 기반 맞춤형 광고 제공</td><td style="border:1px solid #ddd;padding:8px 10px;">계약 종료 시 파기</td></tr></tbody>
+          </table>
+          </div>
+
+          <!-- 10 -->
+          <h3 style="font-family:'Noto Serif KR',serif;font-size:0.93rem;font-weight:700;color:#0b1629;border-bottom:1px solid #e8e0d0;padding-bottom:7px;margin:20px 0 10px;">10. 개인정보 보호책임자 및 민원서비스</h3>
+          <p>이용자의 개인정보 관련 문의, 불만 처리, 피해 구제 등을 담당하는 개인정보 보호책임자는 다음과 같습니다.</p>
+          <table style="width:100%;border-collapse:collapse;font-size:0.8rem;margin:10px 0 16px;">
+            <thead><tr style="background:#f5f0e8;"><th style="border:1px solid #ddd;padding:8px 10px;text-align:left;">구분</th><th style="border:1px solid #ddd;padding:8px 10px;text-align:left;">내용</th></tr></thead>
+            <tbody>
+              <tr><td style="border:1px solid #ddd;padding:8px 10px;">개인정보 보호책임자</td><td style="border:1px solid #ddd;padding:8px 10px;">이승훈</td></tr>
+              <tr style="background:#fafaf8;"><td style="border:1px solid #ddd;padding:8px 10px;">이메일</td><td style="border:1px solid #ddd;padding:8px 10px;">agastya-kr@agastya.com</td></tr>
+              <tr><td style="border:1px solid #ddd;padding:8px 10px;">전화번호</td><td style="border:1px solid #ddd;padding:8px 10px;">02-336-0996</td></tr>
+            </tbody>
+          </table>
+
+          <!-- 11 -->
+          <h3 style="font-family:'Noto Serif KR',serif;font-size:0.93rem;font-weight:700;color:#0b1629;border-bottom:1px solid #e8e0d0;padding-bottom:7px;margin:20px 0 10px;">11. 개인정보 침해 구제기관</h3>
+          <p>개인정보 침해로 인한 피해를 구제받기 위해 아래 기관에 문의하실 수 있습니다.</p>
+          <table style="width:100%;border-collapse:collapse;font-size:0.8rem;margin:10px 0;">
+            <thead><tr style="background:#f5f0e8;"><th style="border:1px solid #ddd;padding:8px 10px;text-align:left;">기관명</th><th style="border:1px solid #ddd;padding:8px 10px;text-align:left;">URL</th><th style="border:1px solid #ddd;padding:8px 10px;text-align:left;">전화</th></tr></thead>
+            <tbody>
+              <tr><td style="border:1px solid #ddd;padding:8px 10px;">개인정보 침해신고센터 (KISA)</td><td style="border:1px solid #ddd;padding:8px 10px;">privacy.kisa.or.kr</td><td style="border:1px solid #ddd;padding:8px 10px;">국번없이 118</td></tr>
+              <tr style="background:#fafaf8;"><td style="border:1px solid #ddd;padding:8px 10px;">개인정보 분쟁조정위원회 (KOPICO)</td><td style="border:1px solid #ddd;padding:8px 10px;">www.kopico.go.kr</td><td style="border:1px solid #ddd;padding:8px 10px;">1833-6972</td></tr>
+              <tr><td style="border:1px solid #ddd;padding:8px 10px;">대검찰청 사이버수사과 (SPO)</td><td style="border:1px solid #ddd;padding:8px 10px;">www.spo.go.kr</td><td style="border:1px solid #ddd;padding:8px 10px;">국번없이 1301</td></tr>
+              <tr style="background:#fafaf8;"><td style="border:1px solid #ddd;padding:8px 10px;">경찰청 사이버수사국</td><td style="border:1px solid #ddd;padding:8px 10px;">cyberbureau.police.go.kr</td><td style="border:1px solid #ddd;padding:8px 10px;">국번없이 182</td></tr>
+            </tbody>
+          </table>
+
+          <!-- 12 -->
+          <h3 style="font-family:'Noto Serif KR',serif;font-size:0.93rem;font-weight:700;color:#0b1629;border-bottom:1px solid #e8e0d0;padding-bottom:7px;margin:20px 0 10px;">12. 개인정보의 안전성 확보조치에 관한 사항</h3>
+          <p>회사는 이용자의 개인정보를 안전하게 관리하기 위하여 최선을 다하고 있으며, 「개인정보 보호법」에 따라 다음과 같은 안전성 확보 조치를 취하고 있습니다.</p>
+          <ul style="padding-left:20px;margin:8px 0;">
+            <li><strong>관리적 조치</strong> : 내부관리계획 수립·시행, 전담조직 운영, 정기적 직원 교육</li>
+            <li><strong>기술적 조치</strong> : 개인정보처리시스템 등의 접근권한 관리, 접근통제시스템 설치, 개인정보의 암호화, 보안프로그램 설치 및 갱신</li>
+            <li><strong>물리적 조치</strong> : 개인정보가 포함된 서류·저장매체의 잠금장치 보관, 비인가자 접근 통제</li>
+          </ul>
+          <p>이용자께서 제공하신 모든 정보는 방화벽 등 정보보호시스템에 의해 안전하게 보호되고 있습니다. 또한 개인정보를 처리하는 인원을 최소한으로 제한하고 정기적인 교육과 비밀번호 변경을 통해 개인정보가 유출되지 않도록 안전하게 관리하고 있습니다.</p>
+
+          <!-- 13 -->
+          <h3 style="font-family:'Noto Serif KR',serif;font-size:0.93rem;font-weight:700;color:#0b1629;border-bottom:1px solid #e8e0d0;padding-bottom:7px;margin:20px 0 10px;">13. 고지의 의무</h3>
+          <p>개인정보처리방침 내용의 추가, 삭제 및 수정이 있을 경우에는 시행하기 최소 <strong>7일 전</strong>에 홈페이지 등에 공지하도록 하겠습니다.</p>
+          <p>단, 이용자의 권리 또는 의무에 중요한 변경이 발생하는 경우 최소 <strong>30일 전</strong>에 공지합니다.</p>
+          <div style="background:#fafaf7;border-left:3px solid #c8973a;padding:11px 15px;margin:10px 0;font-size:0.82rem;line-height:2;border-radius:0 4px 4px 0;">
+            - 개인정보처리방침 버전 번호 : v0.1<br>
+            - 공고일: 2026년 4월 12일<br>
+            - 시행일: 2026년 4월 12일
+          </div>
+        </div>
+        <div style="padding:14px 24px;border-top:1px solid #e8e0d0;background:#fafaf8;display:flex;justify-content:flex-end;align-items:center;gap:12px;flex-shrink:0;">
+          <a href="/privacy" target="_blank" style="font-size:0.79rem;color:#c8973a;text-decoration:underline;">전문 보기 →</a>
+          <button onclick="document.getElementById('agree-check').checked=true;document.getElementById('privacy-modal-overlay').style.display='none';" style="padding:10px 24px;background:#c8973a;color:white;border:none;border-radius:4px;font-size:0.88rem;font-weight:500;cursor:pointer;">확인 및 동의</button>
+        </div>
+      </div>`;
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.style.display = 'none'; });
+    document.body.appendChild(overlay);
+  }
+</script>
+</body>
+</html>

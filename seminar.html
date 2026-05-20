@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>신청 | 한국 아가스티아 협회</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { opacity: 0; transition: opacity 0.25s ease; }
+    /* ── 필터 탭 ── */
+    .filter-tabs {
+      display: flex; gap: 8px; flex-wrap: wrap;
+      margin-bottom: 40px; justify-content: center;
+    }
+    .filter-tab {
+      padding: 8px 20px;
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      cursor: pointer;
+      background: white;
+      color: var(--text-mid);
+      transition: var(--transition);
+    }
+    .filter-tab:hover, .filter-tab.active {
+      background: var(--navy); color: white; border-color: var(--navy);
+    }
+
+    /* ── 세미나 카드 그리드 ── */
+    .seminar-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+    }
+    .seminar-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: var(--transition);
+      display: flex; flex-direction: column;
+    }
+    .seminar-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+    .seminar-card__img-wrap { height: 220px; overflow: hidden; position: relative; }
+    .seminar-card__img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+    .seminar-card:hover .seminar-card__img { transform: scale(1.04); }
+    .seminar-card__status {
+      position: absolute; top: 16px; left: 16px;
+    }
+    .seminar-card__body { padding: 28px; flex: 1; display: flex; flex-direction: column; }
+    .seminar-card__cat {
+      font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 8px; display: block;
+    }
+    .seminar-card__title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.1rem; font-weight: 500;
+      color: var(--text-dark); margin-bottom: 8px; line-height: 1.5;
+    }
+    .seminar-card__sub {
+      font-size: 0.82rem; color: var(--text-light); margin-bottom: 16px;
+    }
+    .seminar-card__info {
+      display: flex; flex-direction: column; gap: 7px;
+      margin-bottom: 20px;
+    }
+    .seminar-card__info-row {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.82rem; color: var(--text-mid);
+    }
+    .seminar-card__info-icon { color: var(--gold); width: 16px; text-align: center; }
+    .seminar-card__footer {
+      margin-top: auto;
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 20px; border-top: 1px solid var(--border);
+      flex-wrap: wrap; gap: 12px;
+    }
+    .seminar-card__price {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.2rem; color: var(--text-dark);
+    }
+    .seminar-card__price span {
+      font-size: 0.8rem; color: var(--text-light); font-family: 'Noto Sans KR', sans-serif;
+    }
+    .seminar-card__cap {
+      font-size: 0.78rem; color: var(--text-light);
+      margin-top: 4px;
+    }
+    /* 정원 바 */
+    .capacity-bar {
+      height: 4px; background: #eee; border-radius: 2px;
+      margin-top: 6px; overflow: hidden;
+    }
+    .capacity-bar__fill {
+      height: 100%; background: var(--gold); border-radius: 2px;
+      transition: width 0.6s ease;
+    }
+
+    /* ── 세미나 상세 모달 ── */
+    .detail-modal { max-width: 680px; }
+    .detail-modal__img { width: 100%; height: 260px; object-fit: cover; }
+    .detail-modal__body { padding: 32px; }
+    .detail-modal__cat {
+      font-size: 0.7rem; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 8px;
+    }
+    .detail-modal__title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.5rem; font-weight: 500; margin-bottom: 8px;
+    }
+    .detail-modal__sub { font-size: 0.9rem; color: var(--text-light); margin-bottom: 24px; }
+    .detail-modal__info-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; margin-bottom: 24px;
+      background: var(--bg-cream); padding: 20px; border-radius: 4px;
+    }
+    .detail-modal__info-item {}
+    .detail-modal__info-label {
+      font-size: 0.7rem; letter-spacing: 0.1em; color: var(--text-light); margin-bottom: 3px;
+    }
+    .detail-modal__info-value { font-size: 0.9rem; color: var(--text-dark); font-weight: 500; }
+    .detail-modal__desc {
+      font-size: 0.9rem; line-height: 2; color: var(--text-mid); margin-bottom: 24px; white-space: pre-line;
+    }
+    .detail-modal__price-row {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .detail-modal__price {
+      font-family: 'Noto Serif KR', serif; font-size: 1.6rem; color: var(--gold);
+    }
+    .detail-modal__price small { font-size: 0.85rem; color: var(--text-light); font-family: 'Noto Sans KR',sans-serif; }
+
+    /* ── 빈 상태 ── */
+    .empty-state {
+      text-align: center; padding: 80px 20px; color: var(--text-light);
+      grid-column: 1 / -1;
+    }
+    .empty-state__icon { font-size: 3rem; margin-bottom: 16px; opacity: 0.4; }
+
+    /* ── 로딩 ── */
+    .loading-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px;
+    }
+    .skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 4px;
+    }
+    @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+    .skeleton-card { border: 1px solid var(--border); border-radius: 2px; overflow: hidden; }
+    .skeleton-img { height: 220px; }
+    .skeleton-body { padding: 28px; }
+    .skeleton-line { height: 14px; margin-bottom: 10px; border-radius: 3px; }
+    .skeleton-line--short { width: 40%; }
+    .skeleton-line--mid { width: 70%; }
+    .skeleton-line--full { width: 100%; }
+
+    /* 잎 리딩 배너: PC/모바일 전환 */
+    .leaf-banner-pc     { display: flex; }
+    .leaf-banner-mobile { display: none; }
+
+    @media (max-width: 768px) {
+      .seminar-grid { grid-template-columns: 1fr; }
+      .detail-modal__info-grid { grid-template-columns: 1fr; }
+      .leaf-banner-pc     { display: none; }
+      .leaf-banner-mobile { display: flex; }
+    }
+    @media (max-width: 480px) {
+      /* 필터 탭: 한 줄에 모두 표시 */
+      .filter-tabs {
+        flex-wrap: nowrap;
+        gap: 5px;
+        justify-content: center;
+        overflow-x: visible;
+        padding-bottom: 0;
+      }
+      .filter-tab {
+        white-space: nowrap;
+        flex-shrink: 1;           /* 공간 부족 시 자연스럽게 축소 */
+        font-size: 0.72rem;
+        padding: 6px 10px;
+        letter-spacing: 0.04em;
+      }
+      /* 세미나 카드 */
+      .seminar-card__body { padding: 18px 16px; }
+      .seminar-card__title { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- 페이지 헤더 -->
+<div class="page-header">
+  <span class="page-header__label">APPLICATION BOARD</span>
+  <h1 class="page-header__title" id="seminar-page-title">신청 게시판</h1>
+  <p class="page-header__sub" id="seminar-page-subtitle">세미나 · 리트리트 · 잎 리딩 등 다양한 프로그램을 신청하세요</p>
+</div>
+
+<!-- 메인 콘텐츠 -->
+<section class="section">
+  <div class="container">
+    <!-- 필터 탭 -->
+    <div style="position:relative;">
+      <div class="filter-tabs" id="filter-tabs">
+        <button class="filter-tab active" data-cat="전체">전체</button>
+        <button class="filter-tab" data-cat="아가스티아">아가스티아</button>
+        <button class="filter-tab" data-cat="리트리트">리트리트</button>
+        <button class="filter-tab" data-cat="인도여행">인도 여행</button>
+        <button class="filter-tab" data-cat="필로소피">철학·빛의 법칙</button>
+      </div>
+      <!-- 관리자만 보이는 카테고리 편집 버튼 (오른쪽 위에 별도 배치) -->
+      <button id="seminar-cat-edit-btn" onclick="openSeminarCatModal()" style="display:none;position:absolute;top:-40px;right:0;padding:5px 12px;background:#1a2a4a;color:white;border:none;border-radius:6px;font-size:0.75rem;cursor:pointer;">⚙ 카테고리 편집</button>
+    </div>
+
+    <!-- 카테고리 편집 모달 -->
+    <div id="seminar-cat-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
+      <div style="background:white;border-radius:12px;padding:32px;width:90%;max-width:440px;box-shadow:0 8px 40px rgba(0,0,0,0.2);">
+        <div style="font-size:1.1rem;font-weight:700;color:#1a2a4a;margin-bottom:6px;">📂 세미나 카테고리 편집</div>
+        <div style="font-size:0.8rem;color:#888;margin-bottom:16px;">콤마(,)로 구분하여 입력하세요</div>
+        <input id="seminar-cat-input" type="text" style="width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:7px;font-size:0.95rem;box-sizing:border-box;margin-bottom:8px;" placeholder="아가스티아, 리트리트, 인도여행">
+        <div style="font-size:0.75rem;color:#aaa;margin-bottom:18px;">※ '전체' 탭은 자동으로 포함됩니다</div>
+        <div style="display:flex;gap:10px;justify-content:flex-end;">
+          <button onclick="closeSeminarCatModal()" style="padding:9px 20px;border:1px solid #ddd;border-radius:6px;background:white;cursor:pointer;">취소</button>
+          <button onclick="saveSeminarCategories()" style="padding:9px 20px;background:#b8963e;color:white;border:none;border-radius:6px;cursor:pointer;font-weight:600;">저장</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 🌿 아가스티아 잎 리딩 배너 (세미나 그리드 상단 고정) -->
+    <div id="leaf-reading-banner" style="grid-column:1/-1;display:none;margin-bottom:32px;">
+      <!-- PC 배너 (769px+) -->
+      <div class="leaf-banner-pc" style="background:#ffffff;border-radius:0;padding:36px 40px;align-items:center;gap:32px;flex-wrap:wrap;border:1px solid #e5e0d0;box-shadow:0 4px 24px rgba(26,35,50,0.08);">
+        <div style="width:64px;height:64px;border-radius:0;background:#1a2332;display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0;box-shadow:0 4px 16px rgba(26,35,50,0.25);">🌿</div>
+        <div style="flex:1;min-width:220px;">
+          <div style="font-size:0.65rem;letter-spacing:0.28em;color:#1a2332;text-transform:uppercase;margin-bottom:8px;font-weight:700;">AGASTYA LEAF READING</div>
+          <h3 style="font-family:'Noto Serif KR',serif;font-size:1.3rem;color:#1a2744;margin-bottom:10px;line-height:1.5;">아가스티아 잎 리딩 신청</h3>
+          <p style="font-size:0.85rem;color:#5a5040;line-height:1.9;margin-bottom:0;">5천 년 전 성자가 기록한 당신의 운명의 기록.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-end;flex-shrink:0;">
+          <a href="mypage.html" style="display:inline-flex;align-items:center;gap:8px;padding:13px 32px;font-size:0.78rem;letter-spacing:0.18em;text-transform:uppercase;font-weight:400;border-radius:0;background:#1a2332;color:#ffffff;border:1px solid #1a2332;white-space:nowrap;text-decoration:none;transition:all 0.3s ease;" onmouseover="this.style.background='#2d3f5c'" onmouseout="this.style.background='#1a2332'">✦ 마이페이지에서 신청</a>
+          <a href="service-leaf.html" style="font-size:0.78rem;color:#1a2332;text-decoration:none;text-align:right;opacity:0.75;">자세히 알아보기 →</a>
+        </div>
+      </div>
+      <!-- 모바일 배너 (768px 이하) -->
+      <div class="leaf-banner-mobile" style="background:#ffffff;border:1px solid #e5e0d0;border-radius:6px;padding:14px 16px;align-items:center;gap:14px;box-shadow:0 2px 10px rgba(26,35,50,0.06);">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:0.6rem;letter-spacing:0.2em;color:#8a7a60;text-transform:uppercase;margin-bottom:3px;font-weight:700;">LEAF READING</div>
+          <div style="font-family:'Noto Serif KR',serif;font-size:0.92rem;color:#1a2744;font-weight:500;margin-bottom:2px;">아가스티아 잎 리딩</div>
+          <div style="font-size:0.72rem;color:#8a7a60;line-height:1.5;">5천 년 전 성자가 기록한 운명의 기록.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px;align-items:flex-end;flex-shrink:0;">
+          <a href="mypage.html" style="display:inline-flex;align-items:center;gap:5px;padding:8px 14px;font-size:0.74rem;font-weight:500;border-radius:4px;background:#1a2332;color:#fff;white-space:nowrap;text-decoration:none;">✦ 신청하기</a>
+          <a href="service-leaf.html" style="font-size:0.7rem;color:#8a7a60;text-decoration:none;white-space:nowrap;">자세히 알아보기 →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 세미나 그리드 -->
+    <div class="seminar-grid" id="seminar-grid">
+      <!-- 로딩 스켈레톤 -->
+      <div class="skeleton-card">
+        <div class="skeleton skeleton-img"></div>
+        <div class="skeleton-body">
+          <div class="skeleton skeleton-line skeleton-line--short"></div>
+          <div class="skeleton skeleton-line skeleton-line--mid" style="height:20px;margin-bottom:12px;"></div>
+          <div class="skeleton skeleton-line skeleton-line--full"></div>
+          <div class="skeleton skeleton-line skeleton-line--full"></div>
+        </div>
+      </div>
+      <div class="skeleton-card">
+        <div class="skeleton skeleton-img"></div>
+        <div class="skeleton-body">
+          <div class="skeleton skeleton-line skeleton-line--short"></div>
+          <div class="skeleton skeleton-line skeleton-line--mid" style="height:20px;margin-bottom:12px;"></div>
+          <div class="skeleton skeleton-line skeleton-line--full"></div>
+          <div class="skeleton skeleton-line skeleton-line--full"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ 관리자 세미나 편집 모달 ══════ -->
+<div id="sem-edit-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:9999;overflow-y:auto;padding:32px 16px;">
+  <div style="background:white;border-radius:12px;max-width:720px;margin:0 auto;padding:36px 32px;box-shadow:0 16px 60px rgba(0,0,0,0.3);">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+      <h2 id="sem-modal-title" style="font-size:1.2rem;color:#1a2a4a;margin:0;">세미나 추가</h2>
+      <button onclick="closeSemEditModal()" style="background:none;border:none;font-size:1.5rem;cursor:pointer;color:#888;">×</button>
+    </div>
+    <input type="hidden" id="sem-id">
+    <div style="display:grid;gap:14px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <label style="display:block;font-size:0.8rem;color:#555;margin-bottom:5px;font-weight:600;">제목 <span style="color:red;">*</span></label>
+          <input id="sem-title" type="text" placeholder="세미나 제목" style="width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:7px;font-size:0.95rem;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="display:block;font-size:0.8rem;color:#555;margin-bottom:5px;font-weight:600;">부제목</label>
+          <input id="sem-subtitle" type="text" placeholder="부제목 (선택)" style="width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:7px;font-size:0.95rem;box-sizing:border-box;">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+        <div>
+          <label style="display:block;font-size:0.8rem;color:#555;margin-bottom:5px;font-weight:600;">카테고리</label>
+          <select id="sem-category" style="width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:7px;font-size:0.9rem;">
+            <option>아가스티아</option><option>리트리트</option><option>인도여행</option><option>필로소피</option>
+          </select>
+        </div>
+        <div>
+          <label style="display:block;font-size:0.8rem;color:#555;margin-bottom:5px;font-weight:600;">상태</label>
+          <select id="sem-status" style="width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:7px;font-size:0.9rem;">
+            <option value="모집중">모집중</option>
+            <option value="신청마감">신청마감</option>
+            <option value="종료">종료</option>
+          </select>
+        </div>
+        <div>
+          <label style="display:block;font-size:0.8rem;color:#555;margin-bottom:5px;font-weight:600;">신청 방식</label>
+          <select id="sem-apply-type" onchange="toggleSemApplyType(this.value)" style="width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:7px;font-size:0.9rem;">
+            <option value="site">사이트 내 신청</option>
+            <option value="external">외부 링크</option>
+          </select>
+        </div>
+      </div>
+      <div id="sem-ext-url-wrap" style="display:none;">
+        <label style="display:block;font-size:0.8rem;color:#555;margin-bottom:5px;font-weight:600;">외부 신청 URL</label>
+        <input id="sem-external-url" type="url" placeholder="https://forms.google.com/..." style="width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:7px;font-size:0.9rem;box-sizing:border-box;">
+      </div>
+      <div>
+        <label style="display:block;font-size:0.8rem;color:#555;margin-bottom:5px;font-weight:600;">📅 날짜</label>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;cursor:pointer;">
+            <input type="radio" name="sem-date-type" value="single" checked onchange="toggleSemDateType()"> 하루
+          </label>
+          <label style="display:flex;align-items:center;gap:4px;font-size:0.8rem;cursor:pointer;">
+            <input type="radio" name="sem-date-type" value="range" onchange="toggleSemDateType()"> 기간
+          </label>
+        </div>
+        <div id="sem-date-single">
+          <input id="sem-date" type="text" placeholder="YYYY-MM-DD"
+            oninput="this.value=this.value.replace(/[^0-9-]/g,'')"
+            style="width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:7px;font-size:0.9rem;box-sizing:border-box;">
+        </div>
+        <div id="sem-date-range" style="display:none;">
+          <div style="display:flex;align-items:center;gap:6px;">
+            <input id="sem-date-start" type="text" placeholder="YYYY-MM-DD" style="flex:1;padding:10px 12px;border:1.5px solid #ddd;border-radius:7px;font-size:0.9rem;box-sizing:border-box;">
+            <span style="color:#888;">~</span>
+            <input id="sem-date-end" type="text" placeholder="YYYY-MM-DD" style="flex:1;padding:10px 12px;border:1.5px solid #ddd;border-radius:7px;font-size:0.9rem;box-sizing:border-box;">
+          </div>
+          <div style="font-size:0.71rem;color:#999;margin-top:3px;">예: 2025-06-01 ~ 2025-06-03</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;">
+        <div></div>
+        <div>
+          <label style="display:block;font-size:0.8rem;color:#555;margin-bottom:5px;font-weight:600;">⏰ 시간</label>
+          <input id="sem-time" type="text" placeholder="13:00~17:00" style="width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:7px;font-size:0.9rem;box-sizing:border-box;">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <label style="display:block;font-size:0.8rem;color:#555;margin-bottom:5px;font-weight:600;">📍 장소</label>
+          <input id="sem-location" type="text" placeholder="세미나 장소" style="width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:7px;font-size:0.9rem;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="display:block;font-size:0.8rem;color:#555;margin-bottom:5px;font-weight:600;">주최</label>
+          <input id="sem-organizer" type="text" placeholder="주최" style="width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:7px;font-size:0.9rem;box-sizing:border-box;">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <label style="display:block;font-size:0.8rem;color:#555;margin-bottom:5px;font-weight:600;">💰 가격 (원)</label>
+          <input id="sem-price" type="number" placeholder="0" min="0" style="width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:7px;font-size:0.9rem;box-sizing:border-box;">
+        </div>
+        <div>
+          <label style="display:block;font-size:0.8rem;color:#555;margin-bottom:5px;font-weight:600;">👥 정원</label>
+          <input id="sem-capacity" type="number" placeholder="30" min="1" style="width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:7px;font-size:0.9rem;box-sizing:border-box;">
+        </div>
+      </div>
+      <div>
+        <label style="display:block;font-size:0.8rem;color:#555;margin-bottom:5px;font-weight:600;">🖼 이미지 URL</label>
+        <input id="sem-image" type="url" placeholder="https://..." style="width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:7px;font-size:0.9rem;box-sizing:border-box;">
+      </div>
+      <div>
+        <label style="display:block;font-size:0.8rem;color:#555;margin-bottom:5px;font-weight:600;">설명</label>
+        <textarea id="sem-desc" rows="5" placeholder="세미나 상세 설명" style="width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:7px;font-size:0.9rem;box-sizing:border-box;resize:vertical;"></textarea>
+      </div>
+      <div>
+        <label style="display:block;font-size:0.8rem;color:#555;margin-bottom:5px;font-weight:600;">신청 자격</label>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:4px;">
+          <label style="cursor:pointer;display:flex;align-items:center;gap:6px;"><input type="radio" name="sem-member" value="open" checked> 누구나</label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:6px;"><input type="radio" name="sem-member" value="member"> 회원 전용</label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:6px;"><input type="radio" name="sem-member" value="leader"> 리더 전용</label>
+          <label style="cursor:pointer;display:flex;align-items:center;gap:6px;"><input type="radio" name="sem-member" value="admin"> 관리자 전용</label>
+        </div>
+        <div style="font-size:0.72rem;color:#999;margin-top:6px;">※ 리더: 1+13+14장 완료 회원 | 관리자 전용: 내부용</div>
+      </div>
+      <div>
+        <label style="display:block;font-size:0.8rem;color:#555;margin-bottom:5px;font-weight:600;">태그 (쉼표 구분)</label>
+        <input id="sem-tags" type="text" placeholder="태그1, 태그2" style="width:100%;padding:10px 12px;border:1.5px solid #ddd;border-radius:7px;font-size:0.9rem;box-sizing:border-box;">
+      </div>
+
+      <!-- ── 서약 항목 설정 ── -->
+      <div style="border:1.5px solid #e8d5a3;border-radius:10px;padding:16px;background:#fffdf5;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <label style="font-size:0.85rem;color:#7a5c1e;font-weight:700;">📋 신청자 서약 항목</label>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <label style="font-size:0.75rem;color:#888;cursor:pointer;display:flex;align-items:center;gap:4px;">
+              <input type="checkbox" id="sem-use-default-pledge" checked onchange="togglePledgeMode(this.checked)">
+              기본 서약 사용
+            </label>
+            <button type="button" onclick="addPledgeItem()" style="font-size:0.75rem;padding:4px 10px;background:#b8963e;color:white;border:none;border-radius:5px;cursor:pointer;">+ 항목 추가</button>
+          </div>
+        </div>
+        <div id="sem-pledge-default-notice" style="font-size:0.78rem;color:#a07030;background:#fef9ec;border-radius:6px;padding:8px 12px;margin-bottom:10px;">
+          ✅ 관리자 패널에서 설정한 기본 서약이 적용됩니다. 이 세미나에만 별도 서약을 사용하려면 위 체크를 해제하세요.
+        </div>
+        <div id="sem-pledge-custom-wrap" style="display:none;">
+          <div id="sem-pledge-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:8px;"></div>
+          <div style="font-size:0.75rem;color:#aaa;">항목을 드래그하여 순서 변경 · 빈 항목은 저장 시 제외됩니다</div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;margin-top:24px;gap:10px;">
+      <button id="sem-delete-btn" onclick="deleteSeminarInline()" style="display:none;padding:11px 20px;border:1.5px solid #e53e3e;color:#c53030;background:white;border-radius:7px;cursor:pointer;font-size:0.9rem;">🗑 삭제</button>
+      <div style="display:flex;gap:10px;margin-left:auto;">
+        <button onclick="closeSemEditModal()" style="padding:11px 24px;border:1.5px solid #ddd;border-radius:7px;background:white;cursor:pointer;">취소</button>
+        <button id="sem-save-btn" onclick="saveSeminarInline()" style="padding:11px 24px;background:#1a2a4a;color:white;border:none;border-radius:7px;cursor:pointer;font-weight:700;">저장</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── 세미나 상세 모달 ── -->
+<div class="modal-overlay" id="detail-modal">
+  <div class="modal detail-modal" id="detail-modal-inner">
+    <img src="" alt="" class="detail-modal__img" id="dm-img">
+    <button class="modal__close" onclick="closeDetail()" style="position:absolute;top:16px;right:16px;background:rgba(0,0,0,0.4);color:white;border-radius:50%;">✕</button>
+    <div class="detail-modal__body">
+      <div class="detail-modal__cat" id="dm-cat"></div>
+      <h2 class="detail-modal__title" id="dm-title"></h2>
+      <p class="detail-modal__sub" id="dm-sub"></p>
+      <div class="detail-modal__info-grid">
+        <div class="detail-modal__info-item">
+          <div class="detail-modal__info-label">📅 날짜</div>
+          <div class="detail-modal__info-value" id="dm-date"></div>
+        </div>
+        <div class="detail-modal__info-item">
+          <div class="detail-modal__info-label">⏰ 시간</div>
+          <div class="detail-modal__info-value" id="dm-time"></div>
+        </div>
+        <div class="detail-modal__info-item">
+          <div class="detail-modal__info-label">📍 장소</div>
+          <div class="detail-modal__info-value" id="dm-location"></div>
+        </div>
+        <div class="detail-modal__info-item">
+          <div class="detail-modal__info-label">👥 정원</div>
+          <div class="detail-modal__info-value" id="dm-cap"></div>
+        </div>
+      </div>
+      <p class="detail-modal__desc" id="dm-desc"></p>
+      <!-- 회원 전용 안내 배지 -->
+      <div id="dm-member-badge" style="display:none;margin-bottom:12px;padding:8px 14px;background:#fff3e0;border:1px solid #ffb74d;border-radius:8px;font-size:0.8rem;color:#e65100;display:none;align-items:center;gap:8px;">
+        🔒 <strong>회원 전용 세미나</strong>입니다. 신청하려면 로그인이 필요합니다.
+        <a href="login.html" style="margin-left:auto;color:#e65100;text-decoration:underline;font-weight:600;white-space:nowrap;">로그인 →</a>
+      </div>
+      <div class="detail-modal__price-row">
+        <div>
+          <div class="detail-modal__price" id="dm-price"></div>
+          <div style="font-size:0.78rem;color:var(--text-light);margin-top:2px;">부가세 포함</div>
+        </div>
+        <button class="btn btn--gold btn--lg" id="dm-apply-btn" onclick="goApply()">이 세미나 신청하기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  renderNavbar('seminar');
+  renderFooter();
+
+  // 세미나 페이지 콘텐츠 로드
+  (async () => {
+    try {
+      const map = await SB.loadContentMap(200);
+      const get = (k) => (map[k]||{}).content||'';
+      const pt = get('seminar_page_title');
+      const ps = get('seminar_page_subtitle');
+      if (pt) document.getElementById('seminar-page-title').textContent = pt;
+      if (ps) document.getElementById('seminar-page-subtitle').textContent = ps;
+    } catch(e){}
+  })();
+
+  let allSeminars = [];
+  let currentSeminar = null;
+  let currentFilter = '전체';
+  let seminarCategories = ['아가스티아','리트리트','인도여행','필로소피'];
+
+  function openSeminarCatModal() {
+    document.getElementById('seminar-cat-input').value = seminarCategories.join(', ');
+    document.getElementById('seminar-cat-modal').style.display = 'flex';
+  }
+  function closeSeminarCatModal() {
+    document.getElementById('seminar-cat-modal').style.display = 'none';
+  }
+  async function saveSeminarCategories() {
+    const val = document.getElementById('seminar-cat-input').value.trim();
+    if (!val) { alert('카테고리를 입력해주세요.'); return; }
+    seminarCategories = val.split(',').map(c => c.trim()).filter(c => c);
+    renderSeminarCategoryTabs();
+    closeSeminarCatModal();
+    try {
+      await SB.upsertContent('seminar_categories', seminarCategories.join(','), '세미나 카테고리', 'seminar', 0);
+      alert('카테고리가 저장되었습니다!');
+    } catch(e) { alert('저장 중 오류가 발생했습니다.'); }
+  }
+  function renderSeminarCategoryTabs() {
+    const tabs = document.getElementById('filter-tabs');
+    tabs.innerHTML = '<button class="filter-tab active" data-cat="전체">전체</button>' +
+      seminarCategories.map(c => '<button class="filter-tab" data-cat="' + c + '">' + c + '</button>').join('');
+  }
+  async function loadSeminarCategories() {
+    try {
+      const saved = await SB.findOne('site_content', 'key', 'seminar_categories');
+      if (saved && saved.content) {
+        seminarCategories = saved.content.split(',').map(c => c.trim()).filter(c => c);
+        renderSeminarCategoryTabs();
+      }
+    } catch(e) {}
+    if (Auth.isAdmin()) document.getElementById('seminar-cat-edit-btn').style.display = 'block';
+  }
+
+  /* ── 회원 등급 확인 ── */
+  function getUserRole() {
+    const s = Auth.getSession ? Auth.getSession() : null;
+    if (!s) return 'guest';
+    return s.role || 'user';
+  }
+
+  function canViewSeminar(seminar) {
+    const role = getUserRole();
+    const mo = seminar.member_only || 'open';
+    if (Auth.isAdmin()) return true; // 관리자는 모두 점근가능
+    if (mo === 'open') return true;
+    if (mo === 'member') return role === 'user' || role === 'leader' || role === 'admin';
+    if (mo === 'leader') return role === 'leader' || role === 'admin';
+    if (mo === 'admin') return role === 'admin';
+    return false;
+  }
+
+  /* ── 세미나 목록 로드 ── */
+  async function loadSeminars() {
+    try {
+      const raw = await SB.getAll('seminars', { limit: 100, order: 'date.asc' });
+      // 등급 필터링: 별굴자 세미나는 숨김 (admin-only)
+      allSeminars = raw.filter(s => canViewSeminar(s));
+      renderSeminars(allSeminars);
+      if (Auth.isAdmin()) setTimeout(renderAdminSemBtns, 200);
+    } catch (e) {
+      document.getElementById('seminar-grid').innerHTML = `
+        <div class="empty-state" style="grid-column:1/-1">
+          <div class="empty-state__icon">⚠️</div>
+          <p>데이터를 불러오는 중 오류가 발생했습니다.</p>
+        </div>`;
+    }
+  }
+
+  /* ── 세미나 카드 렌더링 ── */
+  function renderSeminars(seminars) {
+    const grid = document.getElementById('seminar-grid');
+    // 게스트/일반 회원 등급 부족 배지 표시
+    const role = getUserRole();
+    if (!Auth.isAdmin() && role === 'guest' || role === 'user') {
+      const hasLeaderOnly = seminars.some(s => s.member_only === 'leader');
+      // 리더 전용 배너 (role이 guest나 user인 경우)
+    }
+    if (!seminars.length) {
+      grid.innerHTML = `<div class="empty-state"><div class="empty-state__icon">🔍</div><p>해당 카테고리의 세미나가 없습니다.</p></div>`;
+      return;
+    }
+    grid.innerHTML = seminars.map(s => {
+      const pct = s.capacity > 0 ? Math.round((s.current_applicants / s.capacity) * 100) : 0;
+      const remaining = s.capacity - s.current_applicants;
+      const statusBadge = s.status === '모집중'
+        ? `<span class="badge badge--green">${s.status}</span>`
+        : s.status === '신청마감'
+        ? `<span class="badge badge--red">${s.status}</span>`
+        : `<span class="badge badge--gray">${s.status}</span>`;
+      const memberBadgeHtml = s.member_only === 'leader'
+        ? `<span class="badge badge--gold" style="font-size:0.65rem;padding:2px 8px;">🌟 리더 전용</span>`
+        : s.member_only === 'member'
+        ? `<span class="badge badge--navy" style="font-size:0.65rem;padding:2px 8px;">🔒 회원 전용</span>`
+        : '';
+      return `
+      <div class="seminar-card" onclick="openDetail('${s.id}')">
+        <div class="seminar-card__img-wrap">
+          <img src="${(s.image_url && s.image_url.startsWith('http')) ? s.image_url : 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'}"
+               alt="${s.title}" class="seminar-card__img" onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+          <div class="seminar-card__status" style="display:flex;gap:6px;flex-wrap:wrap;">${statusBadge}${memberBadgeHtml}</div>
+        </div>
+        <div class="seminar-card__body">
+          <span class="seminar-card__cat">${s.category || ''}</span>
+          <h3 class="seminar-card__title">${s.title}</h3>
+          <p class="seminar-card__sub">${s.subtitle || ''}</p>
+          <div class="seminar-card__info">
+            <div class="seminar-card__info-row"><span class="seminar-card__info-icon">📅</span>${s.date_end ? s.date + ' ~ ' + s.date_end : (s.date || '-')}</div>
+            <div class="seminar-card__info-row"><span class="seminar-card__info-icon">⏰</span>${s.time || '-'}</div>
+            <div class="seminar-card__info-row"><span class="seminar-card__info-icon">📍</span>${s.location || '-'}</div>
+          </div>
+          <div class="seminar-card__footer">
+            <div>
+              <div class="seminar-card__price">${formatPrice(s.price)}<span>/인</span></div>
+              <div class="seminar-card__cap">잔여 ${remaining}석 / 정원 ${s.capacity}명</div>
+              <div class="capacity-bar"><div class="capacity-bar__fill" style="width:${pct}%"></div></div>
+            </div>
+            <button class="btn btn--outline btn--sm" onclick="event.stopPropagation(); openDetail('${s.id}')">상세보기</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  /* ── 필터 탭 ── */
+  document.getElementById('filter-tabs').addEventListener('click', e => {
+    const tab = e.target.closest('.filter-tab');
+    if (!tab) return;
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    currentFilter = tab.dataset.cat;
+    const filtered = currentFilter === '전체'
+      ? allSeminars
+      : allSeminars.filter(s => s.category === currentFilter || (s.tags && s.tags.includes(currentFilter)));
+    renderSeminars(filtered);
+    if (Auth.isAdmin()) setTimeout(renderAdminSemBtns, 200);
+  });
+
+  /* ── 상세 모달 열기 ── */
+  function openDetail(id) {
+    const s = allSeminars.find(x => x.id === id);
+    if (!s) return;
+    currentSeminar = s;
+    const remaining = s.capacity - s.current_applicants;
+    const dmImg = document.getElementById('dm-img');
+    dmImg.src = s.image_url && s.image_url.startsWith('http') ? s.image_url : 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800';
+    dmImg.onerror = function() { this.src = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800'; };
+    document.getElementById('dm-img').alt = s.title;
+    document.getElementById('dm-cat').textContent = s.category || '';
+    document.getElementById('dm-title').textContent = s.title;
+    document.getElementById('dm-sub').textContent = s.subtitle || '';
+    document.getElementById('dm-date').textContent = s.date_end ? (s.date + ' ~ ' + s.date_end) : (s.date || '-');
+    document.getElementById('dm-time').textContent = s.time || '-';
+    document.getElementById('dm-location').textContent = s.location || '-';
+    document.getElementById('dm-cap').textContent = `잔여 ${remaining}석 / ${s.capacity}명`;
+    // \n → <br> 변환으로 엔터 줄바꿈 반영
+    document.getElementById('dm-desc').innerHTML = (s.description || '').replace(/\r\n|\r|\n/g, '<br>');
+    document.getElementById('dm-price').innerHTML = `${formatPrice(s.price)}<small>/인</small>`;
+    // 회원 전용 배지
+    const memberBadge = document.getElementById('dm-member-badge');
+    const isMemberOnly = s.member_only === 'member';
+    const isLoggedIn = Auth.isLoggedIn();
+    if (memberBadge) {
+      if (isMemberOnly && !isLoggedIn) {
+        memberBadge.style.display = 'flex';
+      } else {
+        memberBadge.style.display = 'none';
+      }
+    }
+
+    const applyBtn = document.getElementById('dm-apply-btn');
+    if (s.status === '신청마감' || remaining <= 0) {
+      applyBtn.textContent = '신청 마감';
+      applyBtn.disabled = true;
+      applyBtn.style.opacity = '0.5';
+    } else if (s.apply_type === 'external' && s.external_url) {
+      applyBtn.innerHTML = '외부 신청 폼으로 이동 ↗';
+      applyBtn.disabled = false;
+      applyBtn.style.opacity = '1';
+    } else if (isMemberOnly && !isLoggedIn) {
+      applyBtn.innerHTML = '🔒 로그인 후 신청 가능';
+      applyBtn.disabled = false;
+      applyBtn.style.opacity = '1';
+    } else {
+      applyBtn.textContent = '이 세미나 신청하기';
+      applyBtn.disabled = false;
+      applyBtn.style.opacity = '1';
+    }
+    document.getElementById('detail-modal').classList.add('show');
+    document.body.style.overflow = 'hidden';
+
+    // 관리자: 상세 모달에 편집 버튼 추가
+    if (Auth.isAdmin()) {
+      setTimeout(() => {
+        const inner = document.getElementById('detail-modal-inner');
+        if (!inner) return;
+        // 기존 편집 버튼 제거 후 재추가
+        const old = inner.querySelector('.admin-detail-edit-btn');
+        if (old) old.remove();
+        const editBtn = document.createElement('button');
+        editBtn.className = 'admin-detail-edit-btn';
+        editBtn.textContent = '✏ 이 세미나 편집';
+        editBtn.style.cssText = 'display:block;width:100%;margin-top:12px;padding:10px;background:#f0f4fa;border:1.5px solid #1a2a4a;color:#1a2a4a;border-radius:7px;cursor:pointer;font-size:0.85rem;font-weight:600;';
+        editBtn.onclick = () => { closeDetail(); setTimeout(() => openSemEditModal(s), 80); };
+        inner.appendChild(editBtn);
+      }, 60);
+    }
+  }
+
+  function closeDetail() {
+    document.getElementById('detail-modal').classList.remove('show');
+    document.body.style.overflow = '';
+  }
+
+  function goApply() {
+    if (!currentSeminar) return;
+
+    // ── 외부 URL 방식 ──
+    if (currentSeminar.apply_type === 'external' && currentSeminar.external_url) {
+      closeDetail();
+      window.open(currentSeminar.external_url, '_blank', 'noopener,noreferrer');
+      return;
+    }
+
+    // ── 회원 전용 세미나: 비로그인 시 로그인 페이지로 ──
+    if (currentSeminar.member_only === 'member' && !Auth.isLoggedIn()) {
+      closeDetail();
+      const redirectUrl = encodeURIComponent('seminar-apply.html?id=' + currentSeminar.id);
+      window.location.href = `login.html?redirect=${redirectUrl}&reason=member_only`;
+      return;
+    }
+
+    // ── 사이트 내장 신청 ──
+    closeDetail();
+    window.location.href = `seminar-apply.html?id=${currentSeminar.id}`;
+  }
+
+  // 모달 외부 클릭 닫기
+  document.getElementById('detail-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeDetail();
+  });
+
+  /* ── 잎 리딩 배너 로드 ── */
+  async function loadLeafReadingBanner() {
+    const banner = document.getElementById('leaf-reading-banner');
+    if (banner) banner.style.display = 'block';
+
+    if (!Auth.isLoggedIn()) return;
+    const session = Auth.getSession ? Auth.getSession() : null;
+    if (!session) return;
+
+    try {
+      const all = await SB.getAll('leaf_readings', { limit: 200 });
+      const mine = all.filter(r => r.user_id === session.id);
+      const isDone = r => r.payment_status === '결제완료' || r.payment_status === '완료' || r.status === '완료';
+
+      const ch1done  = mine.some(r => (r.chapter === '1'  || r.chapter === 1)  && isDone(r));
+      const ch13done = mine.some(r => (r.chapter === '13' || r.chapter === 13) && isDone(r));
+      const ch14done = mine.some(r => (r.chapter === '14' || r.chapter === 14) && isDone(r));
+
+      const progressBanner = document.getElementById('leaf-progress-banner');
+      const chipsEl = document.getElementById('leaf-progress-chips');
+      if (!progressBanner || !chipsEl) return;
+
+      progressBanner.style.display = 'flex';
+      const chipStyle = (done) => done
+        ? 'display:inline-flex;align-items:center;gap:6px;background:#d1fae5;border:1px solid #34d399;color:#065f46;font-size:0.78rem;font-weight:700;padding:4px 12px;border-radius:20px;'
+        : 'display:inline-flex;align-items:center;gap:6px;background:var(--bg-cream);border:1px solid var(--border);color:var(--text-light);font-size:0.78rem;font-weight:600;padding:4px 12px;border-radius:20px;';
+      chipsEl.innerHTML = `
+        <span style="${chipStyle(ch1done)}">${ch1done ? '✓' : '○'} 1장</span>
+        <span style="${chipStyle(ch13done)}">${ch13done ? '✓' : '○'} 13장</span>
+        <span style="${chipStyle(ch14done)}">${ch14done ? '✓' : '○'} 14장</span>
+      `;
+    } catch(e) {}
+  }
+
+  Promise.all([loadSeminarCategories(), loadSeminars(), loadLeafReadingBanner()])
+    .finally(() => { document.body.style.opacity = '1'; });
+
+  /* ══════════════════════════════════
+     관리자 인라인 세미나 관리
+  ══════════════════════════════════ */
+
+  function formatPrice(p) {
+    if (!p || p == 0) return '무료';
+    return Number(p).toLocaleString('ko-KR') + '원';
+  }
+
+  function toggleSemApplyType(val) {
+    document.getElementById('sem-ext-url-wrap').style.display = val === 'external' ? 'block' : 'none';
+  }
+
+  /* ── 서약 항목 관리 ── */
+  function togglePledgeMode(useDefault) {
+    document.getElementById('sem-pledge-default-notice').style.display = useDefault ? 'block' : 'none';
+    document.getElementById('sem-pledge-custom-wrap').style.display = useDefault ? 'none' : 'block';
+  }
+
+  function addPledgeItem(text = '') {
+    const list = document.getElementById('sem-pledge-list');
+    const idx = list.children.length + 1;
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;gap:6px;align-items:flex-start;';
+    row.innerHTML = `
+      <span style="font-size:0.78rem;color:#aaa;padding-top:11px;min-width:20px;">${idx}.</span>
+      <textarea rows="2" placeholder="서약 항목 내용" style="flex:1;padding:8px 10px;border:1.5px solid #ddd;border-radius:6px;font-size:0.82rem;resize:vertical;box-sizing:border-box;">${text}</textarea>
+      <button type="button" onclick="this.parentElement.remove(); reindexPledge();" style="padding:6px 10px;border:1px solid #e53e3e;background:white;color:#c53030;border-radius:5px;cursor:pointer;font-size:0.75rem;margin-top:4px;">✕</button>
+    `;
+    list.appendChild(row);
+  }
+
+  function reindexPledge() {
+    const list = document.getElementById('sem-pledge-list');
+    [...list.children].forEach((row, i) => {
+      const span = row.querySelector('span');
+      if (span) span.textContent = `${i + 1}.`;
+    });
+  }
+
+  function getPledgeItems() {
+    const useDefault = document.getElementById('sem-use-default-pledge').checked;
+    if (useDefault) return null; // null = 기본 서약 사용
+    const list = document.getElementById('sem-pledge-list');
+    return [...list.querySelectorAll('textarea')]
+      .map(t => t.value.trim()).filter(Boolean);
+  }
+
+  function setPledgeItems(pledgeData) {
+    const list = document.getElementById('sem-pledge-list');
+    list.innerHTML = '';
+    if (!pledgeData || pledgeData === 'default') {
+      document.getElementById('sem-use-default-pledge').checked = true;
+      togglePledgeMode(true);
+    } else {
+      document.getElementById('sem-use-default-pledge').checked = false;
+      togglePledgeMode(false);
+      const items = Array.isArray(pledgeData) ? pledgeData : JSON.parse(pledgeData);
+      items.forEach(t => addPledgeItem(t));
+    }
+  }
+
+  function openSemEditModal(seminar) {
+    if (!Auth.isAdmin()) return;
+    const isEdit = !!seminar;
+    document.getElementById('sem-modal-title').textContent = isEdit ? '세미나 편집' : '세미나 추가';
+    document.getElementById('sem-id').value = isEdit ? seminar.id : '';
+    document.getElementById('sem-title').value = isEdit ? (seminar.title || '') : '';
+    document.getElementById('sem-subtitle').value = isEdit ? (seminar.subtitle || '') : '';
+    document.getElementById('sem-category').value = isEdit ? (seminar.category || '아가스티아') : '아가스티아';
+    document.getElementById('sem-status').value = isEdit ? (seminar.status || '모집중') : '모집중';
+    // 날짜 타입 복원
+    const hasEnd = isEdit && seminar.date_end && seminar.date_end.trim();
+    document.querySelector('input[name="sem-date-type"][value="single"]').checked = !hasEnd;
+    document.querySelector('input[name="sem-date-type"][value="range"]').checked = !!hasEnd;
+    document.getElementById('sem-date-single').style.display = hasEnd ? 'none' : 'block';
+    document.getElementById('sem-date-range').style.display = hasEnd ? 'block' : 'none';
+    document.getElementById('sem-date').value = isEdit ? (seminar.date || '') : '';
+    document.getElementById('sem-date-start').value = isEdit ? (seminar.date || '') : '';
+    document.getElementById('sem-date-end').value = isEdit ? (seminar.date_end || '') : '';
+    document.getElementById('sem-time').value = isEdit ? (seminar.time || '') : '';
+    document.getElementById('sem-location').value = isEdit ? (seminar.location || '') : '';
+    document.getElementById('sem-organizer').value = isEdit ? (seminar.organizer || '') : '';
+    document.getElementById('sem-price').value = isEdit ? (seminar.price || 0) : 0;
+    document.getElementById('sem-capacity').value = isEdit ? (seminar.capacity || 30) : 30;
+    document.getElementById('sem-image').value = isEdit ? (seminar.image_url || '') : '';
+    document.getElementById('sem-desc').value = isEdit ? (seminar.description || '') : '';
+    document.getElementById('sem-tags').value = isEdit ? (seminar.tags || '') : '';
+    // 신청 방식
+    const applyType = isEdit ? (seminar.apply_type || 'site') : 'site';
+    document.getElementById('sem-apply-type').value = applyType;
+    toggleSemApplyType(applyType);
+    document.getElementById('sem-external-url').value = isEdit ? (seminar.external_url || '') : '';
+    // 신청 자격
+    const memberOnly = isEdit ? (seminar.member_only || 'open') : 'open';
+    document.querySelector(`input[name="sem-member"][value="${memberOnly}"]`).checked = true;
+    // 서약 항목
+    if (isEdit && seminar.pledge_items) {
+      try {
+        const pd = typeof seminar.pledge_items === 'string'
+          ? JSON.parse(seminar.pledge_items) : seminar.pledge_items;
+        setPledgeItems(Array.isArray(pd) && pd.length ? pd : 'default');
+      } catch(e) { setPledgeItems('default'); }
+    } else {
+      setPledgeItems('default');
+    }
+    // 삭제 버튼
+    document.getElementById('sem-delete-btn').style.display = isEdit ? 'block' : 'none';
+    document.getElementById('sem-edit-modal').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSemEditModal() {
+    document.getElementById('sem-edit-modal').style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  function toggleSemDateType() {
+    const isRange = document.querySelector('input[name="sem-date-type"]:checked')?.value === 'range';
+    document.getElementById('sem-date-single').style.display = isRange ? 'none' : 'block';
+    document.getElementById('sem-date-range').style.display = isRange ? 'block' : 'none';
+  }
+
+  async function saveSeminarInline() {
+    if (!Auth.isAdmin()) return;
+    const id = document.getElementById('sem-id').value.trim();
+    const title = document.getElementById('sem-title').value.trim();
+    if (!title) { alert('세미나 제목을 입력해주세요.'); return; }
+    const applyType = document.getElementById('sem-apply-type').value;
+    const externalUrl = document.getElementById('sem-external-url').value.trim();
+    if (applyType === 'external' && !externalUrl) {
+      alert('외부 신청 URL을 입력해주세요.');
+      return;
+    }
+    const payload = {
+      title,
+      subtitle: document.getElementById('sem-subtitle').value.trim(),
+      category: document.getElementById('sem-category').value,
+      status: document.getElementById('sem-status').value,
+      date: (() => {
+        const isRange = document.querySelector('input[name="sem-date-type"]:checked')?.value === 'range';
+        return isRange ? document.getElementById('sem-date-start').value.trim()
+                       : document.getElementById('sem-date').value;
+      })(),
+      date_end: (() => {
+        const isRange = document.querySelector('input[name="sem-date-type"]:checked')?.value === 'range';
+        return isRange ? document.getElementById('sem-date-end').value.trim() : '';
+      })(),
+      time: document.getElementById('sem-time').value.trim(),
+      location: document.getElementById('sem-location').value.trim(),
+      organizer: document.getElementById('sem-organizer').value.trim(),
+      price: Number(document.getElementById('sem-price').value) || 0,
+      capacity: Number(document.getElementById('sem-capacity').value) || 30,
+      image_url: document.getElementById('sem-image').value.trim(),
+      description: document.getElementById('sem-desc').value.trim(),
+      tags: document.getElementById('sem-tags').value.trim(),
+      apply_type: applyType,
+      external_url: externalUrl,
+      member_only: document.querySelector('input[name="sem-member"]:checked')?.value || 'open',
+      pledge_items: (() => {
+        const items = getPledgeItems();
+        return items === null ? '' : JSON.stringify(items);
+      })(),
+    };
+    const saveBtn = document.getElementById('sem-save-btn');
+    if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = '저장 중...'; }
+    console.log('[saveSeminarInline] id:', id, ' title:', payload.title);
+    try {
+      if (id) {
+        console.log('[saveSeminarInline] UPDATE 시도 - id:', id);
+        await SB.update('seminars', id, payload);
+      } else {
+        console.log('[saveSeminarInline] INSERT 시도');
+        await SB.insert('seminars', { ...payload, current_applicants: 0 });
+      }
+      closeSemEditModal();
+      // 목록 새로고침
+      allSeminars = await SB.getAll('seminars', { limit: 100, order: 'date.asc' });
+      const filtered = currentFilter === '전체'
+        ? allSeminars
+        : allSeminars.filter(s => s.category === currentFilter || (s.tags && s.tags.includes(currentFilter)));
+      renderSeminars(filtered);
+      renderAdminSemBtns();
+      alert(id ? '세미나가 수정되었습니다.' : '세미나가 추가되었습니다.');
+    } catch(e) {
+      alert('저장 실패: ' + e.message);
+    } finally {
+      if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = '저장'; }
+    }
+  }
+
+  async function deleteSeminarInline() {
+    const id = document.getElementById('sem-id').value.trim();
+    const title = document.getElementById('sem-title').value.trim();
+    if (!id || !confirm(`"${title}" 세미나를 삭제하시겠습니까?\n이 작업은 되돌릴 수 없습니다.`)) return;
+    try {
+      const ok = await SB.remove('seminars', id);
+      if (!ok) { alert('삭제에 실패했습니다. 다시 시도해주세요.'); return; }
+      closeSemEditModal();
+      allSeminars = await SB.getAll('seminars', { limit: 100, order: 'date.asc' });
+      renderSeminars(allSeminars);
+      alert('삭제되었습니다.');
+    } catch(e) { alert('삭제 실패: ' + e.message); }
+  }
+
+  // 각 세미나 카드에 편집 버튼 추가
+  function renderAdminSemBtns() {
+    if (!Auth.isAdmin()) return;
+    document.querySelectorAll('.seminar-card').forEach(card => {
+      if (card.querySelector('.admin-sem-btn')) return;
+      const onclick = card.getAttribute('onclick') || '';
+      const idMatch = onclick.match(/openDetail\('([^']+)'\)/);
+      if (!idMatch) return;
+      const sId = idMatch[1];
+      const btn = document.createElement('button');
+      btn.className = 'admin-sem-btn';
+      btn.textContent = '✏ 편집';
+      btn.style.cssText = 'position:absolute;top:8px;right:8px;z-index:20;padding:5px 12px;background:#1a2a4a;color:white;border:none;border-radius:4px;font-size:0.72rem;cursor:pointer;';
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        const s = allSeminars.find(x => x.id === sId);
+        if (s) openSemEditModal(s);
+      };
+      card.style.position = 'relative';
+      card.appendChild(btn);
+    });
+  }
+
+  // loadSeminars 호출 후 관리자 버튼 자동 추가 (renderSeminars 패치 불필요 - loadSeminars에서 호출)
+
+  // 관리자 UI 초기화
+  function initAdminSemUI() {
+    if (!Auth.isAdmin()) return;
+    // 세미나 추가 버튼
+    if (!document.getElementById('admin-sem-add-btn')) {
+      const addBtn = document.createElement('button');
+      addBtn.id = 'admin-sem-add-btn';
+      addBtn.innerHTML = '+ 세미나 추가';
+      addBtn.style.cssText = 'position:fixed;bottom:24px;right:24px;z-index:9000;padding:14px 22px;background:#b8963e;color:white;border:none;border-radius:50px;font-size:0.95rem;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,0.25);';
+      addBtn.onclick = () => openSemEditModal(null);
+      document.body.appendChild(addBtn);
+    }
+    // 관리자 패널 링크
+    if (!document.getElementById('admin-panel-link-sem')) {
+      const lnk = document.createElement('a');
+      lnk.id = 'admin-panel-link-sem';
+      lnk.href = 'admin.html';
+      lnk.style.cssText = 'position:fixed;bottom:24px;left:24px;z-index:9000;padding:10px 18px;background:#1a2a4a;color:white;border-radius:50px;font-size:0.82rem;text-decoration:none;font-weight:600;box-shadow:0 4px 16px rgba(0,0,0,0.2);';
+      lnk.textContent = '🔑 관리자 패널';
+      document.body.appendChild(lnk);
+    }
+  }
+
+  if (Auth.isAdmin()) initAdminSemUI();
+
+
+</script>
+</body>
+</html>

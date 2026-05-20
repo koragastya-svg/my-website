@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>아가스티아잎 탐색 | 한국 아가스티아 협회</title>
+  <meta name="description" content="수천 년 전부터 기록된 당신의 운명의 기록, 아가스티아잎 탐색 서비스를 소개합니다.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ══ 히어로 ══ */
+    .svc-detail-hero {
+      position: relative; min-height: 420px;
+      display: flex; align-items: flex-end;
+      overflow: hidden; background: var(--navy);
+    }
+    .svc-detail-hero__bg {
+      position: absolute; inset: 0;
+      background: url('https://www.genspark.ai/api/files/s/stgW8WTV') center center/cover no-repeat;
+      opacity: 0.55;
+    }
+    .svc-detail-hero__inner {
+      position: relative; z-index: 1;
+      padding: 60px 0 56px; width: 100%;
+    }
+    .svc-detail-hero__num {
+      font-size: 0.68rem; letter-spacing: 0.35em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 12px; display: block;
+    }
+    .svc-detail-hero__title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 400; color: white; line-height: 1.3; margin-bottom: 12px;
+    }
+    .svc-detail-hero__sub {
+      font-size: 0.95rem; color: rgba(255,255,255,0.7); line-height: 1.8;
+      max-width: 560px;
+    }
+    .breadcrumb {
+      font-size: 0.78rem; color: rgba(255,255,255,0.5);
+      margin-bottom: 20px; letter-spacing: 0.05em;
+    }
+    .breadcrumb a { color: rgba(255,255,255,0.5); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--gold); }
+    .breadcrumb span { margin: 0 8px; }
+
+    /* ══ 본문 레이아웃 ══ */
+    .svc-content { max-width: 960px; margin: 0 auto; }
+    .svc-lead {
+      font-size: 1.05rem; color: var(--text-dark); line-height: 2.1;
+      font-family: 'Noto Serif KR', serif;
+      margin-bottom: 48px; padding-bottom: 48px;
+      border-bottom: 1px solid var(--border);
+    }
+    .svc-section { margin-bottom: 56px; }
+    .svc-section__num {
+      font-size: 0.65rem; letter-spacing: 0.25em; color: var(--gold);
+      text-transform: uppercase; margin-bottom: 8px; display: block;
+    }
+    .svc-section__title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.4rem; font-weight: 500;
+      color: var(--text-dark); margin-bottom: 20px;
+      padding-bottom: 16px; border-bottom: 2px solid var(--gold);
+      display: inline-block;
+    }
+    .svc-section__body {
+      font-size: 0.93rem; color: var(--text-mid);
+      line-height: 2.1;
+    }
+    .svc-section__body p { margin-bottom: 16px; }
+    .svc-section__body strong { color: var(--text-dark); }
+
+    /* ══ 강조 박스 ══ */
+    .svc-box {
+      background: var(--cream); border-left: 3px solid var(--gold);
+      padding: 24px 28px; border-radius: 0 var(--radius) var(--radius) 0;
+      margin: 28px 0;
+    }
+    .svc-box__title {
+      font-size: 0.78rem; letter-spacing: 0.15em; color: var(--gold);
+      text-transform: uppercase; margin-bottom: 12px; font-weight: 700;
+    }
+    .svc-box p { font-size: 0.9rem; color: var(--text-mid); line-height: 1.9; margin-bottom: 8px; }
+    .svc-box p:last-child { margin-bottom: 0; }
+
+    /* ══ Q&A ══ */
+    .svc-qa { margin: 12px 0; }
+    .svc-qa__q {
+      font-size: 0.9rem; color: var(--text-dark);
+      padding: 12px 16px; background: #f0f0f0;
+      border-radius: 4px; font-style: italic;
+    }
+
+    /* ══ 예약 경고 ══ */
+    .notice-warning {
+      background: #fff8e1; border: 2px solid #f59e0b;
+      border-radius: var(--radius); padding: 20px 26px; margin: 32px 0;
+    }
+    .notice-warning__title {
+      font-size: 0.98rem; font-weight: 700; color: #92400e;
+      margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+    }
+    .notice-warning__body { font-size: 0.87rem; color: #78350f; line-height: 2; }
+    .notice-warning__body li { margin-bottom: 8px; }
+    .notice-red { color: #c53030; font-weight: 700; }
+
+    /* ══ 기본장 챕터 그리드 ══ */
+    .chapter-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 14px; margin: 28px 0;
+    }
+    .chapter-card {
+      background: white; border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 18px 20px;
+      position: relative; transition: var(--transition);
+    }
+    .chapter-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+    .chapter-card__num {
+      font-family: Georgia, serif; font-size: 1.5rem;
+      color: var(--gold); opacity: 0.35; line-height: 1; margin-bottom: 6px;
+    }
+    .chapter-card__title {
+      font-size: 0.88rem; font-weight: 700; color: var(--text-dark); margin-bottom: 6px;
+    }
+    .chapter-card__desc {
+      font-size: 0.81rem; color: var(--text-mid); line-height: 1.85;
+    }
+    /* 추천 배지 */
+    .chapter-card.recommended {
+      border-color: var(--gold); border-width: 2px;
+      background: linear-gradient(135deg, #fffbf0 0%, #fff 100%);
+    }
+    .chapter-card__badge {
+      position: absolute; top: -1px; right: 12px;
+      background: var(--gold); color: white;
+      font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em;
+      padding: 3px 10px; border-radius: 0 0 6px 6px;
+    }
+    /* 열쇠 배지 */
+    .chapter-card.key-chapter {
+      border-color: #c53030; border-width: 2px;
+    }
+    .chapter-card.key-chapter .chapter-card__badge {
+      background: #c53030;
+    }
+
+    /* ══ 특별장 잠금 안내 ══ */
+    .special-unlock-notice {
+      background: linear-gradient(135deg, #0d0d1f 0%, #1a1a3e 50%, #0d1b2a 100%);
+      color: white; border-radius: var(--radius); padding: 28px 32px;
+      margin: 20px 0 28px;
+      border: 2px solid rgba(212,175,55,0.5);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(212,175,55,0.15);
+      position: relative; overflow: hidden;
+    }
+    .special-unlock-notice::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+    .special-unlock-notice__title {
+      font-family: 'Noto Serif KR', serif; font-size: 1.05rem;
+      color: var(--gold); margin-bottom: 14px;
+      display: flex; align-items: center; gap: 8px;
+      letter-spacing: 0.03em;
+    }
+    .special-unlock-notice__body {
+      font-size: 0.88rem; color: rgba(255,255,255,0.8); line-height: 2;
+    }
+    .key-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+    .key-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.6);
+      color: var(--gold); font-size: 0.8rem; font-weight: 700;
+      padding: 7px 16px; border-radius: 24px; letter-spacing: 0.05em;
+      transition: all 0.2s;
+    }
+    .key-chip:hover { background: rgba(212,175,55,0.3); }
+    .key-chip.key-chip--required { background: rgba(197,48,48,0.15); border-color: rgba(197,48,48,0.6); color: #fc8181; }
+
+    /* 특별장 카테고리별 색상 테마 변수 */
+    .special-cat { margin-bottom: 12px; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+    .special-cat[data-theme="star"]      { border-color: rgba(245,158,11,0.4); }
+    .special-cat[data-theme="ancestor"]  { border-color: rgba(56,161,105,0.4); }
+    .special-cat[data-theme="reality"]   { border-color: rgba(66,153,225,0.4); }
+    .special-cat[data-theme="health"]    { border-color: rgba(72,187,120,0.4); }
+    .special-cat[data-theme="spiritual"] { border-color: rgba(159,122,234,0.4); }
+    .special-cat[data-theme="chakra"]    { border-color: rgba(237,100,166,0.4); }
+    .special-cat[data-theme="practice"]  { border-color: rgba(99,179,237,0.4); }
+    .special-cat[data-theme="new"]       { border-color: rgba(154,230,180,0.4); }
+    .special-cat[data-theme="dimension"] { border-color: rgba(118,169,250,0.4); }
+
+    .special-cat__header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 22px; cursor: pointer;
+      background: white; user-select: none;
+      transition: background 0.2s;
+    }
+    .special-cat__header:hover { background: #fafaf8; }
+    .special-cat[data-theme="star"]      .special-cat__header.open { background: #fffbf0; border-bottom: 1px solid #f0e0a0; }
+    .special-cat[data-theme="ancestor"]  .special-cat__header.open { background: #f0fff4; border-bottom: 1px solid #9ae6b4; }
+    .special-cat[data-theme="reality"]   .special-cat__header.open { background: #ebf8ff; border-bottom: 1px solid #bee3f8; }
+    .special-cat[data-theme="health"]    .special-cat__header.open { background: #f0fff4; border-bottom: 1px solid #9ae6b4; }
+    .special-cat[data-theme="spiritual"] .special-cat__header.open { background: #faf5ff; border-bottom: 1px solid #d6bcfa; }
+    .special-cat[data-theme="chakra"]    .special-cat__header.open { background: #fff5f7; border-bottom: 1px solid #fed7e2; }
+    .special-cat[data-theme="practice"]  .special-cat__header.open { background: #ebf8ff; border-bottom: 1px solid #bee3f8; }
+    .special-cat[data-theme="new"]       .special-cat__header.open { background: #f0fff4; border-bottom: 1px solid #9ae6b4; }
+    .special-cat[data-theme="dimension"] .special-cat__header.open { background: #0d0d1f; border-bottom: 1px solid rgba(212,175,55,0.3); }
+    .special-cat[data-theme="dimension"] .special-cat__header { background: #1a1a2e; }
+    .special-cat[data-theme="dimension"] .special-cat__title { color: rgba(255,255,255,0.9); }
+    .special-cat[data-theme="dimension"] .special-cat__sub { color: rgba(255,255,255,0.5); }
+    .special-cat[data-theme="dimension"] .special-cat__header:hover { background: #1e1e35; }
+
+    .special-cat__left { display: flex; align-items: center; gap: 12px; }
+    .special-cat__icon { font-size: 1.3rem; }
+    .special-cat__title { font-family: 'Noto Serif KR', serif; font-size: 0.97rem; font-weight: 600; color: var(--text-dark); }
+    .special-cat__sub { font-size: 0.74rem; color: var(--text-light); margin-top: 3px; }
+    .special-cat__meta { display: flex; align-items: center; gap: 8px; margin-left: auto; margin-right: 14px; }
+    .special-cat__count {
+      font-size: 0.68rem; background: rgba(212,175,55,0.15); border: 1px solid rgba(212,175,55,0.4);
+      color: #92740a; padding: 2px 8px; border-radius: 10px; font-weight: 600; white-space: nowrap;
+    }
+    .special-cat__arrow {
+      font-size: 0.82rem; color: var(--gold); transition: transform 0.3s ease; display: inline-block;
+    }
+    .special-cat__header.open .special-cat__arrow { transform: rotate(180deg); }
+
+    .special-cat__body {
+      display: none; padding: 20px 22px 24px;
+      background: #fafaf8;
+    }
+    .special-cat[data-theme="dimension"] .special-cat__body { background: #0a0a1a; }
+    .special-cat[data-theme="dimension"] .special-item { border-bottom-color: rgba(255,255,255,0.08); }
+    .special-cat[data-theme="dimension"] .special-item__title { color: rgba(255,255,255,0.9); }
+    .special-cat[data-theme="dimension"] .special-item__desc { color: rgba(255,255,255,0.6); }
+    .special-cat__body.open { display: block; }
+
+    /* 특별장 내부 아이템 */
+    .special-item { margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px dashed #ddd; }
+    .special-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+    .special-item__title {
+      font-size: 0.9rem; font-weight: 700; color: var(--text-dark);
+      margin-bottom: 6px; display: flex; align-items: flex-start; gap: 8px; flex-wrap: wrap;
+      line-height: 1.6;
+    }
+    .special-item__badge {
+      font-size: 0.6rem; background: var(--gold); color: white;
+      padding: 2px 8px; border-radius: 10px; font-weight: 700; letter-spacing: 0.05em; white-space: nowrap;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .special-item__badge.badge-red    { background: #c53030; }
+    .special-item__badge.badge-green  { background: #2f855a; }
+    .special-item__badge.badge-purple { background: #6b46c1; }
+    .special-item__badge.badge-blue   { background: #2b6cb0; }
+    .special-item__desc { font-size: 0.82rem; color: var(--text-mid); line-height: 1.9; }
+    .special-item__note { font-size: 0.78rem; color: #c53030; margin-top: 6px; line-height: 1.7; }
+    .special-item__note-blue { font-size: 0.78rem; color: #2b6cb0; margin-top: 6px; line-height: 1.7; }
+
+    /* ══ 추천 세트 ══ */
+    .recommend-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 24px 0; }
+    .recommend-card { background: white; border: 2px solid var(--gold); border-radius: var(--radius); padding: 20px; position: relative; }
+    .recommend-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gold); border-radius: var(--radius) var(--radius) 0 0; }
+    .recommend-card__badge { font-size: 0.65rem; letter-spacing: 0.15em; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; display: block; font-weight: 700; }
+    .recommend-card__title { font-family: 'Noto Serif KR', serif; font-size: 0.95rem; color: var(--text-dark); font-weight: 600; margin-bottom: 8px; }
+    .recommend-card__body { font-size: 0.82rem; color: var(--text-mid); line-height: 1.85; }
+    .recommend-card__meta { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); font-size: 0.78rem; color: var(--text-light); }
+
+    /* ══ 치유 방법 ══ */
+    .healing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 24px 0; }
+    .healing-card { background: var(--cream); border-radius: var(--radius); padding: 24px; border: 1px solid rgba(212,175,55,0.3); }
+    .healing-card__icon { font-size: 1.4rem; margin-bottom: 10px; }
+    .healing-card__title { font-family: 'Noto Serif KR', serif; font-size: 0.95rem; color: var(--text-dark); font-weight: 600; margin-bottom: 10px; }
+    .healing-card__body { font-size: 0.85rem; color: var(--text-mid); line-height: 1.9; }
+
+    /* ══ 프로세스 ══ */
+    .svc-process { display: flex; flex-direction: column; gap: 0; margin: 28px 0; }
+    .svc-process__step { display: flex; gap: 20px; align-items: flex-start; padding: 20px 0; border-bottom: 1px dashed var(--border); }
+    .svc-process__step:last-child { border-bottom: none; }
+    .svc-process__num { width: 36px; height: 36px; flex-shrink: 0; background: var(--gold); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 600; }
+    .svc-process__text { font-size: 0.9rem; color: var(--text-mid); line-height: 1.9; }
+    .svc-process__text strong { display: block; color: var(--text-dark); margin-bottom: 4px; }
+
+    /* ══ CTA ══ */
+    .svc-cta { background: var(--navy); border-radius: var(--radius); padding: 48px; text-align: center; margin-top: 64px; }
+    .svc-cta__title { font-family: 'Noto Serif KR', serif; font-size: 1.3rem; color: white; margin-bottom: 12px; }
+    .svc-cta__sub { font-size: 0.88rem; color: rgba(255,255,255,0.65); margin-bottom: 28px; line-height: 1.8; }
+
+    /* ══ 다른 서비스 ══ */
+    .other-services { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 48px; }
+    .other-svc-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-decoration: none; transition: var(--transition); display: block; }
+    .other-svc-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .other-svc-card__num { font-size: 0.62rem; letter-spacing: 0.2em; color: var(--gold); margin-bottom: 4px; }
+    .other-svc-card__title { font-size: 0.95rem; color: var(--text-dark); font-weight: 500; }
+
+    /* ══ 리치 텍스트 편집기 ══ */
+    .rte-toolbar {
+      display: flex; gap: 4px; flex-wrap: wrap;
+      padding: 8px; background: #2a2a40; border-radius: 5px 5px 0 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .rte-btn {
+      background: rgba(255,255,255,0.1); border: none; color: white;
+      padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.78rem;
+      transition: background 0.15s;
+    }
+    .rte-btn:hover { background: rgba(212,175,55,0.4); }
+    .rte-editor {
+      width: 100%; min-height: 120px; max-height: 300px; overflow-y: auto;
+      background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.2);
+      border-top: none; color: white; border-radius: 0 0 5px 5px;
+      padding: 10px; font-size: 0.85rem; line-height: 1.8; outline: none;
+      box-sizing: border-box; word-break: break-word;
+    }
+    .rte-editor:focus { border-color: var(--gold); }
+    .rte-field-wrap { margin-bottom: 14px; }
+    .rte-label { font-size: 0.7rem; color: #d4af37; letter-spacing: 0.1em; display: block; margin-bottom: 4px; }
+    .rte-input {
+      width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2);
+      color: white; border-radius: 5px; padding: 8px 10px; font-size: 0.82rem;
+      box-sizing: border-box;
+    }
+
+    /* PC에서 모바일 전용 줄바꿈 숨김 */
+    .leaf-quote-br { display: none; }
+    .leaf-br { display: none; }
+    .cta-br { display: none; }
+
+    @media (max-width: 768px) {
+      /* 모바일에서 지정 줄바꿈 활성화 */
+      .leaf-quote-br { display: block; }
+      .leaf-br { display: inline; }
+      .cta-br { display: block; }
+      .svc-cta { padding: 36px 24px; }
+      .other-services { grid-template-columns: repeat(2,1fr); }
+      .chapter-grid { grid-template-columns: 1fr; }
+      .recommend-cards { grid-template-columns: 1fr; }
+      .healing-grid { grid-template-columns: 1fr; }
+      .key-chips { flex-direction: column; }
+      /* 정책 카드 모바일 대응 */
+      #leaf-policy-section > div:first-of-type + div {
+        grid-template-columns: 1fr !important;
+      }
+
+      /* ── 핵심 문구(blockquote) ── */
+      #leaf-quote {
+        font-size: 0.95rem !important;
+        line-height: 2 !important;
+        word-break: keep-all;
+        text-align: center;
+      }
+
+      /* ── 러브레터 블록 — 패딩 축소 ── */
+      .leaf-love-block { padding: 36px 24px 32px !important; }
+      .leaf-love-p { font-size: 0.93rem !important; line-height: 2.2 !important; }
+
+      /* ── WHAT'S INSIDE — 2열 → 1열 ── */
+      #leaf-inside-list { grid-template-columns: 1fr !important; }
+
+      /* ── 대화 예시 Q&A ── */
+      .svc-qa__q {
+        word-break: keep-all;
+        white-space: normal;
+        line-height: 1.9;
+      }
+
+      /* ── svc-lead 줄바꿈 ── */
+      .svc-lead { font-size: 0.95rem !important; word-break: keep-all; }
+    }
+
+    @media (max-width: 480px) {
+      .other-services { grid-template-columns: 1fr; }
+
+      /* ── 핵심 문구 ── */
+      #leaf-quote { font-size: 0.9rem !important; line-height: 1.9 !important; }
+
+      /* ── 러브레터 블록 ── */
+      .leaf-love-block { padding: 28px 18px 24px !important; }
+      .leaf-love-p { font-size: 0.88rem !important; line-height: 2 !important; }
+
+      /* ── svc-lead ── */
+      .svc-lead { font-size: 0.9rem !important; line-height: 2 !important; }
+
+      /* ── Q&A ── */
+      .svc-qa__q { font-size: 0.87rem; padding: 10px 14px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- 히어로 -->
+<div class="svc-detail-hero">
+  <div class="svc-detail-hero__bg"></div>
+  <div class="container svc-detail-hero__inner">
+    <div class="breadcrumb">
+      <a href="index.html">홈</a><span>›</span>
+      <a href="service.html">서비스</a><span>›</span>
+      아가스티아잎 탐색
+    </div>
+    <span class="svc-detail-hero__num">01 · SEARCHING</span>
+    <h1 class="svc-detail-hero__title">아가스티아잎 탐색</h1>
+    <p class="svc-detail-hero__sub">5천 년 전부터, 당신의 지문과 운명은 이미 기록되어 있었습니다.</p>
+  </div>
+</div>
+
+<!-- 본문 -->
+<section class="section bg-cream">
+  <div class="container">
+    <div class="svc-content">
+
+      <!-- ★ 핵심 문구 -->
+      <div style="text-align:center;padding:44px 24px 36px;margin-bottom:8px;">
+        <div style="width:40px;height:2px;background:var(--gold);margin:0 auto 24px;"></div>
+        <blockquote id="leaf-quote" style="font-family:'Noto Serif KR',serif;font-size:clamp(1rem,2vw,1.2rem);color:var(--text-dark);line-height:2.2;font-style:normal;max-width:680px;margin:0 auto;word-break:keep-all;">
+          5천 년 전 고대 아가스티아 성자가 <br class="leaf-quote-br">
+          「사람들이 오래오래 행복하게 살 수 있기를」이라는 <br class="leaf-quote-br">
+          영혼의 소원을 담아 야자잎에 적어 남긴 기록.
+        </blockquote>
+        <div style="width:40px;height:2px;background:var(--gold);margin:24px auto 0;"></div>
+      </div>
+
+      <!-- ★ 러브레터 블록 -->
+      <div class="leaf-love-block" style="background:linear-gradient(135deg,#fffbf0 0%,#fff9ee 100%);border:1px solid rgba(212,175,55,0.3);border-radius:12px;padding:64px 80px 52px;margin:28px 0 56px;text-align:center;">
+        <p class="leaf-love-p" style="font-family:'Noto Serif KR',serif;font-size:1rem;color:var(--text-dark);line-height:2.6;margin:0 0 24px;word-break:keep-all;">
+          그 사람이 사명에 맞는 최고의 인생을 <br class="leaf-br">걸어주길 바란다는, 넘쳐 흐르는 사랑만으로 <br class="leaf-br">
+          진지하게, 좋은 마음일 때, 집중하여, <br class="leaf-br">엄청난 속도로 써 내려갔습니다.
+        </p>
+        <p class="leaf-love-p" style="font-family:'Noto Serif KR',serif;font-size:1rem;color:var(--text-dark);line-height:2.6;margin:0 0 24px;word-break:keep-all;">
+          좋은 마음이 없을 때, 집중할 수 없을 때는 <br class="leaf-br">붓을 멈추고, 다시 집중하여 <br class="leaf-br">단숨에 써 내려갔습니다.
+        </p>
+        <p style="font-family:'Noto Serif KR',serif;font-size:1.08rem;color:#92400e;font-weight:600;line-height:2.2;margin:0 0 28px;letter-spacing:0.02em;">
+          사랑으로 가득 찬 러브레터입니다.
+        </p>
+        <p style="font-family:'Noto Serif KR',serif;font-size:1rem;color:var(--text-dark);line-height:1.7;margin:0;word-break:keep-all;">
+          그런 러브레터를 <br class="leaf-br">당신은 써본 적, 받아본 적이 있으신가요？
+        </p>
+      </div>
+
+      <!-- ★ 리드 문단 -->
+      <div class="svc-lead" id="leaf-lead">
+        우리는 매일 수많은 선택 앞에 서 있습니다. 아무리 계획을 세우고 노력을 거듭해도, 어째서인지 넘어서지 못하는 벽, 혹은 이유를 알 수 없이 반복되는 패턴에 막막함을 느껴본 적 있으신가요?<br><br>
+        만약 당신의 인생에 이미 기록된 「시나리오」가 존재하고, 그 시나리오를 최선의 방향으로 이끌기 위한 「길잡이」가 고대부터 준비되어 있었다면 어떨까요?
+      </div>
+
+      <!-- ★ 아가스티아잎을 열면 나오는 것 -->  
+      <div style="margin:32px 0;background:white;border:2px solid var(--gold);border-radius:12px;padding:28px 32px;">
+        <div style="font-size:0.72rem;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;margin-bottom:14px;font-weight:700;">WHAT'S INSIDE YOUR LEAF</div>
+        <p style="font-family:'Noto Serif KR',serif;font-size:1rem;color:var(--text-dark);font-weight:600;margin:0 0 16px;line-height:1.8;">아가스티아잎을 열면 나오는 것들</p>
+        <ul id="leaf-inside-list" style="list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <li style="display:flex;align-items:flex-start;gap:10px;font-size:0.88rem;color:var(--text-mid);line-height:1.8;">
+            <span style="color:var(--gold);font-size:1rem;flex-shrink:0;margin-top:2px;">✦</span>
+            <span>본인의 <strong style="color:var(--text-dark);">생년월일</strong></span>
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:10px;font-size:0.88rem;color:var(--text-mid);line-height:1.8;">
+            <span style="color:var(--gold);font-size:1rem;flex-shrink:0;margin-top:2px;">✦</span>
+            <span><strong style="color:var(--text-dark);">부모님의 이름</strong></span>
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:10px;font-size:0.88rem;color:var(--text-mid);line-height:1.8;">
+            <span style="color:var(--gold);font-size:1rem;flex-shrink:0;margin-top:2px;">✦</span>
+            <span><strong style="color:var(--text-dark);">가족 관계와 직업</strong></span>
+          </li>
+          <li style="display:flex;align-items:flex-start;gap:10px;font-size:0.88rem;color:var(--text-mid);line-height:1.8;">
+            <span style="color:var(--gold);font-size:1rem;flex-shrink:0;margin-top:2px;">✦</span>
+            <span><strong style="color:var(--text-dark);">아무에게도 말한 적 없는 것</strong></span>
+          </li>
+        </ul>
+        <p style="font-size:0.83rem;color:var(--text-light);margin:16px 0 0;line-height:1.8;">— 수천 년 전에 이미 야자잎에 적혀 있었습니다.</p>
+      </div>
+
+      <!-- 섹션 0: 아가스티아 성자 소개 -->
+      <div class="svc-section">
+        <span class="svc-section__num" id="leaf-sec0-num">00 · THE SAGE</span>
+        <h2 class="svc-section__title" id="leaf-sec0-title">성자 아가스티아 — 신들의 지혜를 인간 세계에 전한 존재</h2>
+        <div class="svc-section__body" id="leaf-sec0-body">
+          <p>아가스티아(Agastya)는 힌두교의 성전(聖典) 「리그베다(Rigveda)」에도 등장하는 역사상 가장 위대한 성자(리시, Rishi) 중 한 명입니다. 드라비다 문명의 정신적 기반을 확립했으며, 타밀 문학과 의학(싯다 의학), 천문학, 철학, 언어학에 지대한 영향을 미쳤습니다.</p>
+          <p>전승에 따르면, 아가스티아는 창조주 브라흐마와 시바 신의 명을 받아 <strong>우주의 아카식 레코드(Akashic Records — 시간과 공간을 초월한 모든 영혼의 기록)</strong>에 접근하는 능력을 부여받았고, 이를 바탕으로 과거·현재·미래를 통틀어 무수한 영혼의 운명을 야자 잎(Nadi)에 기록했습니다.</p>
+          <p>그 가르침의 핵심은 「영혼은 자신의 카르마(業)를 완성하기 위해 육신을 입고 이 세상에 온다」는 것. 아가스티아잎은 단순한 예언서가 아닌, 당신의 영혼이 이번 생에 완수해야 할 사명과 치유해야 할 카르마의 로드맵입니다.</p>
+        </div>
+        <div class="svc-box">
+          <div class="svc-box__title">🕉 아가스티아의 예언 — 「나디 점성술(Nadi Astrology)」의 기원</div>
+          <p>아가스티아잎은 나디 점성술(Nadi Jyotish)의 정수입니다. 「나디(Nadi)」란 산스크리트어로 「탐구하다」 혹은 「흐름」을 의미하며, 운명의 흐름을 읽어낸다는 뜻을 품고 있습니다.</p>
+          <p>인도 타밀나두주 바이테스와란코일(Vaitheeswaran Koil) 등지의 전통 나디 보관소에 수십만 묶음의 잎이 현재도 보존되어 있습니다.</p>
+        </div>
+      </div>
+
+      <!-- 섹션 1: 지문 검색 -->
+      <div class="svc-section">
+        <span class="svc-section__num" id="leaf-sec1-num">01 · THE KEY</span>
+        <h2 class="svc-section__title" id="leaf-sec1-title">유일무이한 열쇠 — 「지문」에 의한 검색 시스템</h2>
+        <div class="svc-section__body" id="leaf-sec1-body">
+          <p>아가스티아잎을 찾는 과정은 매우 신비롭고도, 동시에 극히 체계적입니다.</p>
+          <p>5,000년 이상 전, 성자 아가스티아는 수백만 명의 개인 운명을 잎사귀(야자 잎)에 기록했습니다. 방대한 잎사귀 중에서, 당신만의 잎사귀를 특정하는 열쇠가 바로 <strong>「지문」</strong>입니다.</p>
+        </div>
+        <div class="svc-box">
+          <div class="svc-box__title" id="leaf-box1-title">🔍 검색 프로세스</div>
+          <div id="leaf-box1-body">
+            <p>필요한 정보는 당신의 엄지손가락 지문입니다 (남성: 오른손, 여성: 왼손).</p>
+            <p>고대의 분류법에서 인간의 지문은 <strong>108가지</strong>로 분류된다고 합니다. 현지 보관소에는 지문 패턴별로 아가스티아잎 묶음이 분류되어 보관되어 있습니다.</p>
+            <p>108은 힌두교와 불교에서 신성한 숫자로, 우주의 완전함과 영혼의 순환을 상징합니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 섹션 2: 나디 리딩 -->
+      <div class="svc-section">
+        <span class="svc-section__num" id="leaf-sec2-num">02 · THE PROCESS</span>
+        <h2 class="svc-section__title" id="leaf-sec2-title">운명의 대조 — 나디 리딩</h2>
+        <div class="svc-section__body" id="leaf-sec2-body">
+          <p>지문 패턴을 바탕으로 후보가 되는 잎사귀 묶음이 발견되면, 「나디 리더」라고 불리는 전문 독해자가 <strong>고대 타밀어</strong>로 기록된 시를 읽어 나갑니다.</p>
+          <p>여기서 당신과 리더 사이의 <strong>대화</strong>가 시작됩니다. 리더가 잎사귀에 기록된 정보를 읽어 올리고, 당신은 그에 대해 「예」「아니오」만으로 답해 나갑니다.</p>
+        </div>
+
+        <!-- 통역 안내 (간결) -->
+        <div style="background:var(--bg-cream);border-left:3px solid var(--gold);border-radius:0 8px 8px 0;padding:16px 20px;margin:24px 0;">
+          <p style="font-size:0.88rem;color:var(--text-mid);line-height:2;margin:0;">리딩은 <strong>전문 통역사</strong>를 통해 한국어로 전달됩니다. 자세한 진행 방식은 신청 후 안내드립니다.</p>
+        </div>
+        <div class="svc-box">
+          <div class="svc-box__title" id="leaf-box2-title">💬 대화 예시</div>
+          <div id="leaf-box2-body">
+            <div class="svc-qa"><div class="svc-qa__q">「당신은 장남입니까?」</div></div>
+            <div class="svc-qa"><div class="svc-qa__q">「아버님 성함의 첫 글자는 ○○입니까?」</div></div>
+            <div class="svc-qa"><div class="svc-qa__q">「현재의 직업은 ○○와 관련이 있습니까?」</div></div>
+            <div class="svc-qa"><div class="svc-qa__q">「당신에게는 형제자매가 ○명 있습니까?」</div></div>
+          </div>
+        </div>
+        <div class="svc-section__body" id="leaf-sec2-body2">
+          <p>이처럼 범위를 좁혀 나가, 최종적으로 당신의 부모님 성함, 생년월일, 현재 상황 등이 완전히 일치하는 한 장이 발견되었을 때, 그것이 <strong>「당신의 아가스티아잎」</strong>으로 특정됩니다.</p>
+          <p>자신의 부모 성함이나 배우자의 상황까지, 수천 년 전의 예언서에 정확히 기록되어 있다는 사실에 많은 분들이 말을 잃고, 인생에 대한 경외감을 품게 됩니다.</p>
+        </div>
+      </div>
+
+      <!-- ⚠️ 예약 전에 반드시 읽어주세요 -->
+      <div class="notice-warning" id="leaf-notice">
+        <div class="notice-warning__title">⚠️ 예약 전에 반드시 읽어주세요</div>
+        <div class="notice-warning__body">
+          <p style="margin-bottom:12px;">아가스티아잎은 5천 년 전 고대 아가스티아 성자가 「사람들이 오래도록 행복하게 살아가기를」 바라는 마음을 담아 야자잎에 새겨 남긴 것이라고 전해집니다.</p>
+          <p style="margin-bottom:12px;">각 장은 <strong>그때 필요한 내용이 제시되기 때문에</strong>, 기재되어 있는 각 장의 설명과 다른 내용이 읽힐 수 있습니다.<br>
+          <span class="notice-red">※ 내용 차이를 이유로 한 환불은 불가능합니다. 미리 양해해 주시고, 예약해 주시길 부탁드립니다.</span></p>
+          <ul style="padding-left:18px;margin:0;">
+            <li><strong>각 장(챕터)의 소요 시간:</strong> 1챕터당 약 10~30분 정도이며, 제1 칸담(총론)은 탐색부터 리딩 완료까지 약 3시간에서 4시간 정도 소요됩니다.</li>
+            <li><strong>내용 차이:</strong> 각 장의 내용은 그때 필요한 메시지가 제시되므로, 설명과 다른 내용이 나올 수 있습니다.</li>
+            <li><strong>의식·부적 비용:</strong> 처방받은 샨티(정화 의식)나 부적(Kavach) 비용은 <strong>200만원 정도</strong>입니다. 의식의 규모와 종류에 따라 다릅니다.</li>
+            <li><strong>인도 사원 위탁:</strong> 의식이나 부적 제작을 인도 현지 사원에 위탁하는 경우, 별도의 사원 비용 및 배송료가 추가될 수 있습니다.</li>
+            <li><strong>아가스티아잎이 발견되지 않는 경우:</strong> 지문 패턴에 따라 탐색 결과가 없을 수도 있습니다. 아가스티아잎은 본인에게 가장 적절한 시기에 열리게 된다고 합니다. 만약 이번에 찾지 못하는 경우, 시기를 달리하여 다시 찾아보시는 것을 권장합니다.</li>
+            <li><strong>의식 참가 여부:</strong> 처방받은 의식은 권고이며 강제 사항이 아닙니다. 본인의 자유 의사에 달려 있으며 결코 강요되지 않습니다.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 처음 이용하시는 분 추천 세트 -->
+      <div class="svc-section">
+        <span class="svc-section__num">📌 FIRST TIME</span>
+        <h2 class="svc-section__title">「처음 이용하시는 분을 위한 추천 세트」</h2>
+        <div class="svc-section__body">
+          <p>처음으로 자신의 잎을 여시는 분들을 위한 권장 패키지입니다. 제1장, 13장, 14장을 동시에 확인함으로써 아가스티아 성자의 인도와 함께, 앞으로의 인생 흐름을 호전시키는 변화의 문을 여는 최적의 조합입니다.</p>
+          <p><strong>제1·13·14장을 확인하고 13장의 카르마 해소 및 14장의 부적 제작 대행을 신청하시면, 이후의 다른 장들도 열어볼 수 있게 됩니다.</strong> 추가로 궁금한 장이 있으신 분들도 우선 이 세트를 먼저 신청해 주시기 바랍니다.</p>
+        </div>
+        <div class="recommend-cards">
+          <div class="recommend-card">
+            <span class="recommend-card__badge">제 1 칸담 ⭐ 필수</span>
+            <div class="recommend-card__title">총론 — 인생의 전체 지도</div>
+            <div class="recommend-card__body">잎을 연 시점부터 생의 마지막 순간까지의 대략적인 인생의 흐름이 나타나 있는 장. 본인의 사명, 장점과 단점, 성공을 위한 핵심 포인트, 태어난 당시의 행성 위치에 따른 영향 및 앞으로 일어날 사건들의 전반적인 흐름을 알려줍니다.</div>
+            <div class="recommend-card__meta">⏱ 소요 시간: 약 3시간 ~ 4시간 / 사전에 지문 제출 필요</div>
+          </div>
+          <div class="recommend-card">
+            <span class="recommend-card__badge">제 13 칸담 ⭐ 필수</span>
+            <div class="recommend-card__title">샨티 — 과거 전생의 업(카르마) 정화</div>
+            <div class="recommend-card__body">이번 생에 가장 큰 영향을 미치고 있는 과거 전생의 악업(나쁜 업보)과 그 영향, 그리고 해결책을 알려줍니다. 카르마를 해소하기 위한 치유 의식과 암송해야 할 만트라도 함께 확인할 수 있습니다.</div>
+            <div class="recommend-card__meta">⏱ 소요 시간: 약 20~30분 / <span style="color:#c53030;">의식 비용 별도</span></div>
+          </div>
+          <div class="recommend-card">
+            <span class="recommend-card__badge">제 14 칸담 ⭐ 필수</span>
+            <div class="recommend-card__title">딕샤 — 현생의 트러블을 회피하는 부적</div>
+            <div class="recommend-card__body">과거 전생이나 조상, 주변 사람들로부터 받는 나쁜 에너지로부터 자신을 보호하기 위한 부적(Amulet) 제작 방법을 알려줍니다. 참고로 부적은 본인이 직접 만드는 것이 아니라, 대행으로 의뢰하는 형태가 됩니다.</div>
+            <div class="recommend-card__meta">⏱ 소요 시간: 약 20~30분 / <span style="color:#c53030;">부적 제작 비용 별도</span></div>
+          </div>
+        </div>
+        <div style="background:#f0f9f4;border:1px solid #68d391;border-radius:8px;padding:16px 20px;margin-top:16px;font-size:0.86rem;color:#276749;line-height:1.9;">
+          <strong>📋 진행 안내</strong><br>
+          • 소요 시간: 약 3시간 ~ 4시간 (시간적 여유를 충분히 가지고 참여해 주세요.)<br>
+          • 사전 준비: 사전에 지문 제출이 필요합니다.<br>
+          • 휴식 시간: 잎의 내용을 기록(필사)하는 동안 중간에 15분~1시간 정도의 휴식이 있습니다. 이 시간은 자유롭게 보내실 수 있습니다.<br>
+          <br>
+          ※참고 사항: 아가스티아잎은 본인에게 가장 적절한 시기에 열리게 된다고 합니다. 만약 이번에 자신의 잎을 찾지 못할 경우, 시기를 달리하여 다시 찾아보시는 것을 권장합니다.
+        </div>
+      </div>
+
+      <!-- 치유 방법 안내 -->
+      <div class="svc-section">
+        <span class="svc-section__num">🙏 HEALING METHODS</span>
+        <h2 class="svc-section__title">【샨티 칸담 · 딕샤 칸담 안내】</h2>
+        <div class="svc-section__body">
+          <p>특별장에는 샨티 칸담(치유 의식)과 딕샤 칸담(부적)이 포함되어 있습니다. 아가스티아잎이 여타 스피리추얼 서비스와 차별화되는 점은 바로 이 구체적인 해결 방법이 제시된다는 점입니다.</p>
+          <p>단순히 내용을 읽는 것에서 그치지 않고, <strong>의식 대행이나 부적 제작까지 진행함으로써</strong> 아가스티아 성자가 전하는 본래의 은혜를 온전히 받을 수 있다고 알려져 있습니다.</p>
+        </div>
+        <div class="healing-grid">
+          <div class="healing-card">
+            <div class="healing-card__icon">🔥</div>
+            <div class="healing-card__title">샨티 칸담 (Shanti Kandam)<br><small style="font-size:0.75rem;font-weight:400;color:var(--text-light);">카르마 해소 (의식)</small></div>
+            <div class="healing-card__body">
+              인생에 나타나는 부정적인 영향을 경감시키고, 긍정적인 부분은 더욱 높이기 위한 <strong>치유 의식(Ritual)이 제시</strong>되어 있습니다.<br><br>
+              ※의식을 거행함으로써 문제의 근본적인 원인에 직접적으로 접근하여 해결을 도울 수 있습니다.<br><br>
+              의식 거행이나 부적 제작은 인도 현지 사찰에 <strong>「대행」</strong>의 형태로 의뢰할 수 있으며, 희망하실 경우 별도의 비용이 발생합니다.
+            </div>
+          </div>
+          <div class="healing-card">
+            <div class="healing-card__icon">🕉️</div>
+            <div class="healing-card__title">딕샤 칸담 (Deeksha Kandam)<br><small style="font-size:0.75rem;font-weight:400;color:var(--text-light);">부적 제작 (Amulet)</small></div>
+            <div class="healing-card__body">
+              부정적인 영향으로부터 자신을 보호하기 위한 <strong>부적(Amulet) 제작 방법</strong>이 제시되어 있습니다.<br><br>
+              ※이 부적들은 좋은 에너지를 불러오거나, 외부에서 쏟아지는 나쁜 에너지의 '비'를 막아주는 우산과 같은 역할을 하기도 합니다.<br><br>
+              이 과정들은 칸담에서 제시된 내용을 보다 원활하게 해소하고 앞으로 나아가기 위한 소중한 인도(Leading)가 되지만, <strong>신청 여부는 어디까지나 본인의 자유 의사에 달려 있으며 결코 강요되지 않습니다.</strong>
+            </div>
+          </div>
+        </div>
+        <div style="background:#fff8e1;border-left:4px solid #f59e0b;padding:14px 18px;border-radius:0 8px 8px 0;margin-top:12px;font-size:0.84rem;color:#78350f;line-height:1.9;">
+          ※ 참고: 인도를 직접 방문하여 의식을 진행하는 방법도 있으나, <strong>「모든 것을 믿고 맡기는 마음」</strong>이 가장 중요하다고 알려져 있습니다. 따라서 본 단체에서는 「대행 의뢰」를 통한 의식 및 부적 제작 방식을 권장하고 있습니다.
+        </div>
+      </div>
+
+      <!-- 섹션 3: 기본 챕터 (1–14) -->
+      <div class="svc-section">
+        <span class="svc-section__num">03 · THE CHAPTERS</span>
+        <h2 class="svc-section__title" id="leaf-sec3-title">【아가스티아잎 기본장】 제1장~제14장</h2>
+        <div class="svc-section__body">
+          <p id="leaf-sec3-body">기본 장은 주로 우리 인간 세계의 문제 해결에 특화된 장입니다. 잎을 들어보시는 시간은 각 장당 약 10~30분 정도입니다.</p>
+
+          <!-- 핵심 안내: 카르마 정화 체계 -->
+          <div style="background:#fffdf7;border:2px solid rgba(212,175,55,0.35);border-radius:12px;padding:24px 28px;margin:20px 0;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+            <div style="font-size:0.68rem;letter-spacing:0.22em;color:#b7791f;text-transform:uppercase;margin-bottom:10px;font-weight:700;">⚠️ IMPORTANT — 필독 사항</div>
+            <p style="font-family:'Noto Serif KR',serif;font-size:1rem;color:#7b341e;line-height:2;margin-bottom:14px;"><strong style="color:#c53030;">카르마를 정화하지 않고서는 나머지 장을 읽어도 소용이 없습니다.</strong></p>
+            <p style="font-size:0.88rem;color:#744210;line-height:2;margin-bottom:14px;">아가스티아잎은 다음의 순서로 진행해야 그 진정한 은혜를 받을 수 있습니다:</p>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px;">
+              <div style="display:flex;align-items:flex-start;gap:12px;background:#fdfaf3;border:1px solid rgba(212,175,55,0.2);border-radius:8px;padding:12px 16px;">
+                <div style="background:var(--gold);color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;flex-shrink:0;margin-top:1px;">1</div>
+                <div style="font-size:0.88rem;color:#374151;line-height:1.7;word-break:keep-all;"><strong style="color:#92620a;">제1장 리딩</strong> — 인생 전체의 흐름을 확인합니다</div>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:12px;background:#fdfaf3;border:1px solid rgba(212,175,55,0.2);border-radius:8px;padding:12px 16px;">
+                <div style="background:var(--gold);color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;flex-shrink:0;margin-top:1px;">2</div>
+                <div style="font-size:0.88rem;color:#374151;line-height:1.7;word-break:keep-all;"><strong style="color:#92620a;">제13장 리딩 + 의식 대행</strong> — 과거 전생의 카르마를 정화합니다</div>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:12px;background:#fdfaf3;border:1px solid rgba(212,175,55,0.2);border-radius:8px;padding:12px 16px;">
+                <div style="background:var(--gold);color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;flex-shrink:0;margin-top:1px;">3</div>
+                <div style="font-size:0.88rem;color:#374151;line-height:1.7;word-break:keep-all;"><strong style="color:#92620a;">제14장 리딩 + 부적 대행</strong> — 부정적 에너지로부터 자신을 보호합니다</div>
+              </div>
+              <div style="display:flex;align-items:flex-start;gap:12px;background:#f5f5f0;border:1px solid #e0ddd5;border-radius:8px;padding:12px 16px;">
+                <div style="background:#64748b;color:white;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;flex-shrink:0;margin-top:1px;">↓</div>
+                <div style="font-size:0.88rem;color:#374151;line-height:1.7;word-break:keep-all;">위 3단계를 모두 완료하신 후 <strong style="color:#92620a;">제2~12장 및 특별장 신청 가능</strong></div>
+              </div>
+            </div>
+            <p style="font-size:0.78rem;color:#6b7280;line-height:1.8;">※ 1장만 먼저 신청하신 경우, 이후 13장과 14장을 별도로 신청하실 수 있습니다.<br>※ 단, 1장을 읽지 않고서는 13장·14장을 신청하실 수 없습니다.</p>
+          </div>
+        </div>
+
+        <div class="chapter-grid" style="margin-top:24px;">
+          <!-- 1장 - 필수 -->
+          <div class="chapter-card key-chapter recommended">
+            <div class="chapter-card__badge">⭐ 필수 · 처음 열기</div>
+            <div class="chapter-card__num">01</div>
+            <div class="chapter-card__title">제1장: 잎을 연 순간부터 생의 마지막까지의 대략적인 인생 흐름</div>
+            <div class="chapter-card__desc">본인의 사명, 장점과 단점, 성공을 위한 핵심 포인트, 태어난 당시의 행성 위치에 따른 영향 및 앞으로 일어날 사건들의 전반적인 흐름을 알려줍니다.</div>
+          </div>
+          <!-- 2장 -->
+          <div class="chapter-card">
+            <div class="chapter-card__num">02</div>
+            <div class="chapter-card__title">제2장: 가족, 금전, 언어, 교육, 시력</div>
+            <div class="chapter-card__desc">연령대별로 어떤 가족 문제나 경제적 문제가 발생하는지, 또한 어떤 분야를 통해 재산을 얻을 운명인지를 알려줍니다. 문제가 있을 경우 그에 대한 해결책도 함께 제시됩니다.</div>
+          </div>
+          <!-- 3장 -->
+          <div class="chapter-card">
+            <div class="chapter-card__num">03</div>
+            <div class="chapter-card__title">제3장: 형제·자매, 직업, 행운, 명예, 용기</div>
+            <div class="chapter-card__desc">형제/자매에게 일어나는 문제와 해결책, 관계에서 주의해야 할 점을 알려줍니다. 나아가 직업적 문제가 생기기 쉬운 시기나 명예를 얻는 타이밍, 타고난 운명에 대해서도 나타나 있습니다.</div>
+          </div>
+          <!-- 4장 -->
+          <div class="chapter-card">
+            <div class="chapter-card__num">04</div>
+            <div class="chapter-card__title">제4장: 어머니, 토지, 집, 재산, 인생의 즐거움</div>
+            <div class="chapter-card__desc">부모님과의 관계, 특히 연령대별로 어머니에게 일어날 수 있는 문제나 경사스러운 일에 대해 알려줍니다. 토지나 집을 얻는 시기, 발생 가능한 문제와 해결책, 본인 인생의 즐거움이 찾아오는 시기 및 주의점 등이 제시됩니다.</div>
+          </div>
+          <!-- 5장 -->
+          <div class="chapter-card">
+            <div class="chapter-card__num">05</div>
+            <div class="chapter-card__title">제5장: 자녀 (탄생, 미래, 자녀가 생기지 않는 이유 등)</div>
+            <div class="chapter-card__desc">첫째, 둘째 등 각 자녀에게 일어날 사건과 시기, 자녀의 소질, 향후 진로에 대해 알려줍니다. 또한 질병이나 인간관계 트러블이 생기기 쉬운 시기와 그에 대한 대책도 함께 나타나 있습니다.</div>
+          </div>
+          <!-- 6장 -->
+          <div class="chapter-card">
+            <div class="chapter-card__num">06</div>
+            <div class="chapter-card__title">제6장: 질병, 부채, 소송, 적</div>
+            <div class="chapter-card__desc">휘말리기 쉬운 트러블의 종류와 그 해결책, 사기 문제나 소송 등에 대해 알려줍니다. 건강 측면에서는 걸리기 쉬운 질병과 그 대처법을 확인할 수 있습니다.</div>
+          </div>
+          <!-- 7장 -->
+          <div class="chapter-card">
+            <div class="chapter-card__num">07</div>
+            <div class="chapter-card__title">제7장: 결혼 시기와 문제점, 결혼 생활, 배우자</div>
+            <div class="chapter-card__desc">미혼자에게는 앞으로 만나게 될 파트너의 인물상, 결혼 시기, 결혼 생활에서 주의해야 할 점이 제시됩니다. 기혼자에게는 파트너에게 일어날 사건이나 부부 사이의 과제 및 해결책을 알려줍니다.</div>
+          </div>
+          <!-- 8장 -->
+          <div class="chapter-card">
+            <div class="chapter-card__num">08</div>
+            <div class="chapter-card__title">제8장: 죽음의 시기, 사건, 사고, 수명</div>
+            <div class="chapter-card__desc">생사와 직결된 사고나 질병이 발생하는 시기와 대처법, 그리고 수명에 관한 구체적인 시기와 마지막을 맞이하는 상황에 대해 알려줍니다.</div>
+          </div>
+          <!-- 9장 -->
+          <div class="chapter-card">
+            <div class="chapter-card__num">09</div>
+            <div class="chapter-card__title">제9장: 아버지, 행운(럭키 넘버, 스톤 등), 영적 성장을 위해 받아야 할 에너지</div>
+            <div class="chapter-card__desc">아버지와 관련된 사건이나 관계에 대해 알려줍니다. 또한 자신과 연관된 성자나 신들, 그 에너지를 더욱 강하게 받기 위한 기도와 의식, 그리고 행운을 높여주는 럭키 넘버나 행운석 등을 확인할 수 있습니다.</div>
+          </div>
+          <!-- 10장 -->
+          <div class="chapter-card">
+            <div class="chapter-card__num">10</div>
+            <div class="chapter-card__title">제10장: 직업(업무 내용, 성과 및 진전), 이사</div>
+            <div class="chapter-card__desc">현재 직업에서 활용해야 할 재능과 장점, 앞으로 종사해야 할 업무, 이직이나 이사 시기, 업무상 발생하는 문제와 그 해결책에 대해 알려줍니다.</div>
+          </div>
+          <!-- 11장 -->
+          <div class="chapter-card">
+            <div class="chapter-card__num">11</div>
+            <div class="chapter-card__title">제11장: 인생의 성과, 이익, 재혼</div>
+            <div class="chapter-card__desc">어느 시기에 어떤 일로 성과나 이익을 얻게 되는지가 나타납니다. 또한 재혼할 운명이 있는 경우, 만나는 시기와 상대의 특징, 나아가 영혼의 성장을 위해 필요한 과제에 대해서도 알려줍니다.</div>
+          </div>
+          <!-- 12장 -->
+          <div class="chapter-card">
+            <div class="chapter-card__num">12</div>
+            <div class="chapter-card__title">제12장: 지출, 정치 활동, 외국과의 관계, 내세, 해탈</div>
+            <div class="chapter-card__desc">어느 연령대에 해외와의 인연이나 정치 활동이 생기는지, 지출에 관한 주의점 등을 알려줍니다. 또한 내세가 있을 경우의 출생지, 가족, 사명, 그리고 해탈을 향한 과제에 대해서도 확인할 수 있습니다.</div>
+          </div>
+          <!-- 13장 - 필수 -->
+          <div class="chapter-card key-chapter recommended">
+            <div class="chapter-card__badge">⭐ 필수 · 특별장 열쇠</div>
+            <div class="chapter-card__num">13</div>
+            <div class="chapter-card__title">제13장: 과거 전생의 업(카르마)과 해소를 위한 의식 안내 <span style="color:#c53030;font-size:0.75rem;">(의식 비용 별도)</span></div>
+            <div class="chapter-card__desc">이번 생에 가장 큰 영향을 미치고 있는 과거 전생의 악업(나쁜 업보)과 그 영향, 그리고 해결책을 알려줍니다. 카르마를 해소하기 위한 치유 의식과 암송해야 할 만트라도 함께 확인할 수 있습니다.</div>
+          </div>
+          <!-- 14장 - 필수 -->
+          <div class="chapter-card key-chapter recommended">
+            <div class="chapter-card__badge">⭐ 필수 · 특별장 열쇠</div>
+            <div class="chapter-card__num">14</div>
+            <div class="chapter-card__title">제14장: 현생의 트러블을 회피하는 부적 제작 방법 <span style="color:#c53030;font-size:0.75rem;">(부적 제작 비용 별도)</span></div>
+            <div class="chapter-card__desc">과거 전생이나 조상, 주변 사람들로부터 받는 나쁜 에너지로부터 자신을 보호하기 위한 부적 제작 방법을 알려줍니다. 참고로 부적은 본인이 직접 만드는 것이 아니라, 대행으로 의뢰하는 형태가 됩니다.</div>
+          </div>
+        </div>
+
+        <!-- 주의 및 참고 사항 -->
+        <div style="margin-top:20px;font-size:0.83rem;color:var(--text-mid);line-height:1.9;background:#f5f5f5;border-radius:8px;padding:16px 20px;">
+          ※ 제2장~12장에서는 문제를 방지하기 위한 의식이나 부적, 만트라가 반드시 제시되는 것은 아닙니다.<br>
+          ※ 각 <strong>의식 비용 및 부적 제작 대행 비용</strong>은 <strong style="color:#c53030;">200만원 정도</strong>입니다.
+        </div>
+
+        <!-- 특별장 섹션 -->
+        <div style="margin-top:44px;">
+          <div style="font-size:0.78rem;letter-spacing:0.15em;color:var(--gold);text-transform:uppercase;margin-bottom:8px;">SPECIAL CHAPTERS</div>
+          <h3 style="font-family:'Noto Serif KR',serif;font-size:1.25rem;color:var(--text-dark);margin-bottom:8px;">【아가스티아잎 특별장】</h3>
+
+          <div class="special-unlock-notice">
+            <div class="special-unlock-notice__title">🔑 특별장을 열기 위한 조건</div>
+            <div class="special-unlock-notice__body">
+              특별장은 <strong style="color:var(--gold);">제13장과 제14장의 대행 신청을 완료하신 후</strong>, 가급적 빠른 시일 내에 열어보는 것을 권장하는 장입니다.<br>
+              아래의 기본장 3개를 먼저 열고 대행을 신청하셔야 특별장을 신청하실 수 있습니다.
+              <div class="key-chips">
+                <span class="key-chip">🔑 제1장 (총론)</span>
+                <span class="key-chip">🔑 제13장 (샨티 — 의식)</span>
+                <span class="key-chip">🔑 제14장 (딕샤 — 부적)</span>
+              </div>
+            </div>
+          </div>
+
+          <p style="font-size:0.86rem;color:var(--text-mid);line-height:1.9;margin-bottom:20px;">
+            특별장에는 샨티 칸담(치유 의식)과 딕샤 칸담(부적)이 포함되어 있습니다 (※일부 제외).<br>
+            각 장의 소요 시간은 약 5~10분 정도인 컴팩트한 구성입니다. <strong>「칸담(Kandam)」이라 불리는 테마별 조언이나 설명이 포함된 경우, 추가 비용 없이 플러스 알파(+) 메시지로 함께 들으실 수 있습니다.</strong>
+          </p>
+
+          <!-- ① 별의 과학 (점성학) 관련 장 -->
+          <div class="special-cat" id="sc-star" data-theme="star">
+            <div class="special-cat__header" onclick="toggleSpecialCat('sc-star')">
+              <div class="special-cat__left">
+                <span class="special-cat__icon" style="color:#f59e0b;">⭐</span>
+                <div>
+                  <div class="special-cat__title">별의 과학 (점성학) 관련 장</div>
+                  <div class="special-cat__sub">코차라 · 나바그라하 · 디샤북티 · 나크샤트라 · 라시 · 라그나 칸담 등</div>
+                </div>
+              </div>
+              <div class="special-cat__meta"><span class="special-cat__count">해당 장 6개</span></div>
+              <span class="special-cat__arrow">▼</span>
+            </div>
+            <div class="special-cat__body" id="sc-star-body">
+              <div style="background:#fffbf0;border:1px solid #e0d5b0;border-radius:6px;padding:12px 16px;margin-bottom:16px;font-size:0.83rem;color:#7a6400;line-height:1.8;">
+                행성의 위치로 인해 받는 부정적인 영향은 코차라, 나바그라하, 디샤북티 칸담의 <strong>산티 및 딕샤</strong>를 실행함으로써 약 60%까지 해소할 수 있다고 알려져 있습니다. 남은 부분은 일상에서의 선한 생각과 행동을 쌓아감으로써 더욱 해소에 가까워질 수 있습니다.
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">나바그라하 칸담 / 산티 / 딕샤 <span class="special-item__badge">추천</span></div>
+                <div class="special-item__desc">태어난 시점의 호로스코프(천궁도)를 바탕으로, 각 행성의 배치가 가져오는 영향에 대해 더욱 상세히 알려줍니다. 자신의 단점이나 질병에 걸리기 쉬운 경향을 이해하고, 재능을 신장시키기 위한 핵심 포인트도 제시됩니다.</div>
+                <div class="special-item__note">※ 잎에 기록된 호로스코프상의 행성 위치는 일반적인 점성술과 다를 수 있습니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">코차라 칸담 (Kochaara Kandam) / 산티 / 딕샤 <span class="special-item__badge">추천</span></div>
+                <div class="special-item__desc">수년간에 걸친 행성 배치의 변화와 그에 따른 영향에 대해 알려줍니다. 특히 삼재(厄年)나 토성의 영향이 강해지는 시기에 대해 자세히 알 수 있으며, 운이 좋은 시기를 더욱 잘 활용하기 위한 조언도 받을 수 있습니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">디샤북티 칸담 (Disha Bukthi Kandam) / 산티 / 딕샤</div>
+                <div class="special-item__desc">인생을 120년으로 가정하고, 각 시기를 지배하는 행성과 그 영향에 대해 알려줍니다. 태어난 순간부터 현재에 이르기까지의 전반적인 운세 흐름을 파악할 수 있습니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">나크샤트라 칸담 / 산티 / 딕샤</div>
+                <div class="special-item__desc">당신의 나크샤트라(운명성)의 특징과 그것을 활용하는 방법에 대해 알려줍니다. 장점과 단점, 성장을 방해하는 결점, 주의해야 할 포인트 등이 제시됩니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">라시 칸담 / 산티 / 딕샤</div>
+                <div class="special-item__desc">당신의 라시(별자리)의 특징과 그 별자리가 당신에게 미치는 영향에 대해 알려줍니다. 본인의 장점과 과제, 그리고 이를 어떻게 활용하고 개선할지에 대한 방법이 제시됩니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">라그나 칸담 / 산티 / 딕샤</div>
+                <div class="special-item__desc">태어날 때 동쪽 지평선에서 떠오르던 별자리(라그나)가 당신에게 미치는 영향에 대해 알려줍니다. 라그나의 긍정적인 면과 보완해야 할 점, 이를 삶에 활용하고 개선하는 방법이 제시됩니다.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ② 조상의 인연 및 영혼 관련 장 -->
+          <div class="special-cat" id="sc-ancestor" data-theme="ancestor">
+            <div class="special-cat__header" onclick="toggleSpecialCat('sc-ancestor')">
+              <div class="special-cat__left">
+                <span class="special-cat__icon" style="color:#38a169;">🌿</span>
+                <div>
+                  <div class="special-cat__title">조상의 인연 및 영혼 관련 장</div>
+                  <div class="special-cat__sub">피트루 · 아트마 · 미트라 · 모크샤 · 잔마다 · 산타나 바바 등</div>
+                </div>
+              </div>
+              <div class="special-cat__meta"><span class="special-cat__count">해당 장 10개</span></div>
+              <span class="special-cat__arrow">▼</span>
+            </div>
+            <div class="special-cat__body" id="sc-ancestor-body">
+              <div class="special-item">
+                <div class="special-item__title">피트루 칸담 / 산티 / 딕샤 <span class="special-item__badge">추천</span></div>
+                <div class="special-item__desc">조상으로부터 물려받은 카르마에 대해 알려줍니다. 몇 대 전의 조상이 어떤 행위를 했는지, 그리고 그 행위가 현재의 나에게 구체적으로 어떤 영향을 주고 있는지가 나타납니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">미트라 산티 / 미트라 딕샤 (Mitra)</div>
+                <div class="special-item__desc">채워지지 않은 마음이나 집착을 가진 영혼이 본인의 마음과 삶의 사건들에 미치는 영향을 진정시키고 가볍게 털어내기 위한 장입니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">아트마 산티 / 딕샤 (Atma)</div>
+                <div class="special-item__desc">구천을 떠도는(성불하지 못한) 영혼들을 평온한 곳으로 인도하기 위한 방법을 알려줍니다. 또한 본인의 영혼을 한 단계 더 성장시키기 위한 영적 지침이 제시되기도 합니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">모크샤 산티 / 모크샤 딕샤 (Moksha)</div>
+                <div class="special-item__desc">영혼을 평온하게 안정시키고 성불(성스러운 곳으로 인도)시키는 장입니다. (부모를 포함한 조상 포함)</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">잔마 타당갈 산티 / 딕샤 (Janmada)</div>
+                <div class="special-item__desc">아버지, 어머니, 그리고 조상으로부터 물려받은 <strong>질긴 인연(업)</strong>을 끊어내고 해소하는 장입니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">산타나 바바 산티 / 딕샤 (Santhana Paava)</div>
+                <div class="special-item__desc">어머니의 자궁에 잉태된 아이가 끝까지 머물지 못하고 <strong>유산이나 사산</strong>이 된 경우와 관련된 카르마를 다루며, 이를 치유하기 위한 의식을 설명하는 장입니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">마트루 샤파 니바르티 산티 / 딕샤 (Matha Sapanivarthi)</div>
+                <div class="special-item__desc">어머니를 포함하여 <strong>외가 쪽 조상의 인연</strong>에 대해 알려주는 장입니다. 지은 죄를 씻어내고 재난을 회피하며, 카르마를 해소하는 구체적인 방법을 확인할 수 있습니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">피트루 샤파 니바르티 산티 / 딕샤 (Pitha Sapanivarthi)</div>
+                <div class="special-item__desc">아버지를 포함하여 <strong>친가 쪽 조상의 인연</strong>에 대해 알려주는 장입니다. 지은 죄를 멀리하고 재난을 피하며, 카르마를 해소하여 삶을 정화하는 방법을 알려줍니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">사리야 산티 / 사리야 딕샤 (Salliya) <span class="special-item__badge badge-red">제령(除靈)</span></div>
+                <div class="special-item__desc"><strong>제령(除靈)의 장.</strong> 영적인 장애가 있는 분들을 위한 장입니다. 사리야(Salliya)란 본래 제거해야 할 이물질, 불필요한 것, 유해해진 것을 의미합니다. 빙의된 영의 영향을 해결하기 위한 의식과 부적 제작 방법을 알려줍니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">냐나 칸담 / 산티 / 딕샤 (Gnana Kandam)</div>
+                <div class="special-item__desc">영적인 능력(스피리추얼 능력)을 향상시키기 위해 필요한 지혜와 방법을 알려줍니다. 영적 능력이 향상됨에 따라 현실적인 측면의 문제들이 함께 개선되는 경우도 있습니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">일라라 칸담 / 산티 / 딕샤 (Issura Kandam)</div>
+                <div class="special-item__desc">가정생활에서 발생하는 문제의 원인과 그 해결책에 대해 알려줍니다.</div>
+                <div class="special-item__note">※ 이 장은 결혼 경력이 있는 분(현재 기혼자 또는 과거에 결혼하셨던 분)만 열어보실 수 있습니다.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ③ 현실 문제 해결 / 사회 활동 관련 장 -->
+          <div class="special-cat" id="sc-reality" data-theme="reality">
+            <div class="special-cat__header" onclick="toggleSpecialCat('sc-reality')">
+              <div class="special-cat__left">
+                <span class="special-cat__icon" style="color:#3182ce;">🏛️</span>
+                <div>
+                  <div class="special-cat__title">현실 문제 해결 · 사회 활동 관련 장</div>
+                  <div class="special-cat__sub">적 대응 · 소송 · 사고 · 사회 지도자 · 정치 · 예술 · 올해의 축복 등</div>
+                </div>
+              </div>
+              <div class="special-cat__meta"><span class="special-cat__count">해당 장 9개</span></div>
+              <span class="special-cat__arrow">▼</span>
+            </div>
+            <div class="special-cat__body" id="sc-reality-body">
+              <div class="special-item">
+                <div class="special-item__title">샤트루 니바르티 산티 / 딕샤 (Shatru Nivarthi) <span class="special-item__badge">추천</span></div>
+                <div class="special-item__desc"><strong>적을 제압하는 장</strong>입니다. 나를 해하려는 모든 형태의 '적'과 관련된 문제에 초점을 맞추고 있습니다. 대립 관계나 적(사트루/Satru)의 영향을 분석하여 인생을 앞으로 나아가게 하는 장으로, 상황에 따라 단순히 상대를 원수로 보고 쫓아내는 것뿐만 아니라, <strong>상대의 움직임을 읽고 나에게 유리하게 활용(아군으로 만듦)하는 관점</strong>도 제시됩니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">파가이 산티 / 딕샤 (Pagai) <span class="special-item__badge">추천</span></div>
+                <div class="special-item__desc">바가이 칸담이라고도 불립니다. 대립 관계나 적의 영향으로부터 보호받고, 관계를 정화하는 처방이 제시됩니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">바작쿠 니바르티 산티 / 딕샤 (Vazhakku Nivarthi)</div>
+                <div class="special-item__desc">이 장은 <strong>재판, 법적 분쟁, 경찰 조사, 정부와의 트러블</strong> 등 모든 종류의 소송 문제에 특화되어 있습니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">비파투 니바르티 산티 / 딕샤 (Vipattu Nivarthi)</div>
+                <div class="special-item__desc"><strong>사건·사고를 해결하는 장</strong>입니다. 생명을 위협하는 갑작스러운 사고, 위험, 건강상의 위기 상황 등을 해결하는 데 중점을 둡니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">현실 세계의 문제를 해결하는 장 (현실 문제 해결 장)</div>
+                <div class="special-item__desc">
+                  <strong>산티:</strong> 현실 세계에서 느끼고 있는 직장, 가정, 인간관계의 문제를 해결하기 위한 치유 의식에 대해 알려줍니다.<br>
+                  <strong>딕샤:</strong> 현실적인 문제들에 대해 적절한 행동을 취할 수 있도록 에너지를 정돈해 주는 부적 제작 방법에 대해 알려줍니다.
+                </div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">올해의 축복의 장 / 산티 / 딕샤</div>
+                <div class="special-item__desc">한 달 간격으로 업무나 가정의 변화 및 성과, 사고나 사건, 자연재해, 건강 문제 등에 대해 알려줍니다. 또한 각 시기마다 실천해야 할 과제에 대해서도 제시됩니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">사회 지도자의 칸담 (리더십 장) / 산티 / 딕샤</div>
+                <div class="special-item__desc">경영자나 리더의 역할을 맡은 분들을 대상으로, 현실 세계에서 지도력을 발휘하기 위한 지침을 알려줍니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">정치가의 칸담 (정치 장) / 산티 / 딕샤</div>
+                <div class="special-item__desc">정치인 또는 정치인을 지망하는 분들을 대상으로, 활동을 어떻게 추진해 나가야 할지에 대해 알려줍니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">예술의 장 / 산티 / 딕샤</div>
+                <div class="special-item__desc">예술적 재능(미술뿐만 아니라 음악, 무용, 연예, 미용 포함)의 개화와 이를 방해하는 요소에 대해 알려줍니다.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ④ 아우샤다 (건강 · 아유르베다) 관련 장 -->
+          <div class="special-cat" id="sc-health" data-theme="health">
+            <div class="special-cat__header" onclick="toggleSpecialCat('sc-health')">
+              <div class="special-cat__left">
+                <span class="special-cat__icon" style="color:#48bb78;">🌱</span>
+                <div>
+                  <div class="special-cat__title">건강 · 아유르베다 관련 장 (아우샤다)</div>
+                  <div class="special-cat__sub">아우샤다 칸담 · 아우샤다 산티 · 아우샤다 딕샤 · 아유르베다 칸담 등</div>
+                </div>
+              </div>
+              <div class="special-cat__meta"><span class="special-cat__count">해당 장 4개</span></div>
+              <span class="special-cat__arrow">▼</span>
+            </div>
+            <div class="special-cat__body" id="sc-health-body">
+              <div class="special-item">
+                <div class="special-item__title">아우샤다 칸담 (Aushadha Kandam)</div>
+                <div class="special-item__desc">현재 본인의 몸 상태에 맞춰, 「아유르베다(Ayurveda)」에 기반한 개인별 맞춤 허브 보조제(사플리먼트)를 제안받을 수 있는 장입니다.</div>
+                <div class="special-item__note">※허브 보조제 구입비는 별도로 발생합니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">아우샤다 산티 (Aushadha Shanti)</div>
+                <div class="special-item__desc">건강 문제의 근본 원인을 줄이기 위한 치유 의식에 대해 알려줍니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">아우샤다 딕샤 (Aushadha Deeksha)</div>
+                <div class="special-item__desc">건강 유지 및 질병 예방에 효과적인 부적 제작에 대해 알려줍니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">아유르베다 칸담 / 산티 / 딕샤</div>
+                <div class="special-item__desc">건강하게 장수하는 것을 목표로, 본인의 체질에 맞는 식단·운동·생활 습관에 관한 조언을 얻을 수 있습니다. 아유르베다의 지혜를 일상생활에 활용하기 위한 장입니다.<br>• 산티: 건강 관련 카르마 해소<br>• 딕샤: 건강을 위한 부적 제작</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ⑤ 신들의 축복 · 영적 성장 관련 장 -->
+          <div class="special-cat" id="sc-spiritual" data-theme="spiritual">
+            <div class="special-cat__header" onclick="toggleSpecialCat('sc-spiritual')">
+              <div class="special-cat__left">
+                <span class="special-cat__icon" style="color:#9f7aea;">🙏</span>
+                <div>
+                  <div class="special-cat__title">신들의 축복 · 영적 성장 관련 장</div>
+                  <div class="special-cat__sub">아시 · 프라슈나 · 싯다의 장 · 신들의 장 · 루드라크샤 · 만트라 칸담 등</div>
+                </div>
+              </div>
+              <div class="special-cat__meta"><span class="special-cat__count">해당 장 9개</span></div>
+              <span class="special-cat__arrow">▼</span>
+            </div>
+            <div class="special-cat__body" id="sc-spiritual-body">
+              <div style="background:#f0f4ff;border:1px solid #c3dafe;border-radius:6px;padding:12px 16px;margin-bottom:16px;font-size:0.83rem;color:#2c4a8c;line-height:1.8;">
+                신으로부터 오는 축복의 에너지를 최대한 받기 위해, 잎의 내용을 듣기 전날부터는 육류·생선·주류를 삼가고, 당일에는 몸과 마음을 정결히 한 후 임하시는 것을 권장합니다. 전달받는 음성 자체에도 많은 축복의 에너지가 담겨 있으므로, 몇 번이고 반복해서 듣는 것이 중요합니다.
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">프라슈나 칸담 (Prashna Kandam)</div>
+                <div class="special-item__desc">아가스티아 성자에게 <strong>최대 5가지까지 질문</strong>을 할 수 있는 특별한 장입니다. 다만, 질문 내용에 따라 답이 다른 장에 기록되어 있는 경우, 해당 장을 열도록 지시받을 수도 있습니다.</div>
+                <div class="special-item__note">※ 산티·딕샤 칸담은 별도로 존재하지 않습니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">아시 프라슈나 칸담 / 아시 프라슈나 산티 / 아시 프라슈나 딕샤 <span class="special-item__badge badge-green">강력 추천</span></div>
+                <div class="special-item__desc">신들의 축복을 받음과 동시에 <strong>최대 5가지까지 질문</strong>을 할 수 있는 장입니다. 일반 프라슈나 칸담과의 차이점은, 질문한 문제가 더 원활하게 해결될 수 있도록 돕는 <strong>'산티(의식)'와 '딕샤(부적)'</strong>가 함께 제시된다는 점입니다. 무거운 고민이나 문제를 해결하고 싶을 때 특히 적합합니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">아시 칸담 / 아시 산티 / 아시 딕샤</div>
+                <div class="special-item__desc">신으로부터 어떤 축복을 받고 있는지, 또한 그 축복을 활용하여 어떻게 인생을 살아가야 할지가 명확해집니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">신들의 장 (신들의 장 / 산티 / 딕샤)</div>
+                <div class="special-item__desc">어떤 신들이 왜 당신에게 축복을 내리고 있는지 더욱 상세히 보여주며, 그 축복을 통해 당신이 어떤 존재로 성장해 나가야 하는지를 알려줍니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">싯다의 장 (싯다의 장 / 산티 / 딕샤)</div>
+                <div class="special-item__desc">당신의 영혼에 가장 큰 영향을 미치고 있는 <strong>싯다(Siddha, 성자)</strong>는 누구인지, 그리고 그 성자가 가진 소질과 에너지, 당신이 받고 있는 축복에 대해 알려줍니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">시바 루드라크샤 칸담 (시바 루드라크샤 산티 / 딕샤)</div>
+                <div class="special-item__desc">본인에게 가장 적합한 <strong>루드라크샤(Ludraksah, 보리수 열매)</strong>를 1면부터 27면 중에서 찾아 알려줍니다. 루드라크샤마다 고유의 효과와 효능이 있으며, 자신에게 맞는 것을 몸에 지님으로써 그 효과가 발휘됩니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">만트라 칸담 (Mantra Kandam)</div>
+                <div class="special-item__desc">현재 당신에게 가장 적합한 <strong>만트라(Mantra)</strong>를 알려줍니다. 이 장을 확인하는 타이밍에 따라 전해지는 만트라가 달라지며, 에너지 또한 그 시기에 가장 필요한 것으로 주어집니다.</div>
+                <div class="special-item__note">※ 산티·딕샤 칸담은 별도로 존재하지 않습니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">영적 지도자의 칸담 / 영적 지도자의 산티 / 영적 지도자의 딕샤</div>
+                <div class="special-item__desc">정신세계의 지도자나 영적인 성장을 목표로 하는 분들을 대상으로, 어떻게 타인을 인도하고 나아가야 할지를 알려줍니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">아바타 칸담 (Avatar Kandam / 아바타 산티 / 딕샤)</div>
+                <div class="special-item__desc">「신들의 화신」에 관한 장이 아니라, 당신의 과거 전생 중에서 <strong>가장 높은 차원에 근접했던 생애</strong>에 대해 기록되어 있습니다. 이 장은 사회에 큰 영향력을 미치는 분들에게만 존재합니다.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ⑥ 차크라의 장 -->
+          <div class="special-cat" id="sc-chakra" data-theme="chakra">
+            <div class="special-cat__header" onclick="toggleSpecialCat('sc-chakra')">
+              <div class="special-cat__left">
+                <span class="special-cat__icon" style="color:#ed64a6;">🔮</span>
+                <div>
+                  <div class="special-cat__title">차크라의 장</div>
+                  <div class="special-cat__sub">물라 타라 · 스와디슈타나 · 마니푸라 · 아나하타 · 비슛디 · 아즈냐 · 수르얌 · 프라나-산탐 · 찬드라 · 소마리얀 · 샤크티 칼람 · 시바 칼람 · 일라이 칸담 등</div>
+                </div>
+              </div>
+              <div class="special-cat__meta"><span class="special-cat__count">해당 장 13개</span></div>
+              <span class="special-cat__arrow">▼</span>
+            </div>
+            <div class="special-cat__body" id="sc-chakra-body">
+              <div class="special-item">
+                <div class="special-item__title">물라 타라 칸담 (Mula Tharam Kandam / 산티 / 딕샤)</div>
+                <div class="special-item__desc">인생의 기반, 안정성, 신체 에너지, 정신의 근원을 다루는 장입니다. 삶의 토대를 다질 필요가 있을 때나 공포, 불안, 의구심을 안고 있을 때 제시됩니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">스와디슈타나 칸담 (Swadhisthanam Kandam / 산티 / 딕샤)</div>
+                <div class="special-item__desc">감정의 흐름, 창조성, 자신감, 인간관계의 균형과 관련된 장입니다. 감정의 조화가 필요할 때나 창조적인 에너지를 높이고 싶을 때 제시됩니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">마니푸라 칸담 (Manipura Kandam / 산티 / 딕샤)</div>
+                <div class="special-item__desc">행동력과 결단력을 관장하는 장입니다. 에너지가 부족하다고 느낄 때, 내면의 열정이 약해졌을 때, 결단력이 부족하여 망설임이 생길 때, 또는 소화기 계통에 불편함이 있을 때 제시됩니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">아나하타 칸담 (Anahata Kandam / 산티 / 딕샤)</div>
+                <div class="special-item__desc">심장(하트), 사랑, 자비, 직관에 관한 장입니다. 마음의 평안이 필요할 때나 대립, 갈등, 응어리진 마음을 내려놓아야 할 때 제시됩니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">비슛디 칸담 (Vishuddhi Kandam / 산티 / 딕샤)</div>
+                <div class="special-item__desc">프라나(생명 에너지)의 흐름을 조절하는 장입니다. 신체의 정화와 해독, 프라나의 흐름을 원활하게 할 때 제시됩니다. 심신에 축적된 것들을 비워내고 정화가 필요한 시기에 나타납니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">아즈냐 칸담 (Ajna Kandam / 산티 / 딕샤)</div>
+                <div class="special-item__desc">직관, 명석함, 예지(叡智), 정신적 깨어남에 관한 장입니다. 마음이 혼란스러울 때나 판단이 서지 않을 때 제시됩니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">수르얌 칸담 (Suriyam Kandam / 산티 / 딕샤)</div>
+                <div class="special-item__desc">내면의 빛, 생명력, 에너지의 확장을 다루는 장입니다. 심신의 힘이나 활력을 높여야 할 필요가 있을 때 제시됩니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">프라나-산탐 칸담 (Swasa Samsam Kandam / 산티 / 딕샤)</div>
+                <div class="special-item__desc">호흡과 프라나의 흐름, 생명 에너지의 조화에 관한 장입니다. 스트레스나 불안이 있을 때, 혹은 에너지가 부족하다고 느낄 때 제시됩니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">찬드라 칸담 (Chandram Kandam / 산티 / 딕샤)</div>
+                <div class="special-item__desc">조화, 냉각(진정), 마음의 평안, 감수성을 정돈하는 장입니다. 열기나 분노가 강할 때, 생각이 너무 많아 마음이 안정을 찾지 못할 때 제시됩니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">소마리얀 칸담 (Somriyan Kandam / 산티 / 딕샤)</div>
+                <div class="special-item__desc">심신의 젊음 회복(회춘), 지복(至福)의 상태, 고차원적인 철학적 에너지에 관한 장입니다. 고도의 명상이나 깊은 영적 수행을 하는 단계에서 제시됩니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">샤크티 칼람 칸담 (Shaktikaram Kandam / 산티 / 딕샤)</div>
+                <div class="special-item__desc">샤크티(Shakti, 근원적 에너지)의 각성과 영적 에너지의 상승을 다루는 장입니다. 에너지의 변형(Transformation) 단계에 들어섰을 때 제시됩니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">시바 칼람 칸담 (Shivakaram Kandam / 산티 / 딕샤)</div>
+                <div class="special-item__desc">정적, 영적 통합, 지고한 예지(叡智)의 경지에 관한 장입니다. 샤크티가 정화된 후, 보다 고차원적인 명상 상태로 나아갈 때 제시됩니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">일라이 칸담 (Irai Kandam / 산티 / 딕샤)</div>
+                <div class="special-item__desc">신의 에너지(신성한 에너지)에 관한 장입니다. '제로의 상태(본래의 자기 자신)'로 돌아가 시바 신과 연결될 수 있는지, 어떻게 하면 자연체(Natural state)로 존재할 수 있는지, 그리고 제3의 눈으로 모든 것을 평등하게 받아들일 수 있는지에 대해 알려줍니다.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ⑦ 수행 심화 관련 장 -->
+          <div class="special-cat" id="sc-practice" data-theme="practice">
+            <div class="special-cat__header" onclick="toggleSpecialCat('sc-practice')">
+              <div class="special-cat__left">
+                <span class="special-cat__icon" style="color:#63b3ed;">🧘</span>
+                <div>
+                  <div class="special-cat__title">수행 심화 · 영혼 탐구 관련 장</div>
+                  <div class="special-cat__sub">구루 서렌더 · 필라핀다 · 니간두 · 메이나나 · 프라나야마 · 다라나 · 디아나 · 사마디 · 코사 칸담 등</div>
+                </div>
+              </div>
+              <div class="special-cat__meta"><span class="special-cat__count">해당 장 10개</span></div>
+              <span class="special-cat__arrow">▼</span>
+            </div>
+            <div class="special-cat__body" id="sc-practice-body">
+              <div class="special-item">
+                <div class="special-item__title">구루 서렌더 칸담 (Guru Surrender Kandam / 산티 / 딕샤)</div>
+                <div class="special-item__desc">정신세계(영성)에 있어 어떤 <strong>구루(스승)</strong>를 만나고, 어떤 길을 걷게 될 것인지를 알려줍니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">필라핀다 칸담 (Pila Pinda Kandam / 산티 / 딕샤)</div>
+                <div class="special-item__desc"><strong>현생에서의 사명</strong>은 무엇인지, 그리고 그 사명을 완수하기 위해 실천해야 할 구체적인 행동에 대해 제1장보다 더욱 상세하게 알려줍니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">니간두 칸담 (Nighantu Kandam / 산티 / 딕샤)</div>
+                <div class="special-item__desc">당신 자신의 <strong>영혼의 비밀</strong>과 태어난 의미, 존재의 신비에 대해 알려줍니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">메이야나 칸담 (Meignana Kandam)</div>
+                <div class="special-item__desc">신들의 지혜를 통해 당신의 신체를 활성화하는 방법을 알려줍니다.</div>
+                <div class="special-item__note">※ 산티·딕샤 칸담은 별도로 존재하지 않습니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">프라나야마 칸담 (Pranayama Kandam / 산티 / 딕샤)</div>
+                <div class="special-item__desc">현재 당신에게 가장 적합한 <strong>호흡법(프라나야마)</strong>에 대해 그 상세한 방법과 필요한 마음가짐을 알려줍니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">다라나 칸담 (Dharana Kandam / 산티 / 딕샤)</div>
+                <div class="special-item__desc"><strong>정신 집중(다라나)</strong>을 심화하기 위한 방법과, 이를 통해 자기 자신이 어떻게 성장해 나가는지에 대해 알려줍니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">디야나 칸담 (Dhyana Kandam / 산티 / 딕샤)</div>
+                <div class="special-item__desc">현재 당신에게 가장 적합한 <strong>명상법(디아나)</strong>과 그 실천에 필요한 마음가짐에 대해 알려줍니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">사마디 칸담 (Samadhi Kandam / 산티 / 딕샤)</div>
+                <div class="special-item__desc">현재 당신의 단계에 따른 <strong>삼매(사마디)</strong>의 경지와 그에 필요한 마음가짐에 대해 알려줍니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">코사 칸담 (Kosha Kandam / 산티 / 딕샤)</div>
+                <div class="special-item__desc">다섯 가지 신체층- 육체·에테르체·아스트랄체·멘털체·코잘체를 다루는 장입니다. 신체와 마음, 영혼을 통합하고 전체적인 조화가 필요한 단계에서 제시됩니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">마노라야 산티 / 딕샤 (Manoraya)</div>
+                <div class="special-item__desc">마음을 한곳으로 모으는 <strong>'집중(포커싱)' 능력</strong>을 기르고 마음을 정돈하기 위한 장입니다. 집중하지 못하고 마음이 산만하게 흔들리는 상태를 '노나삼'이라 부릅니다. 이 장에서는 마음의 혼란이 고민과 갈등으로 이어짐을 명시하고, 마음을 다스려 더 나은 결과로 나아가기 위한 지침을 제공합니다.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ⑧ 새롭게 발견된 장 -->
+          <div class="special-cat" id="sc-new" data-theme="new">
+            <div class="special-cat__header" onclick="toggleSpecialCat('sc-new')">
+              <div class="special-cat__left">
+                <span class="special-cat__icon" style="color:#68d391;">✨</span>
+                <div>
+                  <div class="special-cat__title">새롭게 발견된 장</div>
+                  <div class="special-cat__sub">비티 · 니야마 · 바스투 샤스트람 · 차크라 · 무드라 칸담 등 — 향후 명칭이나 내용 변경될 수 있음</div>
+                </div>
+              </div>
+              <div class="special-cat__meta"><span class="special-cat__count">해당 장 5개</span></div>
+              <span class="special-cat__arrow">▼</span>
+            </div>
+            <div class="special-cat__body" id="sc-new-body">
+              <div style="background:#f0f4ff;border:1px solid #c3dafe;border-radius:6px;padding:12px 16px;margin-bottom:16px;font-size:0.83rem;color:#2c4a8c;line-height:1.8;">
+                이제 막 공개된 내용이므로, 향후 장의 명칭이나 상세 내용이 변경될 가능성이 있습니다.
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">비티 칸담 (Vidhi Kandam / 산티 / 딕샤)</div>
+                <div class="special-item__desc">인생의 철학과 법칙에 대해 알려줍니다. 이성과 삶의 원리가 설파되어 있으며, 특히 출가나 정신적 탐구를 지향하는 분들에게도 중요한 가르침을 줍니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">니야마 칸담 (Niyama Kandam / 산티 / 딕샤)</div>
+                <div class="special-item__desc">당신의 영혼을 성장시키고, 도덕적인 삶과 정신적 깨달음을 얻기 위해 【해야 할 일】이 기록된 장입니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">바스투 샤스트람 칸담 (Vastu Shastram Kandam / 산티 / 딕샤) <span class="special-item__badge">풍수의 장</span></div>
+                <div class="special-item__desc"><strong>풍수의 장입니다.</strong> 고대 인도에서 발생한 전통 사상으로, 현대에는 건축 환경공학이나 도시공학을 비롯해 심리학, 뇌과학 등 폭넓은 학문으로 분화되어 활용되고 있습니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">차크라 칸담 (Chakra Kandam / 산티 / 딕샤)</div>
+                <div class="special-item__desc">인체의 에너지 센터인 차크라에 대해 기록된 장입니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">무드라 칸담 (Mudra Kandam / 산티 / 딕샤)</div>
+                <div class="special-item__desc">무드라란 요가에서 자주 사용되는 용어로, <strong>특정한 손의 모양(수인)</strong>과 그 효능을 의미합니다. 이는 신체적·정신적 건강 유지, 특히 호흡기 계통이나 발성 문제를 개선하는 데 도움이 되며, 체내 에너지 센터인 <strong>차크라의 균형을 맞추는 효과</strong>도 있습니다. 이 장에서는 본인에게 가장 적합한 무드라를 알려줍니다.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ⑨ 이후의 장들 (차원의 장) -->
+          <div class="special-cat" id="sc-dimension" data-theme="dimension">
+            <div class="special-cat__header" onclick="toggleSpecialCat('sc-dimension')">
+              <div class="special-cat__left">
+                <span class="special-cat__icon" style="color:#d4af37;">🌌</span>
+                <div>
+                  <div class="special-cat__title">이후의 장들 — 차원의 장 (극히 제한된 분께만)</div>
+                  <div class="special-cat__sub">7차원~13차원 · 사라베스와르 · 조티 칸담 등</div>
+                </div>
+              </div>
+              <div class="special-cat__meta"><span class="special-cat__count" style="background:rgba(212,175,55,0.15);border-color:rgba(212,175,55,0.5);color:var(--gold);">해당 장 4개</span></div>
+              <span class="special-cat__arrow">▼</span>
+            </div>
+            <div class="special-cat__body" id="sc-dimension-body">
+              <div style="background:#1a1a2e;color:rgba(255,255,255,0.8);border-radius:8px;padding:16px 20px;margin-bottom:16px;font-size:0.84rem;line-height:1.9;border:1px solid rgba(212,175,55,0.3);">
+                지금부터 소개할 장들은 <strong style="color:var(--gold);">극히 제한된 분들에게만 준비되어 있는 장</strong>이라고 전해집니다. 만약 마음속에 깊은 울림이 있다면, 부디 자신의 잎을 찾아보시기 바랍니다. 분명 필요한 때에, 필요한 형태의 인도가 기다리고 있을 것입니다.
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">7차원의 장 (7차원 산티 / 딕샤)</div>
+                <div class="special-item__desc">7차원의 에너지와 연결되는 심화 산티(의식)와 딕샤(부적 제작)로 구성된 장입니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">8차원의 장 / 9차원의 장 / 10차원의 장 / 11차원의 장</div>
+                <div class="special-item__desc">각각 해당 차원의 산티(의식)와 딕샤(부적 제작)로 구성된 심화 장입니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">사라베스와르 칸담 (Saraveswara / 12차원의 장) / 사라베스와르 산티 / 딕샤</div>
+                <div class="special-item__desc">12차원의 에너지와 연결되는 고차원의 장입니다.</div>
+              </div>
+              <div class="special-item">
+                <div class="special-item__title">조티 칸담 (Jyoti / 13차원의 장) / 조티 산티 / 딕샤</div>
+                <div class="special-item__desc">13차원의 빛(죠티)과 관련된 가장 높은 차원의 장입니다.</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:16px;font-size:0.8rem;color:var(--text-light);text-align:center;padding:12px;">
+            ※ 산티는 카르마 해소(의식), 딕샤는 부적 제작을 의미합니다.
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ 정책 안내 섹션 ═══ -->
+      <div class="svc-section" id="leaf-policy-section">
+        <span class="svc-section__num">📋 POLICY &amp; GUIDE</span>
+        <h2 class="svc-section__title">신청 전 꼭 확인하세요 — 환불 · 재방문 · 신청 조건</h2>
+        <div class="svc-section__body" style="margin-bottom:28px;">
+          <p>아가스티아잎 리딩 신청 전, 아래의 정책을 미리 확인해 주시면 더욱 안심하고 진행하실 수 있습니다.</p>
+        </div>
+
+        <!-- 정책 카드 3종 -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px;">
+
+          <!-- 카드 1: 환불 -->
+          <div style="background:white;border:1.5px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);transition:box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 6px 24px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow='0 2px 12px rgba(0,0,0,0.06)'">
+            <div style="background:linear-gradient(135deg,#fff8e1 0%,#fffde7 100%);padding:22px 20px 16px;text-align:center;border-bottom:1px solid rgba(212,175,55,0.2);">
+              <div style="font-size:2rem;margin-bottom:8px;">💰</div>
+              <div style="font-size:0.72rem;letter-spacing:0.18em;color:var(--gold);text-transform:uppercase;font-weight:700;margin-bottom:4px;">REFUND POLICY</div>
+              <div style="font-family:'Noto Serif KR',serif;font-size:0.98rem;font-weight:600;color:var(--text-dark);">잎이 없을 경우 환불</div>
+            </div>
+            <div style="padding:18px 18px 20px;">
+              <p style="font-size:0.85rem;color:var(--text-mid);line-height:1.95;margin:0;">
+                탐색 결과 해당 장의 잎을 찾지 못하면 <strong style="color:var(--text-dark);">전액 환불</strong>해 드립니다.<br><br>
+                아가스티아잎은 본인에게 가장 적절한 시기에 열린다고 합니다. 이번에 찾지 못한 경우, 시기를 달리하여 다시 찾아보시는 것을 권장합니다.
+              </p>
+              <div style="margin-top:14px;padding:10px 14px;background:#fff8e1;border-radius:6px;font-size:0.78rem;color:#92400e;line-height:1.8;">
+                ⚠️ 잎의 내용이 설명과 다른 경우의 환불은 적용되지 않습니다.
+              </div>
+            </div>
+          </div>
+
+          <!-- 카드 2: 무료 재방문 -->
+          <div style="background:white;border:1.5px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);transition:box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 6px 24px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow='0 2px 12px rgba(0,0,0,0.06)'">
+            <div style="background:linear-gradient(135deg,#f0fff4 0%,#e6ffed 100%);padding:22px 20px 16px;text-align:center;border-bottom:1px solid rgba(72,187,120,0.2);">
+              <div style="font-size:2rem;margin-bottom:8px;">🔄</div>
+              <div style="font-size:0.72rem;letter-spacing:0.18em;color:#2f855a;text-transform:uppercase;font-weight:700;margin-bottom:4px;">FREE REVISIT</div>
+              <div style="font-family:'Noto Serif KR',serif;font-size:0.98rem;font-weight:600;color:var(--text-dark);">무료 재방문 안내</div>
+            </div>
+            <div style="padding:18px 18px 20px;">
+              <p style="font-size:0.85rem;color:var(--text-mid);line-height:1.95;margin:0;">
+                잎에서 <strong style="color:var(--text-dark);">「○살 때 다시 오세요」</strong>라고 안내된 경우, 해당 시기에 <strong style="color:#2f855a;">무료</strong>로 다시 열람하실 수 있습니다.<br><br>
+                아가스티아 성자의 인도에 따라, 인생의 각 단계에서 새로운 지혜와 안내를 받으실 수 있습니다.
+              </p>
+              <div style="margin-top:14px;padding:10px 14px;background:#f0fff4;border-radius:6px;font-size:0.78rem;color:#276749;line-height:1.8;">
+                ✅ 잎에 재방문 안내가 명시된 경우에 한해 적용됩니다.
+              </div>
+            </div>
+          </div>
+
+          <!-- 카드 3: 다른 장 신청 조건 -->
+          <div style="background:white;border:1.5px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);transition:box-shadow 0.2s;" onmouseover="this.style.boxShadow='0 6px 24px rgba(0,0,0,0.12)'" onmouseout="this.style.boxShadow='0 2px 12px rgba(0,0,0,0.06)'">
+            <div style="background:linear-gradient(135deg,#fffbf0 0%,#fff9ee 100%);padding:22px 20px 16px;text-align:center;border-bottom:1px solid rgba(212,175,55,0.2);">
+              <div style="font-size:2rem;margin-bottom:8px;">🌿</div>
+              <div style="font-size:0.72rem;letter-spacing:0.18em;color:var(--gold);text-transform:uppercase;font-weight:700;margin-bottom:4px;">CHAPTER UNLOCK</div>
+              <div style="font-family:'Noto Serif KR',serif;font-size:0.98rem;font-weight:600;color:var(--text-dark);">다른 장 신청 조건</div>
+            </div>
+            <div style="padding:18px 18px 20px;">
+              <p style="font-size:0.85rem;color:var(--text-mid);line-height:1.95;margin:0;">
+                <strong style="color:var(--text-dark);">1장 · 13장 · 14장</strong> 리딩 및 대행 신청을 모두 완료하시면, 2~12장과 특별장을 자유롭게 신청하실 수 있습니다.
+              </p>
+              <div style="margin-top:14px;display:flex;flex-direction:column;gap:6px;">
+                <div style="display:flex;align-items:center;gap:8px;font-size:0.81rem;color:var(--text-mid);">
+                  <span style="color:var(--gold);font-weight:700;">①</span> 1장 리딩 완료
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:0.81rem;color:var(--text-mid);">
+                  <span style="color:var(--gold);font-weight:700;">②</span> 13장 리딩 + 의식 대행 신청
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:0.81rem;color:var(--text-mid);">
+                  <span style="color:var(--gold);font-weight:700;">③</span> 14장 리딩 + 부적 대행 신청
+                </div>
+                <div style="margin-top:6px;padding:8px 12px;background:#fffbf0;border-left:3px solid var(--gold);border-radius:0 6px 6px 0;font-size:0.78rem;color:#92400e;line-height:1.7;">
+                  ↓ 이후 2~12장 · 특별장 신청 가능
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+      <!-- 섹션 4: 리딩 후 얻는 것 -->
+      <div class="svc-section">
+        <span class="svc-section__num">04 · WHAT YOU RECEIVE</span>
+        <h2 class="svc-section__title" id="leaf-sec4-title">아가스티아잎을 통해 얻는 것</h2>
+        <div class="svc-section__body" id="leaf-sec4-body">
+          <p>아가스티아잎을 읽는다는 것은 단순히 미래를 아는 행위가 아닙니다. 그것은 당신의 영혼이 왜 이 시대에, 이 환경에서, 이 부모에게서 태어났는지를 이해하는 여정입니다.</p>
+        </div>
+        <div class="svc-box">
+          <div class="svc-box__title">🌿 아가스티아잎 리딩이 제공하는 것</div>
+          <p><strong>자기 이해의 심화</strong> — 현재 겪고 있는 문제와 반복되는 패턴이 어디서 비롯되었는지를 카르마적 관점에서 이해합니다.</p>
+          <p><strong>인생의 로드맵 확인</strong> — 각 시기에 찾아오는 기회와 시련의 의미, 그리고 최적의 행동 지침을 얻습니다.</p>
+          <p><strong>카르마 정화 처방</strong> — 불균형한 카르마를 해소하기 위한 특정 의식(샨티)을 안내받아, 삶의 흐름을 변화시킬 수 있습니다.</p>
+          <p><strong>영적 사명 확인</strong> — 이번 생에 당신이 완수해야 할 영적 사명과, 그 여정에서 발전시켜야 할 자질을 알게 됩니다.</p>
+          <p><strong>경외감과 평화</strong> — 자신의 이름과 가족 이름이 수천 년 전부터 기록되어 있음을 확인하는 순간, 우주적 연결감과 깊은 내면의 평화를 경험합니다.</p>
+        </div>
+      </div>
+
+
+
+      <!-- 상담 CTA -->
+      <div class="svc-cta" style="background:linear-gradient(135deg,#1a1f2e 0%,#232840 100%);border-radius:12px;padding:40px 36px;text-align:center;margin-top:64px;border:1px solid rgba(212,175,55,0.25);">
+        <div style="font-size:0.68rem;letter-spacing:0.25em;color:var(--gold);text-transform:uppercase;margin-bottom:14px;font-weight:700;">LEAF READING</div>
+        <h3 class="svc-cta__title" style="font-size:clamp(1rem,3.5vw,1.3rem);line-height:1.6;word-break:keep-all;margin-bottom:14px;">아가스티아 잎을<br class="cta-br"> 신청하실 분께</h3>
+        <p class="svc-cta__sub" style="font-size:0.88rem;line-height:2;word-break:keep-all;margin-bottom:24px;">마이페이지에서 직접 신청하실 수 있습니다.<br>처음이신 분은 먼저 문의 페이지를 통해<br class="cta-br">궁금한 점을 해결하시길 권장합니다.</p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+          <a href="mypage.html#leaf-reading" class="btn btn--gold">🌿 잎 리딩 신청하기</a>
+          <a href="contact.html" class="btn btn--outline" style="color:rgba(255,255,255,0.8);border-color:rgba(255,255,255,0.35);">문의하기</a>
+        </div>
+      </div>
+
+      <!-- 다른 서비스 -->
+      <div style="margin-top:72px;">
+        <div class="section-label" style="margin-bottom:20px;">OTHER SERVICES</div>
+        <div class="other-services">
+          <a href="service-reading.html" class="other-svc-card">
+            <div class="other-svc-card__num">02 · READING</div>
+            <div class="other-svc-card__title">리딩</div>
+          </a>
+          <a href="service-consulting.html" class="other-svc-card">
+            <div class="other-svc-card__num">03 · CONSULTING</div>
+            <div class="other-svc-card__title">컨설팅</div>
+          </a>
+          <a href="service-india.html" class="other-svc-card">
+            <div class="other-svc-card__num">04 · INDIA JOURNEY</div>
+            <div class="other-svc-card__title">인도 여행</div>
+          </a>
+          <a href="service-retreat.html" class="other-svc-card">
+            <div class="other-svc-card__num">05 · RETREAT</div>
+            <div class="other-svc-card__title">리트리트</div>
+          </a>
+          <a href="service-ayurveda.html" class="other-svc-card">
+            <div class="other-svc-card__num">06 · AYURVEDA</div>
+            <div class="other-svc-card__title">아유르베다</div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ 관리자 편집 FAB 버튼 ══ -->
+<button id="admin-edit-fab" onclick="document.getElementById('svc-admin-edit-panel').style.display='block';this.style.display='none';" style="display:none;position:fixed;bottom:28px;right:28px;z-index:7999;background:#d4af37;color:#1a1a2e;border:none;border-radius:50px;padding:13px 22px;font-size:0.85rem;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.25);align-items:center;gap:8px;letter-spacing:0.04em;">✏ 콘텐츠 편집</button>
+
+<!-- ══ 관리자 편집 패널 ══ -->
+<div id="svc-admin-edit-panel" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:8000;background:#1a1a2e;color:white;box-shadow:0 -4px 24px rgba(0,0,0,0.4);max-height:75vh;overflow-y:auto;">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid rgba(255,255,255,0.1);position:sticky;top:0;background:#1a1a2e;z-index:1;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="color:#d4af37;font-weight:700;font-size:0.85rem;letter-spacing:0.1em;">✏ 관리자 편집 모드 — 아가스티아잎 탐색</span>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="saveLeafContent()" style="background:#d4af37;color:#1a1a2e;border:none;border-radius:5px;padding:7px 18px;font-weight:700;cursor:pointer;font-size:0.82rem;">💾 저장</button>
+      <button onclick="document.getElementById('svc-admin-edit-panel').style.display='none';document.getElementById('admin-edit-fab').style.display='flex';" style="background:none;border:1px solid rgba(255,255,255,0.3);color:white;border-radius:5px;padding:7px 14px;cursor:pointer;font-size:0.82rem;">✕</button>
+    </div>
+  </div>
+
+  <!-- 편집기 도움말 -->
+  <div style="padding:12px 24px;background:#0f0f1e;font-size:0.75rem;color:rgba(255,255,255,0.5);line-height:1.8;border-bottom:1px solid rgba(255,255,255,0.05);">
+    📝 서식 도구: <strong style="color:#d4af37;">**굵게**</strong> &nbsp;|&nbsp;
+    <code style="background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:3px;">[BOX1]제목|||내용[/BOX1]</code> 금색 박스 &nbsp;|&nbsp;
+    <code style="background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:3px;">[BOX2]제목|||내용[/BOX2]</code> 회색 박스 &nbsp;|&nbsp;
+    <code style="background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:3px;">[SIDE]인용문[/SIDE]</code> 인용 &nbsp;|&nbsp;
+    <code style="background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:3px;">[HR]</code> 구분선 &nbsp;|&nbsp;
+    <code style="background:rgba(255,255,255,0.1);padding:1px 5px;border-radius:3px;">[UL]밑줄[/UL]</code>
+  </div>
+
+  <div style="padding:20px 24px;display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <!-- 핵심 문구 -->
+    <div style="grid-column:1/-1;" class="rte-field-wrap">
+      <label class="rte-label">⭐ 핵심 문구 (상단 강조 문장)</label>
+      <div class="rte-toolbar">
+        <button class="rte-btn" onclick="rteCmd('edit-leaf-quote','bold')"><b>B</b></button>
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-quote','[BOX1]제목|||내용[/BOX1]')">금색박스</button>
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-quote','[SIDE]인용문[/SIDE]')">인용</button>
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-quote','[HR]')">구분선</button>
+      </div>
+      <textarea id="edit-leaf-quote" rows="3" class="rte-editor" style="border-radius:0 0 5px 5px;" placeholder="5천 년 전, 고대의 성자 아가스티아가 ..."></textarea>
+    </div>
+
+    <!-- 리드 문단 -->
+    <div style="grid-column:1/-1;" class="rte-field-wrap">
+      <label class="rte-label">📝 리드 문단 (도입부)</label>
+      <div class="rte-toolbar">
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-lead','**굵게**')"><b>B</b></button>
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-lead','[BOX1]제목|||내용[/BOX1]')">금색박스</button>
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-lead','[BOX2]제목|||내용[/BOX2]')">회색박스</button>
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-lead','[SIDE]인용문[/SIDE]')">인용</button>
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-lead','[HR]')">구분선</button>
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-lead','[UL]밑줄[/UL]')">밑줄</button>
+      </div>
+      <textarea id="edit-leaf-lead" rows="5" class="rte-editor" style="border-radius:0 0 5px 5px;"></textarea>
+    </div>
+
+    <!-- 섹션1 -->
+    <div class="rte-field-wrap">
+      <label class="rte-label">섹션1 제목</label>
+      <input type="text" id="edit-leaf-sec1-title" class="rte-input" placeholder="유일무이한 열쇠 — 「지문」에 의한 검색 시스템">
+      <label class="rte-label" style="margin-top:10px;">섹션1 본문</label>
+      <div class="rte-toolbar">
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-sec1-body','**굵게**')"><b>B</b></button>
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-sec1-body','[BOX1]제목|||내용[/BOX1]')">금색박스</button>
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-sec1-body','[HR]')">구분선</button>
+      </div>
+      <textarea id="edit-leaf-sec1-body" rows="4" class="rte-editor" style="border-radius:0 0 5px 5px;"></textarea>
+    </div>
+    <div class="rte-field-wrap">
+      <label class="rte-label">박스1 내용 (검색 프로세스)</label>
+      <div class="rte-toolbar">
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-box1','**굵게**')"><b>B</b></button>
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-box1','[HR]')">구분선</button>
+      </div>
+      <textarea id="edit-leaf-box1" rows="4" class="rte-editor" style="border-radius:0 0 5px 5px;"></textarea>
+    </div>
+
+    <!-- 섹션2 -->
+    <div class="rte-field-wrap">
+      <label class="rte-label">섹션2 제목</label>
+      <input type="text" id="edit-leaf-sec2-title" class="rte-input" placeholder="운명의 대조 — 나디 리딩">
+      <label class="rte-label" style="margin-top:10px;">섹션2 본문</label>
+      <div class="rte-toolbar">
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-sec2-body','**굵게**')"><b>B</b></button>
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-sec2-body','[BOX1]제목|||내용[/BOX1]')">금색박스</button>
+      </div>
+      <textarea id="edit-leaf-sec2-body" rows="4" class="rte-editor" style="border-radius:0 0 5px 5px;"></textarea>
+    </div>
+    <div class="rte-field-wrap">
+      <label class="rte-label">섹션2 보충 본문</label>
+      <div class="rte-toolbar">
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-sec2-body2','**굵게**')"><b>B</b></button>
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-sec2-body2','[SIDE]인용[/SIDE]')">인용</button>
+      </div>
+      <textarea id="edit-leaf-sec2-body2" rows="4" class="rte-editor" style="border-radius:0 0 5px 5px;"></textarea>
+    </div>
+
+    <!-- CTA -->
+    <div class="rte-field-wrap">
+      <label class="rte-label">CTA 제목</label>
+      <input type="text" id="edit-leaf-cta-title" class="rte-input">
+      <label class="rte-label" style="margin-top:10px;">CTA 설명</label>
+      <textarea id="edit-leaf-cta-sub" rows="3" class="rte-editor" style="border:1px solid rgba(255,255,255,0.2);border-radius:5px;"></textarea>
+    </div>
+
+    <!-- 예약 안내 -->
+    <div style="grid-column:1/-1;" class="rte-field-wrap">
+      <label class="rte-label">⚠️ 예약 전 안내문</label>
+      <div class="rte-toolbar">
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-notice','**굵게**')"><b>B</b></button>
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-notice','[BOX1]제목|||내용[/BOX1]')">금색박스</button>
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-notice','[BOX2]제목|||내용[/BOX2]')">회색박스</button>
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-notice','[HR]')">구분선</button>
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-notice','[UL]밑줄[/UL]')">밑줄</button>
+      </div>
+      <textarea id="edit-leaf-notice" rows="5" class="rte-editor" style="border-radius:0 0 5px 5px;" placeholder="예약 전 안내 사항"></textarea>
+    </div>
+
+    <!-- 아가스티아 성자 소개 -->
+    <div style="grid-column:1/-1;" class="rte-field-wrap">
+      <label class="rte-label">성자 아가스티아 소개 본문</label>
+      <div class="rte-toolbar">
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-sec0-body','**굵게**')"><b>B</b></button>
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-sec0-body','[BOX1]제목|||내용[/BOX1]')">금색박스</button>
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-sec0-body','[SIDE]인용[/SIDE]')">인용</button>
+        <button class="rte-btn" onclick="rteInsert('edit-leaf-sec0-body','[HR]')">구분선</button>
+      </div>
+      <textarea id="edit-leaf-sec0-body" rows="5" class="rte-editor" style="border-radius:0 0 5px 5px;"></textarea>
+    </div>
+  </div>
+  <div style="padding:0 24px 20px;text-align:center;">
+    <span id="leaf-save-msg" style="font-size:0.8rem;color:#68d391;display:none;">✔ 저장되었습니다!</span>
+  </div>
+</div>
+
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  renderNavbar('service');
+  renderFooter();
+
+  /* ══ 특별장 카테고리 토글 ══ */
+  function toggleSpecialCat(id) {
+    const cat = document.getElementById(id);
+    if (!cat) return;
+    const header = cat.querySelector('.special-cat__header');
+    const body = document.getElementById(id + '-body');
+    const isOpen = header.classList.contains('open');
+    header.classList.toggle('open', !isOpen);
+    body.classList.toggle('open', !isOpen);
+  }
+
+  /* ══ 관리자 편집 ══ */
+  let _leafContents = [];
+
+  const renderFmt = (val) => {
+    if (!val) return '';
+    return val
+      .replace(/\[LEAD\]([\s\S]*?)\[\/LEAD\]/g,'<p style="font-size:1.05rem;font-weight:500;color:var(--navy);line-height:1.9;margin-bottom:18px;">$1</p>')
+      .replace(/\[BOX1\]([\s\S]*?)\|\|\|([\s\S]*?)\[\/BOX1\]/g,'<div style="border:2px solid var(--gold);border-radius:8px;padding:14px 18px;margin:14px 0;"><div style="font-size:0.78rem;font-weight:700;color:var(--gold);margin-bottom:6px;">$1</div><div>$2</div></div>')
+      .replace(/\[BOX2\]([\s\S]*?)\|\|\|([\s\S]*?)\[\/BOX2\]/g,'<div style="background:#f5f5f5;border-left:4px solid #4a5568;border-radius:0 8px 8px 0;padding:14px 18px;margin:14px 0;"><div style="font-size:0.78rem;font-weight:700;color:#4a5568;margin-bottom:6px;">$1</div><div>$2</div></div>')
+      .replace(/\[SEC\]([\s\S]*?)\[\/SEC\]/g,'<h3 style="font-family:\'Noto Serif KR\',serif;font-size:1rem;color:var(--navy);font-weight:600;margin:20px 0 8px;padding-bottom:5px;border-bottom:1px solid #e0d5b0;">$1</h3>')
+      .replace(/\[UL\]([\s\S]*?)\[\/UL\]/g,'<span style="text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--gold);">$1</span>')
+      .replace(/\[SIDE\]([\s\S]*?)\[\/SIDE\]/g,'<blockquote style="border-left:4px solid var(--gold);padding:10px 16px;margin:12px 0;color:#555;background:#fffdf5;font-style:italic;line-height:1.8;">$1</blockquote>')
+      .replace(/\[HR\]/g,'<hr style="border:none;border-top:1px solid #e0d5b0;margin:16px 0;">')
+      .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+      .replace(/\n/g,'<br>');
+  };
+
+  async function loadLeafContent() {
+    try {
+      _leafContents = await SB.getAll('site_content', { limit: 500, order: 'sort_order.asc' });
+      const get = k => (_leafContents.find(c => c.key === k) || {}).content || '';
+
+      const applyHtml = (id, key) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const val = get(key);
+        if (val) el.innerHTML = renderFmt(val);
+      };
+      const applyText = (id, key) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const val = get(key);
+        if (val) el.textContent = val;
+      };
+
+      // 핵심 문구
+      applyHtml('leaf-quote',       'svc_leaf_quote');
+      applyHtml('leaf-lead',        'svc_leaf_lead');
+      applyText('leaf-sec1-title',  'svc_leaf_sec1_title');
+      applyHtml('leaf-sec1-body',   'svc_leaf_sec1_body');
+      applyHtml('leaf-box1-body',   'svc_leaf_box1_body');
+      applyText('leaf-sec2-title',  'svc_leaf_sec2_title');
+      applyHtml('leaf-sec2-body',   'svc_leaf_sec2_body');
+      applyHtml('leaf-sec2-body2',  'svc_leaf_sec2_body2');
+      applyText('leaf-cta-title',   'svc_leaf_cta_title');
+      applyHtml('leaf-cta-sub',     'svc_leaf_cta_sub');
+
+      const session = Auth.getSession ? Auth.getSession() : null;
+      const _isAdmin = session?.username === 'admin' || session?.role === 'admin';
+
+      if (_isAdmin) {
+        fillEditPanel(get);
+        document.getElementById('admin-edit-fab').style.display = 'flex';
+      }
+    } catch(e) {
+      console.log('Supabase load error (normal if not logged in):', e.message);
+    }
+  }
+
+  function fillEditPanel(get) {
+    const fields = [
+      ['edit-leaf-quote',      'svc_leaf_quote'],
+      ['edit-leaf-lead',       'svc_leaf_lead'],
+      ['edit-leaf-sec1-title', 'svc_leaf_sec1_title'],
+      ['edit-leaf-sec1-body',  'svc_leaf_sec1_body'],
+      ['edit-leaf-box1',       'svc_leaf_box1_body'],
+      ['edit-leaf-sec2-title', 'svc_leaf_sec2_title'],
+      ['edit-leaf-sec2-body',  'svc_leaf_sec2_body'],
+      ['edit-leaf-sec2-body2', 'svc_leaf_sec2_body2'],
+      ['edit-leaf-cta-title',  'svc_leaf_cta_title'],
+      ['edit-leaf-cta-sub',    'svc_leaf_cta_sub'],
+      ['edit-leaf-notice',     'svc_leaf_notice'],
+      ['edit-leaf-sec0-body',  'svc_leaf_sec0_body'],
+    ];
+    fields.forEach(([id, key]) => {
+      const el = document.getElementById(id);
+      if (el) el.value = get(key) || '';
+    });
+  }
+
+  async function saveLeafContent() {
+    const fields = [
+      ['edit-leaf-quote',      'svc_leaf_quote'],
+      ['edit-leaf-lead',       'svc_leaf_lead'],
+      ['edit-leaf-sec1-title', 'svc_leaf_sec1_title'],
+      ['edit-leaf-sec1-body',  'svc_leaf_sec1_body'],
+      ['edit-leaf-box1',       'svc_leaf_box1_body'],
+      ['edit-leaf-sec2-title', 'svc_leaf_sec2_title'],
+      ['edit-leaf-sec2-body',  'svc_leaf_sec2_body'],
+      ['edit-leaf-sec2-body2', 'svc_leaf_sec2_body2'],
+      ['edit-leaf-cta-title',  'svc_leaf_cta_title'],
+      ['edit-leaf-cta-sub',    'svc_leaf_cta_sub'],
+      ['edit-leaf-notice',     'svc_leaf_notice'],
+      ['edit-leaf-sec0-body',  'svc_leaf_sec0_body'],
+    ];
+    try {
+      for (const [id, key] of fields) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const val = el.value;
+        const existing = _leafContents.find(c => c.key === key);
+        if (existing) {
+          await SB.update('site_content', existing.id, { content: val });
+        } else {
+          await SB.insert('site_content', { key, content: val, sort_order: 0 });
+        }
+      }
+      const msg = document.getElementById('leaf-save-msg');
+      if (msg) { msg.style.display='inline'; setTimeout(()=>msg.style.display='none', 2500); }
+      loadLeafContent();
+    } catch(e) {
+      alert('저장 실패: ' + e.message);
+    }
+  }
+
+  /* ══ 리치 텍스트 편집기 헬퍼 ══ */
+  function rteInsert(id, text) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const start = el.selectionStart;
+    const end = el.selectionEnd;
+    const val = el.value;
+    const selected = val.substring(start, end);
+    // 선택된 텍스트가 있으면 감싸기
+    let insert = text;
+    if (selected && text.includes('|||')) {
+      // BOX 계열은 선택 텍스트를 내용에
+      insert = text.replace('내용', selected);
+    } else if (selected) {
+      insert = text.replace(/\[.*?\](.*?)\[\/.*?\]/, (m, p1) => m.replace(p1, selected));
+    }
+    el.value = val.substring(0, start) + insert + val.substring(end);
+    el.focus();
+    el.selectionStart = el.selectionEnd = start + insert.length;
+  }
+  function rteCmd(id, cmd) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const start = el.selectionStart, end = el.selectionEnd;
+    const selected = el.value.substring(start, end);
+    if (cmd === 'bold') {
+      const wrapped = `**${selected || '굵게'}**`;
+      el.value = el.value.substring(0, start) + wrapped + el.value.substring(end);
+    }
+    el.focus();
+  }
+
+  loadLeafContent();
+</script>
+</body>
+</html>

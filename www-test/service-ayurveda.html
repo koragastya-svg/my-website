@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>아유르베다 | 한국 아가스티아 협회</title>
+  <meta name="description" content="5,000년의 통계 데이터에 기반한 생명과학으로, 당신의 육체라는 「탈것」을 재정비합니다.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .svc-detail-hero { position: relative; min-height: 420px; display: flex; align-items: flex-end; overflow: hidden; background: var(--navy); }
+    .svc-detail-hero__bg { position: absolute; inset: 0; background: url('https://www.genspark.ai/api/files/s/5MXZgbRF') center/cover no-repeat; opacity: 0.6; }
+    .svc-detail-hero__inner { position: relative; z-index: 1; padding: 60px 0 56px; width: 100%; }
+    .svc-detail-hero__num { font-size: 0.68rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; display: block; }
+    .svc-detail-hero__title { font-family: 'Noto Serif KR', serif; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 400; color: white; line-height: 1.3; margin-bottom: 12px; }
+    .svc-detail-hero__sub { font-size: 0.95rem; color: rgba(255,255,255,0.7); line-height: 1.8; max-width: 600px; }
+    .breadcrumb { font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-bottom: 20px; }
+    .breadcrumb a { color: rgba(255,255,255,0.5); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--gold); }
+    .breadcrumb span { margin: 0 8px; }
+
+    .svc-content { max-width: 800px; margin: 0 auto; }
+    .svc-lead { font-size: 1.05rem; color: var(--text-dark); line-height: 2; font-family: 'Noto Serif KR', serif; margin-bottom: 48px; padding-bottom: 48px; border-bottom: 1px solid var(--border); }
+    .svc-section { margin-bottom: 56px; }
+    .svc-section__num { font-size: 0.65rem; letter-spacing: 0.25em; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; display: block; }
+    .svc-section__title { font-family: 'Noto Serif KR', serif; font-size: 1.4rem; font-weight: 500; color: var(--text-dark); margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px solid var(--gold); display: inline-block; }
+    .svc-section__body { font-size: 0.93rem; color: var(--text-mid); line-height: 2.1; }
+    .svc-section__body p { margin-bottom: 16px; }
+    .svc-section__body strong { color: var(--text-dark); }
+
+    .svc-box { background: var(--cream); border-left: 3px solid var(--gold); padding: 24px 28px; border-radius: 0 var(--radius) var(--radius) 0; margin: 28px 0; }
+    .svc-box__title { font-size: 0.78rem; letter-spacing: 0.15em; color: var(--gold); text-transform: uppercase; margin-bottom: 12px; }
+    .svc-box p { font-size: 0.9rem; color: var(--text-mid); line-height: 1.9; margin-bottom: 8px; }
+
+    /* 3층 구조 */
+    .layers { display: flex; flex-direction: column; gap: 12px; margin: 28px 0; }
+    .layer { display: flex; gap: 0; overflow: hidden; border-radius: var(--radius); border: 1px solid var(--border); }
+    .layer__tag { width: 120px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.1em; text-align: center; padding: 16px 8px; }
+    .layer--physical .layer__tag { background: var(--navy); color: white; }
+    .layer--mental .layer__tag { background: var(--gold); color: white; }
+    .layer--essential .layer__tag { background: #8B6914; color: white; }
+    .layer__body { padding: 16px 20px; font-size: 0.88rem; color: var(--text-mid); line-height: 1.8; }
+
+    /* 3순환 */
+    .three-cycles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 28px 0; }
+    .cycle-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; text-align: center; }
+    .cycle-card__icon { font-size: 2rem; margin-bottom: 12px; }
+    .cycle-card__title { font-size: 0.9rem; color: var(--text-dark); font-weight: 600; margin-bottom: 8px; }
+    .cycle-card__body { font-size: 0.82rem; color: var(--text-mid); line-height: 1.8; }
+
+    /* 원칙 비교 */
+    .principle { background: var(--cream); border-radius: var(--radius); padding: 28px; margin: 28px 0; }
+    .principle__row { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 16px; }
+    .principle__row:last-child { margin-bottom: 0; }
+    .principle__badge { flex-shrink: 0; padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; white-space: nowrap; }
+    .principle__badge--old { background: #ddd; color: #666; }
+    .principle__badge--new { background: var(--gold); color: white; }
+    .principle__text { font-size: 0.9rem; color: var(--text-mid); line-height: 1.8; }
+
+    .svc-cta { background: var(--navy); border-radius: var(--radius); padding: 48px; text-align: center; margin-top: 64px; }
+    .svc-cta__title { font-family: 'Noto Serif KR', serif; font-size: 1.3rem; color: white; margin-bottom: 12px; }
+    .svc-cta__sub { font-size: 0.88rem; color: rgba(255,255,255,0.65); margin-bottom: 28px; line-height: 1.8; }
+
+    .other-services { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 48px; }
+    .other-svc-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-decoration: none; transition: var(--transition); display: block; }
+    .other-svc-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .other-svc-card__num { font-size: 0.62rem; letter-spacing: 0.2em; color: var(--gold); margin-bottom: 4px; }
+    .other-svc-card__title { font-size: 0.95rem; color: var(--text-dark); font-weight: 500; }
+
+    @media (max-width: 768px) { .three-cycles { grid-template-columns: 1fr; } .layer__tag { width: 90px; font-size: 0.72rem; } .svc-cta { padding: 36px 24px; } .other-services { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 480px) { .other-services { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<div class="svc-detail-hero">
+  <div class="svc-detail-hero__bg"></div>
+  <div class="container svc-detail-hero__inner">
+    <div class="breadcrumb">
+      <a href="/">홈</a><span>›</span>
+      <a href="/service">서비스</a><span>›</span>
+      아유르베다
+    </div>
+    <span class="svc-detail-hero__num">06 · AYURVEDA</span>
+    <h1 class="svc-detail-hero__title">아유르베다</h1>
+    <p class="svc-detail-hero__sub">「무엇을 먹는가」보다 「누가 먹는가」.<br>5,000년의 통계 데이터에 기반한 생명과학으로, 당신의 육체를 재정비합니다.</p>
+  </div>
+</div>
+
+<section class="section bg-cream">
+  <div class="container">
+    <div class="svc-content">
+
+      <p class="svc-lead">
+        우리는 인생이라는 무대에서, 「본질(사명)」을 다하기 위해 살아가고 있습니다. 그러나, 그 실행 부대인 「육체」가 기능 부전에 빠져 있다면, 아무리 고귀한 목적도 달성할 수 없습니다.<br><br>
+        아유르베다는, 단순한 마사지나 건강법이 아닙니다. 그것은 고대부터 계승된 <strong>「생명의 취급 설명서(사이언스)」</strong>이며, 개개의 체질(도샤)에 기반하여, 육체 레벨에서 에너지의 막힘을 제거하기 위한 논리적인 시스템입니다.
+      </p>
+
+      <!-- 3층 구조 -->
+      <div class="svc-section">
+        <span class="svc-section__num">01 · THE FOUNDATION</span>
+        <h2 class="svc-section__title">육체·정신·본질의 「토대」를 만들다</h2>
+        <div class="svc-section__body">
+          <p>「빛의 법칙」에서는, 인생을 <strong>「육체(Physical)」「정신(Mental)」「본질(Essential)」</strong>의 3가지 층으로 파악합니다.</p>
+          <p>많은 현대인은, 정신적 스트레스나 운명적 과제(본질)에 눈을 돌리기 쉽지만, 그 그릇인 「육체」의 상태가 갖춰져 있지 않으면, 직감도 무뎌지고, 올바른 판단을 할 수 없습니다.</p>
+        </div>
+
+        <div class="layers">
+          <div class="layer layer--essential">
+            <div class="layer__tag">본질<br>Essential</div>
+            <div class="layer__body">사명, 카르마, 영혼의 방향성. 보이지 않는 80%의 영역.</div>
+          </div>
+          <div class="layer layer--mental">
+            <div class="layer__tag">정신<br>Mental</div>
+            <div class="layer__body">감정, 사고 패턴, 스트레스 반응. 본질과 육체를 잇는 다리.</div>
+          </div>
+          <div class="layer layer--physical">
+            <div class="layer__tag">육체<br>Physical</div>
+            <div class="layer__body">본질의 「탈것(비클)」. 육체가 최적의 상태일 때, 직감과 퍼포먼스가 최대화된다.</div>
+          </div>
+        </div>
+
+        <div class="svc-box">
+          <div class="svc-box__title">🚗 탈것의 비유</div>
+          <p>하루에 2시간밖에 작동하지 못하는 몸과, 24시간 풀로 에너지가 순환하고 있는 몸에서는, 인생의 퍼포먼스에 하늘과 땅만큼의 차이가 생깁니다.</p>
+          <p>아유르베다의 실천은, 이 「탈것」을 최고의 상태로 튜닝하고, 인생의 목적을 향하기 위한 기초 체력을 구축하는 프로세스입니다.</p>
+        </div>
+      </div>
+
+      <!-- 만인에게 좋은 것은 없다 -->
+      <div class="svc-section">
+        <span class="svc-section__num">02 · INDIVIDUALITY</span>
+        <h2 class="svc-section__title">「만인에게 좋은 것」은 존재하지 않는다 — 개체차의 이론</h2>
+        <div class="svc-section__body">
+          <p>현대의 건강 정보의 많은 것은, 「낫토는 몸에 좋다」 「레몬(비타민C)은 필수다」라는 일률적인 정답을 제시합니다.</p>
+          <p>그러나, 아유르베다의 시점에서는, <strong>「어떤 사람에게는 약이 되는 것이, 다른 사람에게는 독이 될 수 있다」</strong>고 생각합니다.</p>
+          <p>중요한 것은, 「세상에서 무엇이 좋다고 말해지고 있는가」가 아닌, 「당신의 체질(지·수·화·풍·공의 균형)에 무엇이 필요한가」입니다.</p>
+        </div>
+
+        <div class="principle">
+          <div class="principle__row">
+            <div class="principle__badge principle__badge--old">기존의 접근</div>
+            <div class="principle__text">세상에서 좋다고 알려진 것을 더한다 (덧셈의 접근)</div>
+          </div>
+          <div class="principle__row">
+            <div class="principle__badge principle__badge--new">아유르베다</div>
+            <div class="principle__text">당신의 체질을 진단하고, 불필요한 것을 빼는 것에서 시작한다 (뺄셈의 접근)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3가지 순환 -->
+      <div class="svc-section">
+        <span class="svc-section__num">03 · THREE CYCLES</span>
+        <h2 class="svc-section__title">단순한 진리 — 3가지 순환을 되찾다</h2>
+        <div class="svc-section__body">
+          <p>건강의 본질은 놀랄 만큼 단순합니다. <strong>「푹 자고, 맛있게 먹고, 원활하게 배설한다」</strong>. 이것으로 충분합니다.</p>
+        </div>
+
+        <div class="three-cycles">
+          <div class="cycle-card">
+            <div class="cycle-card__icon">🔥</div>
+            <div class="cycle-card__title">소화의 불 (아그니)</div>
+            <div class="cycle-card__body">먹은 것을 올바르게 에너지로 변환하고 있는가.</div>
+          </div>
+          <div class="cycle-card">
+            <div class="cycle-card__icon">🌿</div>
+            <div class="cycle-card__title">독소 배출 (아마)</div>
+            <div class="cycle-card__body">미소화물이 체내에 축적되어 관을 막고 있지 않은가.</div>
+          </div>
+          <div class="cycle-card">
+            <div class="cycle-card__icon">💫</div>
+            <div class="cycle-card__title">순환 리셋</div>
+            <div class="cycle-card__body">적절한 식사법과 생활 습관으로 소화력을 높이고 순환이 좋은 몸으로.</div>
+          </div>
+        </div>
+
+        <div class="svc-section__body">
+          <p>아무리 고가의 서플리먼트나 지식을 취해도, 받아들이는 육체가 「더러운 천」과 같은 상태라면, 염료(영양이나 지혜)는 깨끗하게 물들지 않습니다.</p>
+        </div>
+      </div>
+
+      <!-- 판차카르마 -->
+      <div class="svc-section">
+        <span class="svc-section__num">04 · PANCHAKARMA</span>
+        <h2 class="svc-section__title">깊은 디톡스 — 「판차카르마」의 시점</h2>
+        <div class="svc-section__body">
+          <p>보다 깊은 레벨에서의 정화가 필요한 경우, 「판차카르마(5가지 정화 요법)」라는 개념을 사용합니다.</p>
+          <p>이것은, 오일을 전신에 침투시키고, 골수 레벨까지 스며든 독소를 물리적으로 소화관에 모아, 체외로 배출하는 강력한 디톡스법입니다.</p>
+          <p>체내의 노이즈(독소)가 빠져나갔을 때, 사람은 육체적인 건강을 되찾는 것뿐만 아니라, 감각이 연마되어 <strong>「직감」이 날카로워집니다.</strong></p>
+        </div>
+        <div class="svc-box">
+          <div class="svc-box__title">✨ 정화 후의 체험</div>
+          <p>당연한 경치에 눈물이 날 만큼의 행복감을 느끼거나, 논리를 초월한 영감이 내려오는 것은, 육체라는 필터가 청정화된 증거입니다.</p>
+        </div>
+      </div>
+
+      <!-- 싯다 의학의 기원 -->
+      <div class="svc-section">
+        <span class="svc-section__num">05 · THE ORIGIN</span>
+        <h2 class="svc-section__title">아유르베다의 뿌리 — 세계 최고(最古)의 의학 「싯다 의학」</h2>
+        <div class="svc-section__body">
+          <p>아유르베다는 한국에서 「에스테(미용)」나 「힐링 마사지」와 같은 이미지로 알려져 있는 경우가 많습니다. 그러나 <strong>인도에서는 의사 면허 과정이 있을 정도로, 정식 의학 학문</strong>으로 취급됩니다.</p>
+          <p>그리고 그 아유르베다조차 원류(源流)로 삼는, 더욱 오래된 의학이 존재합니다. 그것이 바로 <strong>「싯다 의학(Siddha Medicine)」</strong>입니다.</p>
+        </div>
+
+        <!-- 아가스티아 성자의 3가지 업적 -->
+        <div style="margin:28px 0;display:flex;flex-direction:column;gap:14px;">
+          <!-- 1번째 업적 -->
+          <div style="display:flex;align-items:flex-start;gap:16px;background:white;border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;">
+            <div style="font-size:1.6rem;flex-shrink:0;line-height:1;margin-top:2px;">📚</div>
+            <div>
+              <div style="font-size:0.65rem;letter-spacing:0.18em;color:var(--gold);margin-bottom:5px;">아가스티아 성자의 업적 1️⃣</div>
+              <div style="font-family:'Noto Serif KR',serif;font-size:0.97rem;font-weight:600;color:var(--text-dark);margin-bottom:6px;">타밀 문학·문법의 기초를 닦았다</div>
+              <div style="font-size:0.85rem;color:var(--text-mid);line-height:1.9;">타밀어의 최초 문법서 「아가스티얌(Agasthiyam)」을 저술. 드라비다 문명의 언어적 토대를 만들었습니다.</div>
+            </div>
+          </div>
+          <!-- 2번째 업적 -->
+          <div style="display:flex;align-items:flex-start;gap:16px;background:white;border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;">
+            <div style="font-size:1.6rem;flex-shrink:0;line-height:1;margin-top:2px;">🌌</div>
+            <div>
+              <div style="font-size:0.65rem;letter-spacing:0.18em;color:var(--gold);margin-bottom:5px;">아가스티아 성자의 업적 2️⃣</div>
+              <div style="font-family:'Noto Serif KR',serif;font-size:0.97rem;font-weight:600;color:var(--text-dark);margin-bottom:6px;">나디 점성술·아카식 레코드에 접근했다</div>
+              <div style="font-size:0.85rem;color:var(--text-mid);line-height:1.9;">브라흐마 신과 시바 신으로부터 아카식 레코드(우주의 기억)에 접근하는 권한을 받아, 수백만 영혼의 운명을 야자잎에 기록했습니다.</div>
+            </div>
+          </div>
+          <!-- 3번째 업적 (NEW) -->
+          <div style="display:flex;align-items:flex-start;gap:16px;background:linear-gradient(135deg,#f8f4e8,#fff9ef);border:2px solid rgba(212,175,55,0.4);border-radius:var(--radius);padding:20px 22px;position:relative;">
+            <div style="position:absolute;top:-1px;right:14px;background:var(--gold);color:white;font-size:0.65rem;padding:3px 10px;border-radius:0 0 6px 6px;letter-spacing:0.1em;font-weight:700;">SIDDHA MEDICINE</div>
+            <div style="font-size:1.6rem;flex-shrink:0;line-height:1;margin-top:2px;">🌿</div>
+            <div>
+              <div style="font-size:0.65rem;letter-spacing:0.18em;color:var(--gold);margin-bottom:5px;">아가스티아 성자의 업적 3️⃣</div>
+              <div style="font-family:'Noto Serif KR',serif;font-size:0.97rem;font-weight:600;color:var(--text-dark);margin-bottom:6px;">싯다 의학의 체계를 만들어냈다</div>
+              <div style="font-size:0.85rem;color:var(--text-mid);line-height:1.9;">무루간(Murugan) 신으로부터 전수받은 지혜를 바탕으로, 인류 최초의 통합 의학 체계를 구축했습니다. 그 완성도로 인해 <strong style="color:var(--text-dark);">「의학의 창시자(Father of Medicine)」</strong>라 불립니다.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 의학 계보 시각화 -->
+        <div style="margin:32px 0;">
+          <div style="font-size:0.65rem;letter-spacing:0.22em;color:var(--gold);text-align:center;margin-bottom:18px;">LINEAGE OF ANCIENT MEDICINE</div>
+          <div style="display:flex;flex-direction:column;align-items:center;gap:0;">
+            <!-- 최상위: 신으로부터 전수 -->
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+              <div style="text-align:center;">
+                <div style="font-size:1.8rem;">🕉️</div>
+                <div style="font-size:0.72rem;color:var(--text-light);">무루간 신</div>
+              </div>
+              <div style="font-size:1.2rem;color:var(--gold);">→</div>
+              <div style="text-align:center;">
+                <div style="font-size:1.8rem;">🧙</div>
+                <div style="font-size:0.72rem;color:var(--text-light);">아가스티아 성자</div>
+              </div>
+            </div>
+            <div style="width:2px;height:20px;background:var(--gold);"></div>
+            <!-- 싯다 의학 -->
+            <div style="background:linear-gradient(135deg,#1a1a2e,#2d2d5e);color:white;border-radius:10px;padding:18px 32px;text-align:center;width:100%;max-width:440px;box-sizing:border-box;border:2px solid rgba(212,175,55,0.5);">
+              <div style="font-size:0.65rem;letter-spacing:0.2em;color:var(--gold);margin-bottom:6px;">ORIGIN · 세계 최고(最古)의 의학</div>
+              <div style="font-family:'Noto Serif KR',serif;font-size:1.15rem;font-weight:600;">싯다 의학 (Siddha Medicine)</div>
+              <div style="font-size:0.8rem;color:rgba(255,255,255,0.6);margin-top:6px;">정신 · 신체 · 영혼을 하나로 보는 통합 치유 체계</div>
+            </div>
+            <!-- 화살표 분기 -->
+            <div style="display:flex;gap:160px;align-items:center;padding:8px 0;">
+              <div style="width:2px;height:24px;background:rgba(212,175,55,0.5);"></div>
+              <div style="width:2px;height:24px;background:rgba(212,175,55,0.5);"></div>
+            </div>
+            <!-- 2단계: 아유르베다 + 한방 -->
+            <div style="display:flex;gap:20px;width:100%;max-width:480px;">
+              <div style="flex:1;background:var(--cream);border:1px solid rgba(212,175,55,0.4);border-radius:8px;padding:16px;text-align:center;">
+                <div style="font-size:1.4rem;margin-bottom:6px;">🌸</div>
+                <div style="font-size:0.62rem;letter-spacing:0.15em;color:var(--gold);margin-bottom:5px;">파생 · 인도</div>
+                <div style="font-family:'Noto Serif KR',serif;font-size:0.95rem;font-weight:600;color:var(--text-dark);">아유르베다</div>
+                <div style="font-size:0.74rem;color:var(--text-light);margin-top:4px;">인도에서 정식 의학 학문<br>의사 면허 과정 존재</div>
+              </div>
+              <div style="flex:1;background:var(--cream);border:1px solid rgba(212,175,55,0.4);border-radius:8px;padding:16px;text-align:center;">
+                <div style="font-size:1.4rem;margin-bottom:6px;">☯️</div>
+                <div style="font-size:0.62rem;letter-spacing:0.15em;color:var(--gold);margin-bottom:5px;">파생 · 동아시아</div>
+                <div style="font-family:'Noto Serif KR',serif;font-size:0.95rem;font-weight:600;color:var(--text-dark);">한방 (漢方)</div>
+                <div style="font-size:0.74rem;color:var(--text-light);margin-top:4px;">중국·일본·한국으로<br>전파된 동양 의학</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 무루간 전설 박스 -->
+        <div style="background:linear-gradient(135deg,#1e0a3c,#2d1b4e);border:1px solid rgba(147,112,219,0.4);border-radius:10px;padding:24px 28px;margin:24px 0;">
+          <div style="font-size:0.68rem;letter-spacing:0.2em;color:#c084fc;margin-bottom:12px;font-weight:700;">🕉 THE LEGEND — 무루간 신의 전수</div>
+          <p style="font-size:0.9rem;color:rgba(255,255,255,0.85);line-height:2;margin:0 0 10px;">
+            전승에 따르면, 힌두교의 신 <strong style="color:#c084fc;">무루간(Murugan)</strong> — 지혜와 치유의 신 — 이 아가스티아 성자에게 직접 싯다 의학의 체계를 전수했다고 합니다.
+          </p>
+          <p style="font-size:0.9rem;color:rgba(255,255,255,0.85);line-height:2;margin:0;">
+            아가스티아 성자는 이 신성한 지혜를 정리·체계화하고, 야자잎에 남겨 후세에 전했습니다. 오늘날 우리가 「아유르베다」나 「한방」이라 부르는 의학은, 그 기원을 아가스티아 성자에게까지 소급할 수 있습니다.
+          </p>
+        </div>
+
+        <!-- 인도에서의 아유르베다 지위 강조 -->
+        <div style="border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin:24px 0;">
+          <div style="background:var(--navy);padding:12px 20px;">
+            <div style="font-size:0.65rem;letter-spacing:0.2em;color:var(--gold);">💡 IMPORTANT — 아유르베다의 진짜 위상</div>
+          </div>
+          <div style="padding:20px 22px;background:white;">
+            <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:14px;">
+              <div style="font-size:1.3rem;flex-shrink:0;">❌</div>
+              <div>
+                <div style="font-size:0.78rem;font-weight:700;color:#c53030;margin-bottom:4px;">일반적인 오해</div>
+                <div style="font-size:0.87rem;color:var(--text-mid);line-height:1.8;">「아유르베다는 에스테·마사지·뷰티 관련」</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:14px;">
+              <div style="font-size:1.3rem;flex-shrink:0;">✅</div>
+              <div>
+                <div style="font-size:0.78rem;font-weight:700;color:#276749;margin-bottom:4px;">실제 위상 (인도)</div>
+                <div style="font-size:0.87rem;color:var(--text-mid);line-height:1.8;"><strong style="color:var(--text-dark);">의사 면허 과정(BAMS — Bachelor of Ayurvedic Medicine and Surgery)이 있는 정식 의학 학문.</strong><br>인도 정부 공인 의료 시스템으로, 의사가 진단·처방을 행합니다.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="svc-section__body">
+          <p>싯다 의학의 핵심 사상은, 인간의 정신과 신체가 분리 불가능하다는 것입니다. 마음의 상태가 신체에 영향을 미치고, 신체의 상태가 마음에 영향을 미칩니다. 현대 의학이 최근에야 주목하기 시작한 「심신 의학」의 개념을, 수천 년 전에 완성된 시스템으로 이미 체계화하고 있었습니다.</p>
+        </div>
+
+        <!-- 싯다 의학의 목적 강조 박스 -->
+        <div style="background:linear-gradient(135deg,#0d1b2a,#1a2e1a);border:1px solid rgba(72,187,120,0.3);border-radius:10px;padding:28px 32px;margin:24px 0;">
+          <div style="font-size:0.7rem;letter-spacing:0.2em;color:#68d391;margin-bottom:12px;font-weight:700;">🌱 THE PURPOSE OF SIDDHA MEDICINE</div>
+          <p style="font-family:'Noto Serif KR',serif;font-size:1.05rem;color:white;line-height:2.1;margin:0 0 12px;">
+            싯다 의학은 단순히 병을 「낫게」 하기 위해 존재하지 않습니다.
+          </p>
+          <p style="font-size:0.9rem;color:rgba(255,255,255,0.82);line-height:2;margin:0;">
+            우리 인간이 <strong style="color:#68d391;">이 세상에 태어난 사명을 온전히 다할 수 있도록</strong>,<br>
+            정신과 신체를 최적의 상태로 유지하는 것 — 그것이 싯다 의학이 추구하는 진정한 목적입니다.<br><br>
+            「몸이 건강해야 사명을 다할 수 있다」는 사상은, 아가스티아잎 리딩의 세계관과 완벽하게 연결됩니다.
+          </p>
+        </div>
+
+        <div class="svc-section__body">
+          <p>단순한 「몸 관리」를 넘어, 영혼의 사명을 다할 수 있는 정신·육체의 그릇을 만드는 것 — 그것이 싯다 의학의 본래 목적이며, 아유르베다가 계승하는 정신입니다.</p>
+        </div>
+      </div>
+
+      <!-- 결론 -->
+      <div class="svc-section">
+        <span class="svc-section__num">CONCLUSION</span>
+        <h2 class="svc-section__title">최고의 퍼포먼스로 인생을 즐기기 위해</h2>
+        <div class="svc-section__body">
+          <p>아유르베다는, 금욕적인 수행이 아닙니다.</p>
+          <p>오히려, 이 세계에 있는 맛있는 것, 아름다운 것, 즐거운 것을, <strong>「최고의 컨디션」</strong>으로 맛보기 위한 지혜입니다.</p>
+          <p>육체의 불조화라는 노이즈를 없애고, 에너지를 조화시킴으로써, 당신은 본래의 역할(사명)을 향해 최단 거리로 나아갈 수 있습니다. 고대의 지혜를 현대의 생활에 통합하고, 건강하고 강인한 「그릇」을 손에 넣읍시다.</p>
+        </div>
+      </div>
+
+      <div class="svc-cta">
+        <h3 class="svc-cta__title">아유르베다 체질 진단에 관심 있으신 분께</h3>
+        <p class="svc-cta__sub">개별 체질 진단 및 생활 지도에 대해서는<br>문의 페이지를 통해 안내해 드립니다.</p>
+        <a href="/contact" class="btn btn--gold btn--lg">문의하기</a>
+      </div>
+
+      <div style="margin-top:72px;">
+        <div class="section-label" style="margin-bottom:20px;">OTHER SERVICES</div>
+        <div class="other-services">
+          <a href="/service-leaf" class="other-svc-card">
+            <div class="other-svc-card__num">01 · SEARCHING</div>
+            <div class="other-svc-card__title">아가스티아잎 탐색</div>
+          </a>
+          <a href="/service-reading" class="other-svc-card">
+            <div class="other-svc-card__num">02 · READING</div>
+            <div class="other-svc-card__title">리딩</div>
+          </a>
+          <a href="/service-consulting" class="other-svc-card">
+            <div class="other-svc-card__num">03 · CONSULTING</div>
+            <div class="other-svc-card__title">컨설팅</div>
+          </a>
+          <a href="/service-india" class="other-svc-card">
+            <div class="other-svc-card__num">04 · INDIA JOURNEY</div>
+            <div class="other-svc-card__title">인도 여행</div>
+          </a>
+          <a href="/service-retreat" class="other-svc-card">
+            <div class="other-svc-card__num">05 · RETREAT</div>
+            <div class="other-svc-card__title">리트리트</div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ 관리자 편집 FAB 버튼 ══ -->
+<button id="admin-edit-fab" onclick="document.getElementById('svc-admin-edit-panel').style.display='block';this.style.display='none';" style="display:none;position:fixed;bottom:28px;right:28px;z-index:7999;background:#d4af37;color:#1a1a2e;border:none;border-radius:50px;padding:13px 22px;font-size:0.85rem;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.25);align-items:center;gap:8px;letter-spacing:0.04em;">✏ 콘텐츠 편집</button>
+
+<!-- ══ 관리자 편집 패널 ══ -->
+<div id="svc-admin-edit-panel" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:8000;background:#1a1a2e;color:white;box-shadow:0 -4px 24px rgba(0,0,0,0.4);max-height:70vh;overflow-y:auto;">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid rgba(255,255,255,0.1);position:sticky;top:0;background:#1a1a2e;z-index:1;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="color:#d4af37;font-weight:700;font-size:0.85rem;letter-spacing:0.1em;">✏ 관리자 편집 모드 — 아유르베다</span>
+      <span style="font-size:0.72rem;color:rgba(255,255,255,0.45);">**굵게** 표현 사용 가능</span>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="savePageContent()" style="background:#d4af37;color:#1a1a2e;border:none;border-radius:5px;padding:7px 18px;font-weight:700;cursor:pointer;font-size:0.82rem;">💾 저장</button>
+      <button onclick="document.getElementById('svc-admin-edit-panel').style.display='none';document.getElementById('admin-edit-fab').style.display='flex';" style="background:none;border:1px solid rgba(255,255,255,0.3);color:white;border-radius:5px;padding:7px 14px;cursor:pointer;font-size:0.82rem;">✕</button>
+    </div>
+  </div>
+  <div style="padding:20px 24px;display:grid;grid-template-columns:1fr 1fr;gap:16px;" id="edit-fields-grid"></div>
+  <div style="padding:0 24px 16px;text-align:center;"><span id="page-save-msg" style="font-size:0.8rem;color:#68d391;display:none;">✔ 저장되었습니다!</span></div>
+</div>
+
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  renderNavbar('service');
+  renderFooter();
+
+  const PAGE_FIELDS = [
+    { key:'svc_ayurveda_lead',      label:'리드 문단',   type:'textarea', rows:4 },
+    { key:'svc_ayurveda_sec1_title',label:'섹션1 제목',  type:'input' },
+    { key:'svc_ayurveda_sec1_body', label:'섹션1 본문',  type:'textarea', rows:5 },
+    { key:'svc_ayurveda_sec2_title',label:'섹션2 제목',  type:'input' },
+    { key:'svc_ayurveda_sec2_body', label:'섹션2 본문',  type:'textarea', rows:5 },
+    { key:'svc_ayurveda_sec3_title',label:'섹션3 제목',  type:'input' },
+    { key:'svc_ayurveda_sec3_body', label:'섹션3 본문',  type:'textarea', rows:5 },
+    { key:'svc_ayurveda_cta_title', label:'CTA 제목',    type:'input' },
+    { key:'svc_ayurveda_cta_sub',   label:'CTA 설명',    type:'textarea', rows:2 },
+  ];
+  const PAGE_SELECTORS = [
+    '.svc-lead',
+    '.svc-section:nth-of-type(1) .svc-section__title',
+    '.svc-section:nth-of-type(1) .svc-section__body',
+    '.svc-section:nth-of-type(2) .svc-section__title',
+    '.svc-section:nth-of-type(2) .svc-section__body',
+    '.svc-section:nth-of-type(3) .svc-section__title',
+    '.svc-section:nth-of-type(3) .svc-section__body',
+    '.svc-cta__title',
+    '.svc-cta__sub',
+  ];
+  let _pageContents = [];
+  function makeEditField(f) {
+    const s='width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:white;border-radius:5px;padding:8px 10px;font-size:0.82rem;box-sizing:border-box;';
+    const el=f.type==='textarea'?`<textarea id="ef-${f.key}" rows="${f.rows||3}" style="${s}resize:vertical;"></textarea>`:`<input type="text" id="ef-${f.key}" style="${s}">`;
+    return `<div><label style="font-size:0.7rem;color:#d4af37;letter-spacing:0.1em;display:block;margin-bottom:5px;">${f.label}</label>${el}</div>`;
+  }
+  function renderFmt(val){if(!val)return'';return val.replace(/\[LEAD\]([\s\S]*?)\[\/LEAD\]/g,'<p style="font-size:1.05rem;font-weight:500;color:var(--navy);line-height:1.9;margin-bottom:18px;">$1</p>').replace(/\[BOX1\]([\s\S]*?)\|\|\|([\s\S]*?)\[\/BOX1\]/g,'<div style="border:2px solid var(--gold);border-radius:8px;padding:14px 18px;margin:14px 0;"><div style="font-size:0.78rem;font-weight:700;color:var(--gold);margin-bottom:6px;">$1</div><div>$2</div></div>').replace(/\[BOX2\]([\s\S]*?)\|\|\|([\s\S]*?)\[\/BOX2\]/g,'<div style="background:#f5f5f5;border-left:4px solid #4a5568;border-radius:0 8px 8px 0;padding:14px 18px;margin:14px 0;"><div style="font-size:0.78rem;font-weight:700;color:#4a5568;margin-bottom:6px;">$1</div><div>$2</div></div>').replace(/\[SEC\]([\s\S]*?)\[\/SEC\]/g,'<h3 style="font-family:\'Noto Serif KR\',serif;font-size:1rem;color:var(--navy);font-weight:600;margin:20px 0 8px;padding-bottom:5px;border-bottom:1px solid #e0d5b0;">$1</h3>').replace(/\[UL\]([\s\S]*?)\[\/UL\]/g,'<span style="text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--gold);">$1</span>').replace(/\[SIDE\]([\s\S]*?)\[\/SIDE\]/g,'<blockquote style="border-left:4px solid var(--gold);padding:10px 16px;margin:12px 0;color:#555;background:#fffdf5;font-style:italic;line-height:1.8;">$1</blockquote>').replace(/\[HR\]/g,'<hr style="border:none;border-top:1px solid #e0d5b0;margin:16px 0;">').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');}
+  async function loadPageContent() {
+    try {
+      _pageContents=await SB.getAll('site_content',{limit:500,order:'sort_order.asc'});
+      const get=k=>(_pageContents.find(c=>c.key===k)||{}).content||'';
+      PAGE_FIELDS.forEach((f,i)=>{
+        const el=document.querySelector(PAGE_SELECTORS[i]);
+        if(!el)return;
+        const val=get(f.key);
+        if(!val)return;
+        if(f.type==='input')el.textContent=val;
+        else el.innerHTML=renderFmt(val);
+      });
+      if(Auth.getSession&&Auth.getSession()?.username==='admin'){
+        const grid=document.getElementById('edit-fields-grid');
+        if(grid)grid.innerHTML=PAGE_FIELDS.map(makeEditField).join('');
+        PAGE_FIELDS.forEach((f,i)=>{
+          const srcEl=document.querySelector(PAGE_SELECTORS[i]);
+          const el=document.getElementById('ef-'+f.key);
+          if(!el)return;
+          el.value=get(f.key)||(srcEl?srcEl.innerHTML.replace(/<br\s*\/?>/gi,'\n').replace(/<strong>(.*?)<\/strong>/gi,'**$1**').replace(/<[^>]+>/g,'').trim():'');
+        });
+        document.getElementById('admin-edit-fab').style.display='flex';
+      }
+    }catch(e){console.error('[ayurveda]',e);}
+  }
+  async function savePageContent(){
+    try{
+      for(const f of PAGE_FIELDS){
+        const el=document.getElementById('ef-'+f.key);
+        if(!el)continue;
+        await SB.upsertContent(f.key,el.value,f.label,'service_detail',0);
+      }
+      const msg=document.getElementById('page-save-msg');
+      if(msg){msg.style.display='inline';setTimeout(()=>msg.style.display='none',3000);}
+      await loadPageContent();
+    }catch(e){alert('저장 실패: '+e.message);}
+  }
+  loadPageContent();
+</script>
+</body>
+</html>

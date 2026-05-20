@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>로그인 | 한국 아가스티아 협회</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { background: var(--bg-cream); }
+    .auth-wrap {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 100px 20px 60px;
+    }
+    .auth-card {
+      width: 100%; max-width: 420px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 48px 40px;
+      box-shadow: var(--shadow-sm);
+    }
+    .auth-logo {
+      text-align: center; margin-bottom: 40px;
+    }
+    .auth-logo__main {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.05rem; font-weight: 500;
+      color: var(--navy); margin-bottom: 2px;
+    }
+    .auth-logo__sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.7rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 20px;
+    }
+    .auth-logo__divider {
+      width: 40px; height: 1px;
+      background: var(--gold); margin: 0 auto;
+    }
+    .auth-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.3rem; font-weight: 400;
+      text-align: center; margin-bottom: 32px;
+      color: var(--text-dark);
+    }
+    .auth-footer {
+      margin-top: 24px; text-align: center;
+      font-size: 0.82rem; color: var(--text-light);
+    }
+    .auth-footer a { color: var(--gold); font-weight: 500; }
+    .auth-footer a:hover { text-decoration: underline; }
+    .auth-divider {
+      display: flex; align-items: center; gap: 12px;
+      margin: 20px 0; color: var(--text-light); font-size: 0.78rem;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+  </style>
+</head>
+<body>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <a href="index.html">
+        <div class="auth-logo__main">한국 아가스티아 협회</div>
+        <div class="auth-logo__sub">Korea Agastya Association</div>
+        <div class="auth-logo__divider"></div>
+      </a>
+    </div>
+
+    <h1 class="auth-title">로그인</h1>
+
+    <form onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label class="form-label">아이디 <span class="required">*</span></label>
+        <input type="text" class="form-input" id="username" placeholder="아이디를 입력하세요" autocomplete="username" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">비밀번호 <span class="required">*</span></label>
+        <input type="password" class="form-input" id="password" placeholder="비밀번호를 입력하세요" autocomplete="current-password" required>
+        <div class="form-error show hidden" id="login-error">아이디 또는 비밀번호가 올바르지 않습니다.</div>
+      </div>
+
+      <button type="submit" class="btn btn--primary btn--full mt-8" id="login-btn">
+        로그인
+      </button>
+    </form>
+
+    <div class="auth-divider">또는</div>
+
+    <div style="text-align:center; margin-bottom:8px; display:flex; justify-content:center; gap:16px;">
+      <a href="find-account.html?tab=id" style="font-size:0.82rem; color:var(--text-mid);">아이디 찾기</a>
+      <span style="font-size:0.82rem; color:var(--border);">|</span>
+      <a href="find-account.html?tab=pw" style="font-size:0.82rem; color:var(--text-mid);">비밀번호 찾기</a>
+    </div>
+
+    <div class="auth-footer">
+      아직 회원이 아니신가요? <a href="register.html">회원가입</a>
+    </div>
+  </div>
+</div>
+
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  // 이미 로그인 상태면 리다이렉트
+  if (Auth.isLoggedIn()) {
+    const params = new URLSearchParams(window.location.search);
+    window.location.href = params.get('redirect') || 'index.html';
+  }
+
+  const PBKDF2_ITER = 100000;
+  function generateSalt() {
+    const arr = crypto.getRandomValues(new Uint8Array(16));
+    return Array.from(arr).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+  async function hashPw(pw) {
+    const salt = generateSalt();
+    const enc  = new TextEncoder();
+    const key  = await crypto.subtle.importKey('raw', enc.encode(pw), 'PBKDF2', false, ['deriveBits']);
+    const bits = await crypto.subtle.deriveBits(
+      { name:'PBKDF2', hash:'SHA-256', salt: enc.encode(salt), iterations: PBKDF2_ITER }, key, 256
+    );
+    const hex = Array.from(new Uint8Array(bits)).map(b => b.toString(16).padStart(2,'0')).join('');
+    return `pbkdf2:${salt}:${hex}`;
+  }
+
+  // admin / admin1234 로 로그인 시 계정 없으면 자동 생성
+  const ADMIN_ID = 'admin';
+  const ADMIN_PW = 'admin1234';
+
+  async function ensureAdminExists() {
+    try {
+      const exists = await SB.findOne('users', 'username', ADMIN_ID);
+      if (!exists) {
+        const hash = await hashPw(ADMIN_PW);
+        await SB.insert('users', {
+          username: ADMIN_ID, password_hash: hash,
+          name: '관리자', email: 'kor.agastya@gmail.com',
+          phone: '', role: 'admin', is_active: true,
+          reset_code: '', reset_code_expires: ''
+        });
+      }
+    } catch(e) { console.log('admin check error', e); }
+  }
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value;
+    const btn = document.getElementById('login-btn');
+    const errEl = document.getElementById('login-error');
+
+    if (!username || !password) {
+      errEl.textContent = '아이디와 비밀번호를 모두 입력해주세요.';
+      errEl.classList.remove('hidden');
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner"></div> 로그인 중...';
+    errEl.classList.add('hidden');
+
+    // admin 계정으로 로그인 시 계정 없으면 자동 생성
+    if (username === ADMIN_ID && password === ADMIN_PW) {
+      await ensureAdminExists();
+    }
+
+    const result = await Auth.login(username, password);
+
+    if (result.success) {
+      Toast.show(`${result.user.name}님, 환영합니다!`, 'success');
+      setTimeout(() => {
+        const params = new URLSearchParams(window.location.search);
+        window.location.href = params.get('redirect') || 'index.html';
+      }, 800);
+    } else {
+      errEl.textContent = result.message;
+      errEl.classList.remove('hidden');
+      btn.disabled = false;
+      btn.textContent = '로그인';
+    }
+  }
+</script>
+</body>
+</html>

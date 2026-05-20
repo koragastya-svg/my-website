@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원가입 | 한국 아가스티아 협회</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { background: var(--bg-cream); }
+    .auth-wrap {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 100px 20px 60px;
+    }
+    .auth-card {
+      width: 100%; max-width: 480px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 48px 40px;
+      box-shadow: var(--shadow-sm);
+    }
+    .auth-logo {
+      text-align: center; margin-bottom: 40px;
+    }
+    .auth-logo__main {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.05rem; font-weight: 500;
+      color: var(--navy); margin-bottom: 2px;
+    }
+    .auth-logo__sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.7rem; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 20px;
+    }
+    .auth-logo__divider {
+      width: 40px; height: 1px;
+      background: var(--gold); margin: 0 auto;
+    }
+    .auth-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.3rem; font-weight: 400;
+      text-align: center; margin-bottom: 32px;
+      color: var(--text-dark);
+    }
+    .auth-footer {
+      margin-top: 24px; text-align: center;
+      font-size: 0.82rem; color: var(--text-light);
+    }
+    .auth-footer a { color: var(--gold); font-weight: 500; }
+    .pw-strength {
+      height: 4px; border-radius: 2px; margin-top: 8px;
+      background: #eee; overflow: hidden;
+    }
+    .pw-strength__bar {
+      height: 100%; width: 0; border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    .pw-strength-label { font-size: 0.72rem; color: var(--text-light); margin-top: 4px; }
+    .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 480px) {
+      .auth-card { padding: 32px 20px; }
+      .input-row { grid-template-columns: 1fr; }
+    }
+    /* 완료 화면 */
+    .success-screen {
+      text-align: center; display: none;
+    }
+    .success-screen.show { display: block; }
+    .success-icon {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: rgba(200,151,58,0.12);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; margin: 0 auto 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <div class="auth-logo">
+      <a href="index.html">
+        <div class="auth-logo__main">한국 아가스티아 협회</div>
+        <div class="auth-logo__sub">Korea Agastya Association</div>
+        <div class="auth-logo__divider"></div>
+      </a>
+    </div>
+
+    <!-- 회원가입 폼 -->
+    <div id="register-form">
+      <h1 class="auth-title">회원가입</h1>
+
+      <form onsubmit="handleRegister(event)">
+        <div class="input-row">
+          <div class="form-group">
+            <label class="form-label">이름 <span class="required">*</span></label>
+            <input type="text" class="form-input" id="r-name" placeholder="홍길동" required>
+            <div class="form-error" id="e-r-name"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">성별 <span class="required">*</span></label>
+            <div class="gender-select-row" style="display:flex;gap:10px;margin-top:2px;">
+              <label class="gender-btn" id="g-male-label" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px 8px;border:1px solid var(--border);border-radius:4px;cursor:pointer;font-size:0.88rem;color:var(--text-mid);transition:all 0.2s;">
+                <input type="radio" name="r-gender" value="male" id="r-gender-male" style="display:none;" onchange="updateGenderStyle()">
+                <span>👨</span> 남성
+              </label>
+              <label class="gender-btn" id="g-female-label" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px 8px;border:1px solid var(--border);border-radius:4px;cursor:pointer;font-size:0.88rem;color:var(--text-mid);transition:all 0.2s;">
+                <input type="radio" name="r-gender" value="female" id="r-gender-female" style="display:none;" onchange="updateGenderStyle()">
+                <span>👩</span> 여성
+              </label>
+            </div>
+            <div class="form-error" id="e-r-gender"></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">전화번호</label>
+          <input type="tel" class="form-input" id="r-phone" placeholder="010-0000-0000" oninput="formatPhone(this)" maxlength="13">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">이메일 <span class="required">*</span></label>
+          <input type="email" class="form-input" id="r-email" placeholder="example@email.com" required>
+          <div class="form-error" id="e-r-email"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">아이디 <span class="required">*</span></label>
+          <input type="text" class="form-input" id="r-username" placeholder="영문·숫자 4~20자" minlength="4" maxlength="20" required>
+          <div class="form-error" id="e-r-username"></div>
+          <div class="form-hint">영문 소문자, 숫자 조합 4~20자</div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">비밀번호 <span class="required">*</span></label>
+          <input type="password" class="form-input" id="r-password" placeholder="8자 이상 입력" minlength="8" oninput="checkPwStrength(this.value)" required>
+          <div class="pw-strength"><div class="pw-strength__bar" id="pw-bar"></div></div>
+          <div class="pw-strength-label" id="pw-label">비밀번호를 입력해주세요</div>
+          <div class="form-error" id="e-r-password"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">비밀번호 확인 <span class="required">*</span></label>
+          <input type="password" class="form-input" id="r-password2" placeholder="비밀번호 재입력" required>
+          <div class="form-error" id="e-r-password2"></div>
+        </div>
+
+        <div class="form-group mt-8">
+          <label class="agree-row" style="display:flex;align-items:flex-start;gap:10px;font-size:0.83rem;color:var(--text-mid);cursor:pointer;margin-bottom:8px;">
+            <input type="checkbox" id="r-agree-terms" style="margin-top:3px;accent-color:var(--gold);">
+            <span><button type="button" onclick="openTermsModal()" style="background:none;border:none;padding:0;color:var(--gold);cursor:pointer;font-size:0.83rem;text-decoration:underline;">서비스 이용약관</button>을 읽고 동의합니다. <span class="required">*</span></span>
+          </label>
+          <label class="agree-row" style="display:flex;align-items:flex-start;gap:10px;font-size:0.83rem;color:var(--text-mid);cursor:pointer;margin-bottom:8px;">
+            <input type="checkbox" id="r-agree-privacy" style="margin-top:3px;accent-color:var(--gold);">
+            <span><button type="button" onclick="openPrivacyModal()" style="background:none;border:none;padding:0;color:var(--gold);cursor:pointer;font-size:0.83rem;text-decoration:underline;">개인정보처리방침</button>을 읽고 동의합니다. <span class="required">*</span></span>
+          </label>
+
+          <div class="form-error" id="e-r-agree"></div>
+        </div>
+
+        <!-- [항목 7] HTTPS 보안 접속 상태 표시 -->
+        <div id="sec-badge" style="display:none;align-items:center;gap:6px;padding:8px 12px;border-radius:5px;font-size:0.73rem;margin-bottom:12px;"></div>
+
+        <button type="submit" class="btn btn--primary btn--full mt-16" id="register-btn">
+          회원가입
+        </button>
+      </form>
+
+      <div class="auth-footer" style="margin-top:20px;">
+        이미 계정이 있으신가요? <a href="login.html">로그인</a>
+      </div>
+    </div>
+
+    <!-- 완료 화면 -->
+    <div class="success-screen" id="success-screen">
+      <div class="success-icon">🎉</div>
+      <h2 class="serif" style="font-size:1.3rem; margin-bottom:12px; color:var(--text-dark);">가입이 완료되었습니다!</h2>
+      <p style="color:var(--text-mid); font-size:0.88rem; line-height:1.9; margin-bottom:28px;">
+        한국 아가스티아 협회에 오신 것을 환영합니다.<br>
+        지금 바로 로그인하여 세미나를 신청해보세요.
+      </p>
+      <a href="login.html" class="btn btn--gold btn--full">로그인하기</a>
+    </div>
+  </div>
+</div>
+
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  if (Auth.isLoggedIn()) window.location.href = 'index.html';
+
+  // [항목 1] DOM 내 CI/DI 평문 노출 감시 시작
+  document.addEventListener('DOMContentLoaded', () => SecureCI.watchDomLeaks());
+
+  // [항목 4] 페이지 로드 시 1회용 nonce 발급 (폼 제출 시 소비)
+  let _registerNonce = Auth.generateRegisterNonce();
+
+  // 회원가입 차단 여부 확인
+  (async function checkRegOpen() {
+    try {
+      const item = await SB.findOne('site_content', 'key', 'registration_open');
+      const isOpen = item ? (item.content !== 'false' && item.content !== '0') : true;
+      if (!isOpen) {
+        // 폼 숨기고 차단 메시지 표시
+        const form = document.querySelector('form');
+        if (form) form.style.display = 'none';
+        const card = document.querySelector('.auth-card');
+        if (card) {
+          const msg = document.createElement('div');
+          msg.style.cssText = 'text-align:center;padding:20px 0;';
+          msg.innerHTML = '<div style="font-size:2rem;margin-bottom:16px;">🔒</div><div style="font-family:\'Noto Serif KR\',serif;font-size:1.1rem;color:var(--navy);font-weight:500;margin-bottom:12px;">회원가입이 현재 비공개입니다</div><p style="font-size:0.88rem;color:var(--text-mid);line-height:1.8;margin-bottom:24px;">현재 신규 회원가입을 받고 있지 않습니다.<br>자세한 사항은 문의 페이지를 이용해주세요.</p><a href="contact.html" class="btn btn--outline" style="margin-right:8px;">문의하기</a><a href="login.html" class="btn btn--gold">로그인</a>';
+          card.appendChild(msg);
+        }
+      }
+    } catch(e) { /* 오류 시 기본 허용 */ }
+  })();
+
+  /* ── 비밀번호 강도 ── */
+  function checkPwStrength(pw) {
+    let score = 0;
+    if (pw.length >= 8) score++;
+    if (/[A-Z]/.test(pw)) score++;
+    if (/[0-9]/.test(pw)) score++;
+    if (/[^A-Za-z0-9]/.test(pw)) score++;
+    const bar = document.getElementById('pw-bar');
+    const label = document.getElementById('pw-label');
+    const colors = ['#e53e3e', '#ed8936', '#ecc94b', '#38a169'];
+    const texts = ['매우 약함', '약함', '보통', '강함'];
+    const widths = ['25%', '50%', '75%', '100%'];
+    bar.style.background = colors[score - 1] || '#eee';
+    bar.style.width = score > 0 ? widths[score - 1] : '0';
+    label.textContent = score > 0 ? `비밀번호 강도: ${texts[score - 1]}` : '비밀번호를 입력해주세요';
+    label.style.color = colors[score - 1] || 'var(--text-light)';
+  }
+
+  /* ── 성별 버튼 스타일 업데이트 ── */
+  function updateGenderStyle() {
+    const male = document.getElementById('r-gender-male');
+    const female = document.getElementById('r-gender-female');
+    const maleLabel = document.getElementById('g-male-label');
+    const femaleLabel = document.getElementById('g-female-label');
+    if (male.checked) {
+      maleLabel.style.cssText = 'flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px 8px;border:2px solid var(--gold);border-radius:4px;cursor:pointer;font-size:0.88rem;color:var(--gold);background:rgba(200,151,58,0.08);font-weight:600;transition:all 0.2s;';
+      femaleLabel.style.cssText = 'flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px 8px;border:1px solid var(--border);border-radius:4px;cursor:pointer;font-size:0.88rem;color:var(--text-mid);transition:all 0.2s;';
+    } else if (female.checked) {
+      femaleLabel.style.cssText = 'flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px 8px;border:2px solid var(--gold);border-radius:4px;cursor:pointer;font-size:0.88rem;color:var(--gold);background:rgba(200,151,58,0.08);font-weight:600;transition:all 0.2s;';
+      maleLabel.style.cssText = 'flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:11px 8px;border:1px solid var(--border);border-radius:4px;cursor:pointer;font-size:0.88rem;color:var(--text-mid);transition:all 0.2s;';
+    }
+  }
+
+  /* ── 전화번호 자동 하이픈 포맷 ── */
+  function formatPhone(input) {
+    let v = input.value.replace(/\D/g, '');
+    if (v.length <= 3) {
+      input.value = v;
+    } else if (v.length <= 7) {
+      input.value = v.slice(0,3) + '-' + v.slice(3);
+    } else if (v.length <= 11) {
+      // 010-xxxx-xxxx (11자리) or 02-xxxx-xxxx (10자리)
+      if (v.startsWith('02')) {
+        input.value = v.slice(0,2) + '-' + v.slice(2,6) + (v.length > 6 ? '-' + v.slice(6,10) : '');
+      } else {
+        input.value = v.slice(0,3) + '-' + v.slice(3,7) + (v.length > 7 ? '-' + v.slice(7,11) : '');
+      }
+    }
+  }
+
+  /* ── 회원가입 처리 ── */
+  async function handleRegister(e) {
+    e.preventDefault();
+    let valid = true;
+    const showErr = (id, msg) => {
+      const el = document.getElementById(id);
+      el.textContent = msg;
+      el.classList.toggle('show', !!msg);
+      if (msg) valid = false;
+    };
+
+    const name = document.getElementById('r-name').value.trim();
+    const email = document.getElementById('r-email').value.trim();
+    const username = document.getElementById('r-username').value.trim();
+    const password = document.getElementById('r-password').value;
+    const password2 = document.getElementById('r-password2').value;
+    const phone = document.getElementById('r-phone').value.trim();
+    const agreeTerms = document.getElementById('r-agree-terms').checked;
+    const agreePrivacy = document.getElementById('r-agree-privacy').checked;
+
+    const genderEl = document.querySelector('input[name="r-gender"]:checked');
+    const gender = genderEl ? genderEl.value : '';
+
+    if (!name) showErr('e-r-name', '이름을 입력해주세요.');
+    else showErr('e-r-name', '');
+
+    if (!gender) showErr('e-r-gender', '성별을 선택해주세요.');
+    else showErr('e-r-gender', '');
+
+    if (!email || !/\S+@\S+\.\S+/.test(email)) showErr('e-r-email', '올바른 이메일을 입력해주세요.');
+    else showErr('e-r-email', '');
+
+    if (!username || username.length < 4 || !/^[a-z0-9_]+$/.test(username)) showErr('e-r-username', '영문 소문자, 숫자, _ 조합 4~20자로 입력해주세요.');
+    else showErr('e-r-username', '');
+
+    if (!password || password.length < 8) showErr('e-r-password', '비밀번호는 8자 이상이어야 합니다.');
+    else showErr('e-r-password', '');
+
+    if (password !== password2) showErr('e-r-password2', '비밀번호가 일치하지 않습니다.');
+    else showErr('e-r-password2', '');
+
+    if (!agreeTerms || !agreePrivacy) showErr('e-r-agree', '서비스 이용약관과 개인정보처리방침에 동의해주세요.');
+    else showErr('e-r-agree', '');
+
+    if (!valid) return;
+
+    // [항목 4] nonce 유효성 사전 확인 (소비는 Auth.register 내부에서)
+    if (!NonceStore.isValid(_registerNonce)) {
+      Toast.show('요청이 만료되었습니다. 페이지를 새로고침 후 다시 시도해주세요.', 'error');
+      _registerNonce = Auth.generateRegisterNonce(); // 새 nonce 재발급
+      return;
+    }
+
+    const btn = document.getElementById('register-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner"></div> 처리 중...';
+
+    // [항목 2] 파라미터 변조 방지 nonce 포함 전달
+    const result = await Auth.register({ username, password, name, email, phone, gender, _regNonce: _registerNonce });
+
+    if (result.success) {
+      document.getElementById('register-form').style.display = 'none';
+      document.getElementById('success-screen').classList.add('show');
+    } else {
+      Toast.show(result.message, 'error');
+      btn.disabled = false;
+      btn.textContent = '회원가입';
+      // [항목 4] 실패 시 새 nonce 재발급 (재시도 허용)
+      _registerNonce = Auth.generateRegisterNonce();
+    }
+  }
+
+  /* ── 약관 모달 ── */
+  function openTermsModal() { openPolicyModal('terms'); }
+  function openPrivacyModal() { openPolicyModal('privacy'); }
+
+  function openPolicyModal(type) {
+    const titles = { terms: '서비스 이용약관', privacy: '개인정보처리방침' };
+    const urls = { terms: 'terms.html', privacy: 'privacy.html' };
+    let modal = document.getElementById('policy-modal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'policy-modal';
+      modal.style.cssText = 'position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.55);padding:16px;';
+      modal.innerHTML = `
+        <div style="background:white;border-radius:8px;width:100%;max-width:680px;max-height:80vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.3);">
+          <div style="padding:20px 24px;border-bottom:1px solid #eee;display:flex;align-items:center;justify-content:space-between;background:var(--navy);">
+            <span id="policy-modal-title" style="font-family:'Noto Serif KR',serif;font-size:1rem;color:white;font-weight:500;"></span>
+            <button onclick="closePolicyModal()" style="background:none;border:none;cursor:pointer;color:rgba(255,255,255,0.6);font-size:1.2rem;padding:4px 8px;">✕</button>
+          </div>
+          <iframe id="policy-modal-frame" src="" style="flex:1;border:none;min-height:400px;"></iframe>
+          <div style="padding:16px 24px;border-top:1px solid #eee;display:flex;justify-content:flex-end;gap:10px;background:#fafafa;">
+            <button onclick="closePolicyModal()" style="padding:10px 20px;border:1px solid #ddd;background:white;border-radius:4px;cursor:pointer;font-size:0.85rem;color:#666;">닫기</button>
+          </div>
+        </div>`;
+      document.body.appendChild(modal);
+      modal.addEventListener('click', (e) => { if (e.target === modal) closePolicyModal(); });
+    }
+    document.getElementById('policy-modal-title').textContent = titles[type];
+    document.getElementById('policy-modal-frame').src = urls[type];
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePolicyModal() {
+    const modal = document.getElementById('policy-modal');
+    if (modal) modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  /* ── [항목 7] HTTPS 보안 접속 상태 배지 표시 ── */
+  (function renderSecBadge() {
+    const badge = document.getElementById('sec-badge');
+    if (!badge) return;
+    const isHttps = location.protocol === 'https:';
+    const isLocal = ['localhost','127.0.0.1'].includes(location.hostname);
+    if (isHttps || isLocal) {
+      badge.style.display = 'flex';
+      badge.style.background = '#f0fff4';
+      badge.style.border = '1px solid #9ae6b4';
+      badge.style.color = '#276749';
+      badge.innerHTML = '<span style="font-size:0.95rem;">🔒</span> <span>보안 접속(HTTPS) 중 — 개인정보가 암호화되어 전송됩니다</span>';
+    } else {
+      badge.style.display = 'flex';
+      badge.style.background = '#fff5f5';
+      badge.style.border = '1px solid #feb2b2';
+      badge.style.color = '#c53030';
+      badge.innerHTML = '<span style="font-size:0.95rem;">⚠️</span> <span>비보안 접속(HTTP) — HTTPS 환경에서 이용해 주세요</span>';
+    }
+  })();
+</script>
+</body>
+</html>

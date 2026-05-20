@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>리트리트 | 한국 아가스티아 협회</title>
+  <meta name="description" content="아가스티아잎에 기록된 지혜를 토대로, 인생의 구조와 우주의 법칙을 이해하고 현실의 삶에 적용하는 리트리트.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .svc-detail-hero { position: relative; min-height: 420px; display: flex; align-items: flex-end; overflow: hidden; background: var(--navy); }
+    .svc-detail-hero__bg { position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?w=1400') center/cover no-repeat; opacity: 0.4; }
+    .svc-detail-hero__inner { position: relative; z-index: 1; padding: 60px 0 56px; width: 100%; }
+    .svc-detail-hero__num { font-size: 0.68rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; display: block; }
+    .svc-detail-hero__title { font-family: 'Noto Serif KR', serif; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 400; color: white; line-height: 1.3; margin-bottom: 12px; }
+    .svc-detail-hero__sub { font-size: 0.95rem; color: rgba(255,255,255,0.7); line-height: 1.8; max-width: 600px; }
+    .breadcrumb { font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-bottom: 20px; }
+    .breadcrumb a { color: rgba(255,255,255,0.5); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--gold); }
+    .breadcrumb span { margin: 0 8px; }
+
+    .svc-content { max-width: 800px; margin: 0 auto; }
+    .svc-lead { font-size: 1.05rem; color: var(--text-dark); line-height: 2; font-family: 'Noto Serif KR', serif; margin-bottom: 48px; padding-bottom: 48px; border-bottom: 1px solid var(--border); }
+    .svc-section { margin-bottom: 56px; }
+    .svc-section__num { font-size: 0.65rem; letter-spacing: 0.25em; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; display: block; }
+    .svc-section__title { font-family: 'Noto Serif KR', serif; font-size: 1.4rem; font-weight: 500; color: var(--text-dark); margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px solid var(--gold); display: inline-block; }
+    .svc-section__body { font-size: 0.93rem; color: var(--text-mid); line-height: 2.1; }
+    .svc-section__body p { margin-bottom: 16px; }
+    .svc-section__body strong { color: var(--text-dark); }
+
+    .svc-box { background: var(--cream); border-left: 3px solid var(--gold); padding: 24px 28px; border-radius: 0 var(--radius) var(--radius) 0; margin: 28px 0; }
+    .svc-box__title { font-size: 0.78rem; letter-spacing: 0.15em; color: var(--gold); text-transform: uppercase; margin-bottom: 12px; }
+    .svc-box p { font-size: 0.9rem; color: var(--text-mid); line-height: 1.9; margin-bottom: 8px; }
+
+    /* 학습 포인트 */
+    .learn-points { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 28px 0; }
+    .learn-point { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; position: relative; }
+    .learn-point::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--gold); border-radius: var(--radius) var(--radius) 0 0; }
+    .learn-point__title { font-size: 0.95rem; color: var(--text-dark); font-weight: 600; margin-bottom: 10px; }
+    .learn-point__body { font-size: 0.85rem; color: var(--text-mid); line-height: 1.9; }
+
+    /* 변화 흐름 */
+    .change-flow { display: flex; align-items: center; gap: 12px; margin: 28px 0; flex-wrap: wrap; }
+    .change-flow__item { flex: 1; min-width: 140px; background: var(--cream); border-radius: var(--radius); padding: 16px 20px; text-align: center; }
+    .change-flow__item__text { font-size: 0.88rem; color: var(--text-dark); line-height: 1.6; }
+    .change-flow__arrow { font-size: 1.2rem; color: var(--gold); flex-shrink: 0; }
+
+    /* 아가스티아 성자 소개 */
+    .agastya-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; margin: 48px 0; }
+    .agastya-intro__img { width: 100%; border-radius: 4px; box-shadow: 0 16px 40px rgba(0,0,0,0.15); display: block; }
+    .agastya-intro__img--portrait { width: auto; max-width: 100%; max-height: 520px; margin: 0 auto; display: block; border-radius: 8px; box-shadow: 0 20px 48px rgba(0,0,0,0.18); }
+    /* 이미지 편집 래퍼 */
+    .img-edit-wrap { position: relative; display: inline-block; width: 100%; }
+    .img-edit-btn { display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.45); border-radius: 8px; border: 2px dashed #d4af37; cursor: pointer; align-items: center; justify-content: center; flex-direction: column; gap: 8px; color: #d4af37; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.05em; z-index: 10; }
+    .img-edit-btn span { font-size: 1.6rem; }
+    .admin-mode .img-edit-wrap:hover .img-edit-btn { display: flex; }
+    /* 이미지 교체 모달 */
+    #img-edit-modal { display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; }
+    #img-edit-modal.open { display:flex; }
+    #img-edit-modal .modal-box { background:white; border-radius:12px; padding:32px 28px; width:90%; max-width:480px; box-shadow:0 24px 64px rgba(0,0,0,0.3); }
+    #img-edit-modal h3 { font-family:'Noto Serif KR',serif; font-size:1rem; color:#1a1a2e; margin:0 0 6px; }
+    #img-edit-modal p { font-size:0.78rem; color:#888; margin:0 0 20px; }
+    #img-edit-url { width:100%; border:1px solid #ddd; border-radius:6px; padding:10px 14px; font-size:0.88rem; box-sizing:border-box; outline:none; margin-bottom:6px; }
+    #img-edit-url:focus { border-color:#d4af37; }
+    #img-edit-preview { width:100%; max-height:180px; object-fit:contain; border-radius:6px; margin:10px 0 16px; display:none; background:#f5f5f0; }
+    .modal-btns { display:flex; gap:10px; justify-content:flex-end; }
+    .modal-btns button { border:none; border-radius:6px; padding:9px 20px; font-size:0.85rem; font-weight:700; cursor:pointer; }
+    .modal-btns .btn-cancel { background:#f0f0f0; color:#555; }
+    .modal-btns .btn-apply { background:#d4af37; color:white; }
+    .agastya-intro__label { font-size: 0.65rem; letter-spacing: 0.3em; color: var(--gold); text-transform: uppercase; margin-bottom: 12px; display: block; }
+    .agastya-intro__title { font-family: 'Noto Serif KR', serif; font-size: clamp(1.1rem, 2.5vw, 1.45rem); color: var(--text-dark); line-height: 1.6; margin-bottom: 20px; }
+    .agastya-intro__body { font-size: 0.9rem; color: var(--text-mid); line-height: 2.1; }
+    .agastya-intro__quote { border-left: 3px solid var(--gold); padding: 14px 18px; margin: 20px 0; background: var(--cream); font-family: 'Noto Serif KR', serif; font-size: 0.9rem; color: var(--text-dark); line-height: 1.9; }
+
+    /* Day 1/2 타임라인 */
+    .day-block { margin-bottom: 40px; }
+    .day-block__header { display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid var(--gold); }
+    .day-block__badge { background: var(--gold); color: white; font-family: Georgia, serif; font-size: 0.78rem; letter-spacing: 0.15em; padding: 6px 16px; border-radius: 2px; flex-shrink: 0; }
+    .day-block__title { font-family: 'Noto Serif KR', serif; font-size: 1.1rem; color: var(--text-dark); font-weight: 500; }
+    .day-schedule { list-style: none; padding: 0; margin: 0 0 24px; }
+    .day-schedule__item { display: flex; gap: 16px; padding: 14px 0; border-bottom: 1px dashed var(--border); align-items: flex-start; }
+    .day-schedule__item:last-child { border-bottom: none; }
+    .day-schedule__time { font-family: Georgia, serif; font-size: 0.78rem; color: var(--gold); letter-spacing: 0.05em; min-width: 80px; flex-shrink: 0; padding-top: 2px; }
+    .day-schedule__content { font-size: 0.88rem; color: var(--text-mid); line-height: 1.8; }
+    .day-schedule__content strong { display: block; color: var(--text-dark); font-size: 0.92rem; margin-bottom: 3px; }
+    .day-img { width: 100%; border-radius: 4px; margin-top: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.1); object-fit: cover; max-height: 340px; }
+
+    @media (max-width: 768px) { .agastya-intro { grid-template-columns: 1fr; gap: 32px; } }
+
+    .svc-cta { background: var(--navy); border-radius: var(--radius); padding: 48px; text-align: center; margin-top: 64px; }
+    .svc-cta__title { font-family: 'Noto Serif KR', serif; font-size: 1.3rem; color: white; margin-bottom: 12px; }
+    .svc-cta__sub { font-size: 0.88rem; color: rgba(255,255,255,0.65); margin-bottom: 28px; line-height: 1.8; }
+
+    .other-services { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 48px; }
+    .other-svc-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-decoration: none; transition: var(--transition); display: block; }
+    .other-svc-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .other-svc-card__num { font-size: 0.62rem; letter-spacing: 0.2em; color: var(--gold); margin-bottom: 4px; }
+    .other-svc-card__title { font-size: 0.95rem; color: var(--text-dark); font-weight: 500; }
+
+    @media (max-width: 768px) { .learn-points { grid-template-columns: 1fr; } .svc-cta { padding: 36px 24px; } .other-services { grid-template-columns: repeat(2,1fr); } .change-flow { flex-direction: column; } .change-flow__arrow { transform: rotate(90deg); } }
+    @media (max-width: 480px) { .other-services { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<div class="svc-detail-hero">
+  <div class="svc-detail-hero__bg"></div>
+  <div class="container svc-detail-hero__inner">
+    <div class="breadcrumb">
+      <a href="/">홈</a><span>›</span>
+      <a href="/service">서비스</a><span>›</span>
+      리트리트
+    </div>
+    <span class="svc-detail-hero__num">05 · RETREAT</span>
+    <h1 class="svc-detail-hero__title">리트리트</h1>
+    <p class="svc-detail-hero__sub">인생의 구조를 이해하고, 현실과 영혼 양쪽을 동시에 성숙시켜 가기 위한 이틀간.</p>
+  </div>
+</div>
+
+<section class="section bg-cream">
+  <div class="container">
+    <div class="svc-content">
+
+      <p class="svc-lead">
+        리트리트는 단순한 힐링 프로그램이 아닙니다.<br><br>
+        국내 각지에서 열리는 이 리트리트는, 아가스티아잎에 기록된 지혜를 토대로, 인생의 구조와 우주의 법칙을 이해하고 현실의 삶에 직접 적용하기 위한 이틀간의 집중 과정입니다.
+      </p>
+
+      <!-- 아가스티아 성자 소개 -->
+      <div class="svc-section">
+        <span class="svc-section__num">00 · THE SAGE</span>
+        <h2 class="svc-section__title">아가스티아 성자 — 5천 년의 지혜를 남긴 존재</h2>
+        <div class="agastya-intro" style="align-items:stretch;">
+          <div style="display:flex;align-items:center;">
+            <div class="img-edit-wrap" style="height:100%;">
+              <img
+                id="retreat-img-1"
+                src="images/agastya-muni-portrait.jpg"
+                alt="아가스티아 성자 — Agastya Muni"
+                class="agastya-intro__img agastya-intro__img--portrait"
+                style="width:100%;height:100%;object-fit:cover;max-height:none;"
+              >
+              <div class="img-edit-btn" onclick="openImgEdit('retreat-img-1','svc_retreat_img1')">
+                <span>🖼</span>이미지 교체
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;justify-content:center;">
+            <span class="agastya-intro__label">AGASTYA MAHARISHI</span>
+            <h3 class="agastya-intro__title">인류를 위한 영혼의 기록을 남긴 고대의 현자</h3>
+            <p class="agastya-intro__body">아가스티아(Agastya)는 힌두교 성전 「리그베다」에 등장하는 역사상 가장 위대한 성자 중 한 명입니다. 타밀 문명의 정신적 기반을 확립했으며, 의학(싯다 의학), 천문학, 철학에 깊은 영향을 미쳤습니다.</p>
+            <p class="agastya-intro__body" style="margin-top:14px;">전승에 따르면, 아가스티아는 우주의 아카식 레코드에 접근하는 능력을 부여받아, 과거·현재·미래를 통틀어 무수한 영혼의 운명을 야자 잎에 기록했습니다. 리트리트는 이 지혜를 현대 삶에 적용하는 실천의 장입니다.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 아가스티아의 잎이란 -->
+      <div class="svc-section">
+        <span class="svc-section__num">01 · WHAT IS IT</span>
+        <h2 class="svc-section__title">아가스티아잎이란</h2>
+        <div class="svc-section__body">
+          <p>아가스티아잎이란, 약 5,000년 전 남인도의 성자 아가스티아에 의해 기록되었다고 전해지는 지혜의 체계로, <strong>「당신 전용의 인생 설명서」</strong>라고도 불립니다.</p>
+          <p>그곳에는, 태어난 목적, 인생에서 향향향히게 될 과제, 카르마의 경향, 그리고 미래가 어떤 법칙에 따라 전개되어 갈지가 제시되어 있습니다.</p>
+        </div>
+        <div class="svc-box">
+          <div class="svc-box__title">📖 리트리트에서 배우는 것</div>
+          <p>본 리트리트에서는, 이것들을 신비적인 이야기로서 다루는 것이 아니라, <strong>인생을 읽어내기 위한 실천적인 지침</strong>으로서 배워나갑니다.</p>
+        </div>
+      </div>
+
+      <!-- 카르마의 법칙 -->
+      <div class="svc-section">
+        <span class="svc-section__num">02 · KARMA</span>
+        <h2 class="svc-section__title">중심 테마 — 카르마의 법칙</h2>
+        <div class="svc-section__body">
+          <p>중심이 되는 테마 중 하나가, <strong>카르마의 법칙</strong>입니다.</p>
+          <p>카르마를 「과거의 인연」이나 「피할 수 없는 운명」으로 파악하는 것이 아닌, 자신의 선택과 행동이 어떻게 현실을 창출하고 있는지를 이해하기 위한 구조로서 풀어 나갑니다.</p>
+          <p>카르마의 4요소를 통해, 왜 같은 사건이 반복되는지, 어디서 인생의 흐름이 정체하고, 어디서 가속하는지가 명확해져 나갑니다.</p>
+        </div>
+
+        <div class="learn-points">
+          <div class="learn-point">
+            <div class="learn-point__title">🔄 반복의 이유를 알다</div>
+            <div class="learn-point__body">왜 같은 패턴의 사건이나 인간관계가 반복되는지, 그 구조적 원인을 이해합니다.</div>
+          </div>
+          <div class="learn-point">
+            <div class="learn-point__title">⚡ 흐름의 정체와 가속</div>
+            <div class="learn-point__body">어디서 인생의 흐름이 막히고, 어디서 가속하는지가 명확해집니다.</div>
+          </div>
+          <div class="learn-point">
+            <div class="learn-point__title">🌍 현실에 직접 응용</div>
+            <div class="learn-point__body">일, 인간관계, 건강, 일상의 판단 등 현실 세계에 그대로 응용할 수 있습니다.</div>
+          </div>
+          <div class="learn-point">
+            <div class="learn-point__title">✨ 영혼의 성장</div>
+            <div class="learn-point__body">영혼이 지금 어느 단계에 있고, 무엇을 배우고, 어디를 향하려 하는지가 납득됩니다.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 변화의 흐름 -->
+      <div class="svc-section">
+        <span class="svc-section__num">03 · TRANSFORMATION</span>
+        <h2 class="svc-section__title">노력과 인내에 의존하는 삶에서, 자신의 힘을 올바르게 사용하는 삶으로</h2>
+
+        <div class="change-flow">
+          <div class="change-flow__item">
+            <div class="change-flow__item__text">노력과 인내에<br>의존하는 삶</div>
+          </div>
+          <div class="change-flow__arrow">→</div>
+          <div class="change-flow__item">
+            <div class="change-flow__item__text">카르마의 법칙을<br>이해·실천</div>
+          </div>
+          <div class="change-flow__arrow">→</div>
+          <div class="change-flow__item">
+            <div class="change-flow__item__text">자신의 힘을<br>올바르게 사용하는 삶</div>
+          </div>
+        </div>
+
+        <div class="svc-section__body">
+          <p>이러한 이해는, 정신 세계 안에서만 완결되는 것이 아닙니다. 일이나 인간관계, 건강, 일상의 판단 등 현실 세계에 그대로 응용할 수 있으며, 불필요한 우회를 줄이고 본질적으로 인생을 나아가기 위한 시각이 길러집니다.</p>
+          <p>리트리트는, 인생을 극적으로 바꾸기 위한 장이 아닙니다. 인생의 구조를 이해하고, 현실과 영혼 양쪽을 동시에 성숙시켜 가기 위한 장입니다. 이틀이라는 한정된 시간 속에서, 자신의 인생을 조감하고, 앞으로를 보다 가볍게 걷기 시작하기 위한 토대가 다듬어져 나갑니다.</p>
+        </div>
+      </div>
+
+      <!-- Day 1 / Day 2 커리큘럼 -->
+      <div class="svc-section">
+        <span class="svc-section__num">04 · CURRICULUM</span>
+        <h2 class="svc-section__title">2일간의 프로그램 — Day 1 &amp; Day 2</h2>
+        <div class="svc-section__body">
+          <p>각 세션은 강의와 체험을 50:50으로 구성하여, 머리로 이해하는 것과 몸으로 느끼는 것이 함께 통합됩니다.</p>
+        </div>
+
+        <!-- Day 1 -->
+        <div class="day-block">
+          <div class="day-block__header">
+            <div class="day-block__badge">DAY 1</div>
+            <div class="day-block__title">인생의 구조를 이해하다 — 카르마와 빛의 법칙</div>
+          </div>
+          <ul class="day-schedule">
+            <li class="day-schedule__item">
+              <span class="day-schedule__time">09:30</span>
+              <div class="day-schedule__content">
+                <strong>오프닝 · 자기소개</strong>
+                참가자 소개와 이틀간의 과정 안내. 리트리트에서 얻고자 하는 것을 나눕니다.
+              </div>
+            </li>
+            <li class="day-schedule__item">
+              <span class="day-schedule__time">10:00</span>
+              <div class="day-schedule__content">
+                <strong>강의 ① — 아가스티아 성자와 아가스티아잎의 지혜</strong>
+                5천 년 전 야자잎에 기록된 인류의 지혜. 아가스티아 성자는 왜 이 기록을 남겼는지, 나디 점성술의 본질을 배웁니다.
+              </div>
+            </li>
+            <li class="day-schedule__item">
+              <span class="day-schedule__time">11:30</span>
+              <div class="day-schedule__content">
+                <strong>강의 ② — 카르마의 구조 : 왜 같은 일이 반복되는가</strong>
+                상치타·프라라브다·크리야마나 카르마의 세 층위. 현재의 어려움이 어디서 오는지 구조적으로 이해합니다.
+              </div>
+            </li>
+            <li class="day-schedule__item">
+              <span class="day-schedule__time">13:00</span>
+              <div class="day-schedule__content">
+                <strong>점심 휴식</strong>
+              </div>
+            </li>
+            <li class="day-schedule__item">
+              <span class="day-schedule__time">14:00</span>
+              <div class="day-schedule__content">
+                <strong>체험 워크숍 ① — 나의 카르마 패턴 찾기</strong>
+                반복되는 인간관계·사건 패턴을 지도로 그려보고, 카르마적 관점에서 재해석하는 실습.
+              </div>
+            </li>
+            <li class="day-schedule__item">
+              <span class="day-schedule__time">15:30</span>
+              <div class="day-schedule__content">
+                <strong>강의 ③ — 조상과의 카르마적 연결</strong>
+                가계에서 이어져 오는 에너지 패턴. 조상 카르마(제9 칸담)의 이해와 정화의 방향을 배웁니다.
+              </div>
+            </li>
+            <li class="day-schedule__item">
+              <span class="day-schedule__time">17:00</span>
+              <div class="day-schedule__content">
+                <strong>질의응답 &amp; Day 1 마무리</strong>
+                하루의 배움을 정리하고, 내일을 위한 준비를 합니다.
+              </div>
+            </li>
+          </ul>
+
+        </div>
+
+        <!-- Day 2 -->
+        <div class="day-block" style="margin-top:40px;">
+          <div class="day-block__header">
+            <div class="day-block__badge">DAY 2</div>
+            <div class="day-block__title">인생을 설계하다 — 빛의 법칙 실천과 미래 지도</div>
+          </div>
+          <ul class="day-schedule">
+            <li class="day-schedule__item">
+              <span class="day-schedule__time">09:30</span>
+              <div class="day-schedule__content">
+                <strong>Day 1 복습 &amp; 마음 열기</strong>
+                전날 배움을 함께 나누고 두 번째 날을 시작합니다.
+              </div>
+            </li>
+            <li class="day-schedule__item">
+              <span class="day-schedule__time">10:00</span>
+              <div class="day-schedule__content">
+                <strong>강의 ④ — 우주의 사이클과 나의 타이밍</strong>
+                나바그라하(9행성)의 주기가 개인의 삶에 미치는 영향. 언제 행동하고 언제 쉬어야 하는지를 배웁니다.
+              </div>
+            </li>
+            <li class="day-schedule__item">
+              <span class="day-schedule__time">11:30</span>
+              <div class="day-schedule__content">
+                <strong>강의 ⑤ — 카르마 정화의 실천 : 샨티·푸자·야가</strong>
+                의식(儀式)이 왜 효과가 있는지, 어떻게 활용하는지. 현대인이 실천 가능한 방식으로 안내합니다.
+              </div>
+            </li>
+            <li class="day-schedule__item">
+              <span class="day-schedule__time">13:00</span>
+              <div class="day-schedule__content">
+                <strong>점심 휴식</strong>
+              </div>
+            </li>
+            <li class="day-schedule__item">
+              <span class="day-schedule__time">14:00</span>
+              <div class="day-schedule__content">
+                <strong>체험 워크숍 ② — 나의 인생 지도 그리기</strong>
+                아가스티아 잎의 13챕터 구조를 바탕으로, 각 영역(건강·관계·직업·영성)의 현재와 이상을 정리하는 작업.
+              </div>
+            </li>
+            <li class="day-schedule__item">
+              <span class="day-schedule__time">15:30</span>
+              <div class="day-schedule__content">
+                <strong>특별 세션 — 바라쿰바구루무니 성자와의 질의응답</strong>
+                성자께서 직접 참가자들의 질문에 답하는 시간. (일정에 따라 변동 가능)
+              </div>
+            </li>
+            <li class="day-schedule__item">
+              <span class="day-schedule__time">17:00</span>
+              <div class="day-schedule__content">
+                <strong>클로징 · 수료식</strong>
+                이틀간의 여정을 마무리하며 앞으로의 실천 방향을 함께 확인합니다.
+              </div>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+
+      <div class="svc-cta">
+        <h3 class="svc-cta__title">다음 리트리트 일정을 확인하시려면</h3>
+        <p class="svc-cta__sub">국내 각지에서 정기적으로 개최하고 있습니다.<br>세미나 페이지 또는 문의 페이지에서 최신 일정을 확인해 주세요.</p>
+        <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+          <a href="/seminar" class="btn btn--gold btn--lg">세미나 일정 보기</a>
+          <a href="/contact" class="btn btn--outline-gold btn--lg">문의하기</a>
+        </div>
+      </div>
+
+      <div style="margin-top:72px;">
+        <div class="section-label" style="margin-bottom:20px;">OTHER SERVICES</div>
+        <div class="other-services">
+          <a href="/service-leaf" class="other-svc-card">
+            <div class="other-svc-card__num">01 · SEARCHING</div>
+            <div class="other-svc-card__title">아가스티아잎 탐색</div>
+          </a>
+          <a href="/service-reading" class="other-svc-card">
+            <div class="other-svc-card__num">02 · READING</div>
+            <div class="other-svc-card__title">리딩</div>
+          </a>
+          <a href="/service-consulting" class="other-svc-card">
+            <div class="other-svc-card__num">03 · CONSULTING</div>
+            <div class="other-svc-card__title">컨설팅</div>
+          </a>
+          <a href="/service-india" class="other-svc-card">
+            <div class="other-svc-card__num">04 · INDIA JOURNEY</div>
+            <div class="other-svc-card__title">인도 여행</div>
+          </a>
+          <a href="/service-ayurveda" class="other-svc-card">
+            <div class="other-svc-card__num">06 · AYURVEDA</div>
+            <div class="other-svc-card__title">아유르베다</div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ 이미지 교체 모달 ══ -->
+<div id="img-edit-modal">
+  <div class="modal-box">
+    <h3>🖼 이미지 교체</h3>
+    <p>새 이미지 URL을 입력하거나 붙여넣기 하세요</p>
+    <input type="text" id="img-edit-url" placeholder="https://..." oninput="previewImgEdit()">
+    <img id="img-edit-preview" alt="미리보기">
+    <div style="font-size:0.73rem;color:#aaa;margin-bottom:16px;">※ 공개 접근 가능한 이미지 URL만 사용하세요 (Imgur, Unsplash 등)</div>
+    <div class="modal-btns">
+      <button class="btn-cancel" onclick="closeImgEdit()">취소</button>
+      <button class="btn-apply" onclick="applyImgEdit()">적용 &amp; 저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 관리자 편집 FAB 버튼 ══ -->
+<button id="admin-edit-fab" onclick="document.getElementById('svc-admin-edit-panel').style.display='block';this.style.display='none';" style="display:none;position:fixed;bottom:28px;right:28px;z-index:7999;background:#d4af37;color:#1a1a2e;border:none;border-radius:50px;padding:13px 22px;font-size:0.85rem;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.25);align-items:center;gap:8px;letter-spacing:0.04em;">✏ 콘텐츠 편집</button>
+
+<!-- ══ 관리자 편집 패널 ══ -->
+<div id="svc-admin-edit-panel" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:8000;background:#1a1a2e;color:white;box-shadow:0 -4px 24px rgba(0,0,0,0.4);max-height:70vh;overflow-y:auto;">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid rgba(255,255,255,0.1);position:sticky;top:0;background:#1a1a2e;z-index:1;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="color:#d4af37;font-weight:700;font-size:0.85rem;letter-spacing:0.1em;">✏ 관리자 편집 모드 — 리트리트</span>
+      <span style="font-size:0.72rem;color:rgba(255,255,255,0.45);">**굵게** 표현 사용 가능</span>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="savePageContent()" style="background:#d4af37;color:#1a1a2e;border:none;border-radius:5px;padding:7px 18px;font-weight:700;cursor:pointer;font-size:0.82rem;">💾 저장</button>
+      <button onclick="document.getElementById('svc-admin-edit-panel').style.display='none';document.getElementById('admin-edit-fab').style.display='flex';" style="background:none;border:1px solid rgba(255,255,255,0.3);color:white;border-radius:5px;padding:7px 14px;cursor:pointer;font-size:0.82rem;">✕</button>
+    </div>
+  </div>
+  <div style="padding:20px 24px;display:grid;grid-template-columns:1fr 1fr;gap:16px;" id="edit-fields-grid"></div>
+  <div style="padding:0 24px 16px;text-align:center;"><span id="page-save-msg" style="font-size:0.8rem;color:#68d391;display:none;">✔ 저장되었습니다!</span></div>
+</div>
+
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  renderNavbar('service');
+  renderFooter();
+
+  const PAGE_FIELDS = [
+    { key:'svc_retreat_lead',      label:'리드 문단',   type:'textarea', rows:4 },
+    { key:'svc_retreat_sec1_title',label:'섹션1 제목',  type:'input' },
+    { key:'svc_retreat_sec1_body', label:'섹션1 본문',  type:'textarea', rows:5 },
+    { key:'svc_retreat_sec2_title',label:'섹션2 제목',  type:'input' },
+    { key:'svc_retreat_sec2_body', label:'섹션2 본문',  type:'textarea', rows:5 },
+    { key:'svc_retreat_cta_title', label:'CTA 제목',    type:'input' },
+    { key:'svc_retreat_cta_sub',   label:'CTA 설명',    type:'textarea', rows:2 },
+  ];
+  const PAGE_SELECTORS = [
+    '.svc-lead',
+    '.svc-section:nth-of-type(1) .svc-section__title',
+    '.svc-section:nth-of-type(1) .svc-section__body',
+    '.svc-section:nth-of-type(2) .svc-section__title',
+    '.svc-section:nth-of-type(2) .svc-section__body',
+    '.svc-cta__title',
+    '.svc-cta__sub',
+  ];
+  let _pageContents = [];
+  function makeEditField(f) {
+    const s='width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:white;border-radius:5px;padding:8px 10px;font-size:0.82rem;box-sizing:border-box;';
+    const el=f.type==='textarea'?`<textarea id="ef-${f.key}" rows="${f.rows||3}" style="${s}resize:vertical;"></textarea>`:`<input type="text" id="ef-${f.key}" style="${s}">`;
+    return `<div><label style="font-size:0.7rem;color:#d4af37;letter-spacing:0.1em;display:block;margin-bottom:5px;">${f.label}</label>${el}</div>`;
+  }
+  function renderFmt(val){if(!val)return'';return val.replace(/\[LEAD\]([\s\S]*?)\[\/LEAD\]/g,'<p style="font-size:1.05rem;font-weight:500;color:var(--navy);line-height:1.9;margin-bottom:18px;">$1</p>').replace(/\[BOX1\]([\s\S]*?)\|\|\|([\s\S]*?)\[\/BOX1\]/g,'<div style="border:2px solid var(--gold);border-radius:8px;padding:14px 18px;margin:14px 0;"><div style="font-size:0.78rem;font-weight:700;color:var(--gold);margin-bottom:6px;">$1</div><div>$2</div></div>').replace(/\[BOX2\]([\s\S]*?)\|\|\|([\s\S]*?)\[\/BOX2\]/g,'<div style="background:#f5f5f5;border-left:4px solid #4a5568;border-radius:0 8px 8px 0;padding:14px 18px;margin:14px 0;"><div style="font-size:0.78rem;font-weight:700;color:#4a5568;margin-bottom:6px;">$1</div><div>$2</div></div>').replace(/\[SEC\]([\s\S]*?)\[\/SEC\]/g,'<h3 style="font-family:\'Noto Serif KR\',serif;font-size:1rem;color:var(--navy);font-weight:600;margin:20px 0 8px;padding-bottom:5px;border-bottom:1px solid #e0d5b0;">$1</h3>').replace(/\[UL\]([\s\S]*?)\[\/UL\]/g,'<span style="text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--gold);">$1</span>').replace(/\[SIDE\]([\s\S]*?)\[\/SIDE\]/g,'<blockquote style="border-left:4px solid var(--gold);padding:10px 16px;margin:12px 0;color:#555;background:#fffdf5;font-style:italic;line-height:1.8;">$1</blockquote>').replace(/\[HR\]/g,'<hr style="border:none;border-top:1px solid #e0d5b0;margin:16px 0;">').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>');}
+  async function loadPageContent() {
+    try {
+      _pageContents=await SB.getAll('site_content',{limit:500,order:'sort_order.asc'});
+      const get=k=>(_pageContents.find(c=>c.key===k)||{}).content||'';
+      PAGE_FIELDS.forEach((f,i)=>{
+        const el=document.querySelector(PAGE_SELECTORS[i]);
+        if(!el)return;
+        const val=get(f.key);
+        if(!val)return;
+        if(f.type==='input')el.textContent=val;
+        else el.innerHTML=renderFmt(val);
+      });
+      if(Auth.getSession&&Auth.getSession()?.username==='admin'){
+        const grid=document.getElementById('edit-fields-grid');
+        if(grid)grid.innerHTML=PAGE_FIELDS.map(makeEditField).join('');
+        PAGE_FIELDS.forEach((f,i)=>{
+          const srcEl=document.querySelector(PAGE_SELECTORS[i]);
+          const el=document.getElementById('ef-'+f.key);
+          if(!el)return;
+          el.value=get(f.key)||(srcEl?srcEl.innerHTML.replace(/<br\s*\/?>/gi,'\n').replace(/<strong>(.*?)<\/strong>/gi,'**$1**').replace(/<[^>]+>/g,'').trim():'');
+        });
+        // 어드민 모드: body에 클래스 추가 → 이미지 호버 편집 버튼 표시
+        document.body.classList.add('admin-mode');
+        // 편집 버튼(우하단 플로팅) 표시
+        document.getElementById('admin-edit-fab').style.display='flex';
+        // DB에 저장된 이미지 URL 복원
+        const img1Url = get('svc_retreat_img1');
+        if(img1Url){ const el=document.getElementById('retreat-img-1'); if(el) el.src=img1Url; }
+        const img2Url = get('svc_retreat_img2');
+        if(img2Url){ const el=document.getElementById('retreat-img-2'); if(el) el.src=img2Url; }
+      }
+    }catch(e){console.error('[retreat]',e);}
+  }
+  async function savePageContent(){
+    try{
+      for(const f of PAGE_FIELDS){
+        const el=document.getElementById('ef-'+f.key);
+        if(!el)continue;
+        await SB.upsertContent(f.key,el.value,f.label,'service_detail',0);
+      }
+      const msg=document.getElementById('page-save-msg');
+      if(msg){msg.style.display='inline';setTimeout(()=>msg.style.display='none',3000);}
+      await loadPageContent();
+    }catch(e){alert('저장 실패: '+e.message);}
+  }
+
+  /* ── 이미지 교체 모달 ── */
+  let _editImgId = null;
+  let _editImgKey = null;
+
+  function openImgEdit(imgId, dbKey) {
+    _editImgId  = imgId;
+    _editImgKey = dbKey;
+    const curSrc = document.getElementById(imgId)?.src || '';
+    const urlEl = document.getElementById('img-edit-url');
+    const prev  = document.getElementById('img-edit-preview');
+    if(urlEl) urlEl.value = curSrc.startsWith('blob') ? '' : curSrc;
+    if(prev){ prev.style.display='none'; prev.src=''; }
+    document.getElementById('img-edit-modal').classList.add('open');
+  }
+
+  function closeImgEdit() {
+    document.getElementById('img-edit-modal').classList.remove('open');
+    _editImgId = null; _editImgKey = null;
+  }
+
+  function previewImgEdit() {
+    const url = document.getElementById('img-edit-url').value.trim();
+    const prev = document.getElementById('img-edit-preview');
+    if(!prev) return;
+    if(url){ prev.src=url; prev.style.display='block'; }
+    else { prev.style.display='none'; prev.src=''; }
+  }
+
+  async function applyImgEdit() {
+    const url = document.getElementById('img-edit-url').value.trim();
+    if(!url){ alert('URL을 입력해 주세요.'); return; }
+    if(!_editImgId) return;
+    // 페이지에 즉시 반영
+    const imgEl = document.getElementById(_editImgId);
+    if(imgEl) imgEl.src = url;
+    // DB 저장
+    try{
+      await SB.upsertContent(_editImgKey, url, '이미지 URL', 'service_detail', 0);
+      closeImgEdit();
+      // 저장 완료 토스트
+      const msg = document.getElementById('page-save-msg');
+      if(msg){ msg.textContent='✔ 이미지가 저장되었습니다!'; msg.style.display='inline'; setTimeout(()=>{ msg.style.display='none'; msg.textContent='✔ 저장되었습니다!'; },3000); }
+    }catch(e){ alert('저장 실패: '+e.message); }
+  }
+
+  // 모달 바깥 클릭 시 닫기
+  document.getElementById('img-edit-modal').addEventListener('click', function(e){
+    if(e.target === this) closeImgEdit();
+  });
+
+  loadPageContent();
+</script>
+</body>
+</html>

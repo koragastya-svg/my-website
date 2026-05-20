@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>잎 리딩 신청 | 한국 아가스티아 협회</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .redirect-box {
+      max-width: 480px; margin: 80px auto; text-align: center;
+      padding: 48px 32px;
+      background: white; border: 1px solid var(--border); border-radius: 8px;
+    }
+    .redirect-icon { font-size: 3rem; margin-bottom: 16px; }
+    .redirect-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.2rem; color: var(--text-dark); margin-bottom: 10px;
+    }
+    .redirect-desc {
+      font-size: 0.85rem; color: var(--text-light); line-height: 1.8; margin-bottom: 28px;
+    }
+    .redirect-bar {
+      width: 100%; height: 4px; background: var(--bg-cream); border-radius: 2px; overflow: hidden; margin-bottom: 20px;
+    }
+    .redirect-bar__fill {
+      height: 100%; background: var(--gold); width: 0%;
+      transition: width 2.5s linear;
+    }
+  </style>
+</head>
+<body>
+<section class="section">
+  <div class="container">
+    <div class="redirect-box">
+      <div class="redirect-icon">🌿</div>
+      <div class="redirect-title">잎 리딩 신청 페이지가 이동했습니다</div>
+      <div class="redirect-desc">
+        잎 리딩 신청은 이제 <strong>마이페이지</strong>에서 통합 관리됩니다.<br>
+        잠시 후 자동으로 이동합니다...
+      </div>
+      <div class="redirect-bar"><div class="redirect-bar__fill" id="bar-fill"></div></div>
+      <a href="mypage.html#leaf-reading" class="btn btn--gold">지금 바로 이동하기 →</a>
+    </div>
+  </div>
+</section>
+
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  renderNavbar('');
+  renderFooter();
+
+  // 프로그레스바 애니메이션
+  setTimeout(() => {
+    const fill = document.getElementById('bar-fill');
+    if (fill) fill.style.width = '100%';
+  }, 50);
+
+  // 2.8초 후 자동 리다이렉트
+  setTimeout(() => {
+    window.location.href = 'mypage.html#leaf-reading';
+  }, 2800);
+</script>
+</body>
+</html>

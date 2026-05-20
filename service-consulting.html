@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>컨설팅 | 한국 아가스티아 협회</title>
+  <meta name="description" content="아가스티아잎을 활용해 비즈니스와 인생의 과제를 풀어내고, 최선의 방향으로 이끄는 컨설팅 서비스.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .svc-detail-hero { position: relative; min-height: 420px; display: flex; align-items: flex-end; overflow: hidden; background: var(--navy); }
+    .svc-detail-hero__bg { position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1400') center/cover no-repeat; opacity: 0.35; }
+    .svc-detail-hero__inner { position: relative; z-index: 1; padding: 60px 0 56px; width: 100%; }
+    .svc-detail-hero__num { font-size: 0.68rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; display: block; }
+    .svc-detail-hero__title { font-family: 'Noto Serif KR', serif; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 400; color: white; line-height: 1.3; margin-bottom: 12px; }
+    .svc-detail-hero__sub { font-size: 0.95rem; color: rgba(255,255,255,0.7); line-height: 1.8; max-width: 600px; }
+    .breadcrumb { font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-bottom: 20px; }
+    .breadcrumb a { color: rgba(255,255,255,0.5); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--gold); }
+    .breadcrumb span { margin: 0 8px; }
+
+    .svc-content { max-width: 800px; margin: 0 auto; }
+    .svc-lead { font-size: 1.05rem; color: var(--text-dark); line-height: 2; font-family: 'Noto Serif KR', serif; margin-bottom: 48px; padding-bottom: 48px; border-bottom: 1px solid var(--border); }
+    .svc-section { margin-bottom: 56px; }
+    .svc-section__num { font-size: 0.65rem; letter-spacing: 0.25em; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; display: block; }
+    .svc-section__title { font-family: 'Noto Serif KR', serif; font-size: 1.4rem; font-weight: 500; color: var(--text-dark); margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px solid var(--gold); display: inline-block; }
+    .svc-section__body { font-size: 0.93rem; color: var(--text-mid); line-height: 2.1; }
+    .svc-section__body p { margin-bottom: 16px; }
+    .svc-section__body strong { color: var(--text-dark); }
+
+    .svc-box { background: var(--cream); border-left: 3px solid var(--gold); padding: 24px 28px; border-radius: 0 var(--radius) var(--radius) 0; margin: 28px 0; }
+    .svc-box__title { font-size: 0.78rem; letter-spacing: 0.15em; color: var(--gold); text-transform: uppercase; margin-bottom: 12px; }
+    .svc-box p { font-size: 0.9rem; color: var(--text-mid); line-height: 1.9; margin-bottom: 8px; }
+
+    /* 클라이언트 카드 */
+    .client-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 28px 0; }
+    .client-card { background: white; border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+    .client-card__icon { font-size: 1.5rem; margin-bottom: 10px; }
+    .client-card__title { font-size: 0.95rem; color: var(--text-dark); font-weight: 600; margin-bottom: 8px; }
+    .client-card__body { font-size: 0.85rem; color: var(--text-mid); line-height: 1.9; }
+
+    /* 결론 박스 */
+    .conclusion-box { background: linear-gradient(135deg, var(--navy) 0%, #1a2a4a 100%); border-radius: var(--radius); padding: 40px; margin: 40px 0; color: white; }
+    .conclusion-box__title { font-family: 'Noto Serif KR', serif; font-size: 1.2rem; color: white; margin-bottom: 16px; }
+    .conclusion-box__body { font-size: 0.9rem; color: rgba(255,255,255,0.75); line-height: 2; }
+
+    .svc-cta { background: var(--navy); border-radius: var(--radius); padding: 48px; text-align: center; margin-top: 64px; }
+    .svc-cta__title { font-family: 'Noto Serif KR', serif; font-size: 1.3rem; color: white; margin-bottom: 12px; }
+    .svc-cta__sub { font-size: 0.88rem; color: rgba(255,255,255,0.65); margin-bottom: 28px; line-height: 1.8; }
+
+    .other-services { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 48px; }
+    .other-svc-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-decoration: none; transition: var(--transition); display: block; }
+    .other-svc-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .other-svc-card__num { font-size: 0.62rem; letter-spacing: 0.2em; color: var(--gold); margin-bottom: 4px; }
+    .other-svc-card__title { font-size: 0.95rem; color: var(--text-dark); font-weight: 500; }
+
+    @media (max-width: 768px) { .client-cards { grid-template-columns: 1fr; } .svc-cta { padding: 36px 24px; } .other-services { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 480px) { .other-services { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<div class="svc-detail-hero">
+  <div class="svc-detail-hero__bg"></div>
+  <div class="container svc-detail-hero__inner">
+    <div class="breadcrumb">
+      <a href="index.html">홈</a><span>›</span>
+      <a href="service.html">서비스</a><span>›</span>
+      컨설팅
+    </div>
+    <span class="svc-detail-hero__num">03 · CONSULTING</span>
+    <h1 class="svc-detail-hero__title">컨설팅</h1>
+    <p class="svc-detail-hero__sub">「아가스티아잎」을 활용해 비즈니스 및 인생의 과제를 풀어내고, 최선의 방향으로 이끄는 서비스.</p>
+  </div>
+</div>
+
+<section class="section bg-cream">
+  <div class="container">
+    <div class="svc-content">
+
+      <p class="svc-lead">
+        경영 판단, 혹은 개인의 상황에 있어서, 기존의 방법으로는 해결할 수 없었던 과제에 대해, 육체·심·영혼 레벨에서 극적인 성과를 올리고 있습니다.<br><br>
+        바라쿰바구루무니에 의한 특별 해설·어드바이스를 개별적으로 실시합니다.
+      </p>
+
+      <!-- 주요 클라이언트 -->
+      <div class="svc-section">
+        <span class="svc-section__num">CLIENT · 주요 클라이언트층과 도입 사례</span>
+        <h2 class="svc-section__title">주요 클라이언트층</h2>
+
+        <div class="client-cards">
+          <div class="client-card">
+            <div class="client-card__icon">⚖️</div>
+            <div class="client-card__title">사사·경영자·사업가</div>
+            <div class="client-card__body">변호사·세무사·회사 경영자·노무사 등. 논리적 사고를 극한까지 추구한 전문직분들이야말로, 눈에 보이지 않는 세계에 지배되고 있다는 것을 아가스티아잎을 활용해 해석하고, 경영 리스크를 회피하고 있습니다.</div>
+          </div>
+          <div class="client-card">
+            <div class="client-card__icon">🏥</div>
+            <div class="client-card__title">의료 종사자·전문가</div>
+            <div class="client-card__body">현역 의사(뇌신경외과의·내과의·치과의사), 아유르베다 실천자, 간호사·산파. 서양 의학이나 기존 요법만으로는 완치가 어려운 증례에 대해, 「본질 레벨의 원인」을 해결할 수 있도록 각 의사의 전문성을 살린 닥터팀을 편성, 진정한 통합 의료를 실현하는 클리닉 개원도 실현합니다.</div>
+          </div>
+          <div class="client-card">
+            <div class="client-card__icon">🎭</div>
+            <div class="client-card__title">문화인·크리에이터</div>
+            <div class="client-card__body">배우·탤런트, 스피리추얼 리더 등. 영향력을 크게 가진 분들에 대해, 진정한 정신 세계를 올바르게 이해하고 걸어갈 수 있도록 지도합니다.</div>
+          </div>
+          <div class="client-card">
+            <div class="client-card__icon">🌟</div>
+            <div class="client-card__title">인생의 기로에 선 개인</div>
+            <div class="client-card__body">기존의 교육이나 치료로는 전혀 해결책을 찾지 못했던 자녀를 둔 보호자, 원인 불명의 불조화나 반복되는 트러블에 직면한 분들. 과거세나 선조로부터의 인과율을 풀어냄으로써, 납득할 수 있는 답과 구체적인 해결책(처방전)을 찾고, 인생을 재기동시킵니다.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 결론 -->
+      <div class="svc-section">
+        <span class="svc-section__num">CONCLUSION · 결론</span>
+        <h2 class="svc-section__title">도보에서 「비행기」로</h2>
+        <div class="svc-section__body">
+          <p>인생이나 비즈니스에서, 무거운 짐을 안고 한 걸음 한 걸음 나아갈 필요는 없습니다.</p>
+          <p>「빛의 법칙」에 기반한 컨설팅은, 눈에 보이지 않는 그 짐(카르마·인연)을 내려놓고 이동 수단을 도보에서 비행기로 바꾸기 위한 방법입니다.</p>
+        </div>
+        <div class="svc-box" style="border-left:3px solid var(--gold);background:var(--cream);">
+          <div class="svc-box__title">💡 이런 분들께 도움이 됩니다</div>
+          <p>원인을 알 수 없는 반복되는 어려움, 아무리 노력해도 풀리지 않는 문제 — 그 뿌리에 있는 카르마적 원인을 함께 찾아내고, 최단 경로로 본래 있어야 할 자리로 나아갑니다.</p>
+          <p>고대의 지혜를 현대의 현실에 접목하여, 불확실한 시대를 헤쳐나가는 든든한 나침반 역할을 합니다.</p>
+        </div>
+      </div>
+
+      <div class="svc-cta">
+        <h3 class="svc-cta__title">개별 컨설팅을 희망하시는 분께</h3>
+        <p class="svc-cta__sub">바라쿰바구루무니에 의한 개인 세션을 희망하시는 분은<br>문의 페이지를 통해 연락해 주세요.</p>
+        <a href="contact.html" class="btn btn--gold btn--lg">문의하기</a>
+      </div>
+
+      <div style="margin-top:72px;">
+        <div class="section-label" style="margin-bottom:20px;">OTHER SERVICES</div>
+        <div class="other-services">
+          <a href="service-leaf.html" class="other-svc-card">
+            <div class="other-svc-card__num">01 · SEARCHING</div>
+            <div class="other-svc-card__title">아가스티아잎 탐색</div>
+          </a>
+          <a href="service-reading.html" class="other-svc-card">
+            <div class="other-svc-card__num">02 · READING</div>
+            <div class="other-svc-card__title">리딩</div>
+          </a>
+          <a href="service-india.html" class="other-svc-card">
+            <div class="other-svc-card__num">04 · INDIA JOURNEY</div>
+            <div class="other-svc-card__title">인도 여행</div>
+          </a>
+          <a href="service-retreat.html" class="other-svc-card">
+            <div class="other-svc-card__num">05 · RETREAT</div>
+            <div class="other-svc-card__title">리트리트</div>
+          </a>
+          <a href="service-ayurveda.html" class="other-svc-card">
+            <div class="other-svc-card__num">06 · AYURVEDA</div>
+            <div class="other-svc-card__title">아유르베다</div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ 관리자 편집 FAB 버튼 ══ -->
+<button id="admin-edit-fab" onclick="document.getElementById('svc-admin-edit-panel').style.display='block';this.style.display='none';" style="display:none;position:fixed;bottom:28px;right:28px;z-index:7999;background:#d4af37;color:#1a1a2e;border:none;border-radius:50px;padding:13px 22px;font-size:0.85rem;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.25);align-items:center;gap:8px;letter-spacing:0.04em;">✏ 콘텐츠 편집</button>
+
+<!-- ══ 관리자 편집 패널 ══ -->
+<div id="svc-admin-edit-panel" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:8000;background:#1a1a2e;color:white;box-shadow:0 -4px 24px rgba(0,0,0,0.4);max-height:70vh;overflow-y:auto;">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid rgba(255,255,255,0.1);position:sticky;top:0;background:#1a1a2e;z-index:1;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="color:#d4af37;font-weight:700;font-size:0.85rem;letter-spacing:0.1em;">✏ 관리자 편집 모드 — 컨설팅</span>
+      <span style="font-size:0.72rem;color:rgba(255,255,255,0.45);">**굵게** 표현 사용 가능</span>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="savePageContent()" style="background:#d4af37;color:#1a1a2e;border:none;border-radius:5px;padding:7px 18px;font-weight:700;cursor:pointer;font-size:0.82rem;">💾 저장</button>
+      <button onclick="document.getElementById('svc-admin-edit-panel').style.display='none';document.getElementById('admin-edit-fab').style.display='flex';" style="background:none;border:1px solid rgba(255,255,255,0.3);color:white;border-radius:5px;padding:7px 14px;cursor:pointer;font-size:0.82rem;">✕</button>
+    </div>
+  </div>
+  <div style="padding:20px 24px;display:grid;grid-template-columns:1fr 1fr;gap:16px;" id="edit-fields-grid"></div>
+  <div style="padding:0 24px 16px;text-align:center;"><span id="page-save-msg" style="font-size:0.8rem;color:#68d391;display:none;">✔ 저장되었습니다!</span></div>
+</div>
+
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  renderNavbar('service');
+  renderFooter();
+
+  const PAGE_FIELDS = [
+    { key:'svc_consulting_lead',      label:'리드 문단',   type:'textarea', rows:4 },
+    { key:'svc_consulting_sec1_title',label:'섹션1 제목',  type:'input' },
+    { key:'svc_consulting_sec1_body', label:'섹션1 본문',  type:'textarea', rows:5 },
+    { key:'svc_consulting_sec2_title',label:'섹션2 제목',  type:'input' },
+    { key:'svc_consulting_sec2_body', label:'섹션2 본문',  type:'textarea', rows:5 },
+    { key:'svc_consulting_cta_title', label:'CTA 제목',    type:'input' },
+    { key:'svc_consulting_cta_sub',   label:'CTA 설명',    type:'textarea', rows:2 },
+  ];
+  const PAGE_SELECTORS = [
+    '.svc-lead',
+    '.svc-section:nth-of-type(1) .svc-section__title',
+    '.svc-section:nth-of-type(1) .svc-section__body',
+    '.svc-section:nth-of-type(2) .svc-section__title',
+    '.svc-section:nth-of-type(2) .svc-section__body',
+    '.svc-cta__title',
+    '.svc-cta__sub',
+  ];
+  let _pageContents = [];
+  function makeEditField(f) {
+    const s='width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:white;border-radius:5px;padding:8px 10px;font-size:0.82rem;box-sizing:border-box;';
+    const el=f.type==='textarea'?`<textarea id="ef-${f.key}" rows="${f.rows||3}" style="${s}resize:vertical;"></textarea>`:`<input type="text" id="ef-${f.key}" style="${s}">`;
+    return `<div><label style="font-size:0.7rem;color:#d4af37;letter-spacing:0.1em;display:block;margin-bottom:5px;">${f.label}</label>${el}</div>`;
+  }
+  function renderFmt(val) {
+    if (!val) return '';
+    return val
+      .replace(/\[LEAD\]([\s\S]*?)\[\/LEAD\]/g,'<p style="font-size:1.05rem;font-weight:500;color:var(--navy);line-height:1.9;margin-bottom:18px;">$1</p>')
+      .replace(/\[BOX1\]([\s\S]*?)\|\|\|([\s\S]*?)\[\/BOX1\]/g,'<div style="border:2px solid var(--gold);border-radius:8px;padding:14px 18px;margin:14px 0;"><div style="font-size:0.78rem;font-weight:700;color:var(--gold);margin-bottom:6px;">$1</div><div>$2</div></div>')
+      .replace(/\[BOX2\]([\s\S]*?)\|\|\|([\s\S]*?)\[\/BOX2\]/g,'<div style="background:#f5f5f5;border-left:4px solid #4a5568;border-radius:0 8px 8px 0;padding:14px 18px;margin:14px 0;"><div style="font-size:0.78rem;font-weight:700;color:#4a5568;margin-bottom:6px;">$1</div><div>$2</div></div>')
+      .replace(/\[SEC\]([\s\S]*?)\[\/SEC\]/g,'<h3 style="font-family:\'Noto Serif KR\',serif;font-size:1rem;color:var(--navy);font-weight:600;margin:20px 0 8px;padding-bottom:5px;border-bottom:1px solid #e0d5b0;">$1</h3>')
+      .replace(/\[UL\]([\s\S]*?)\[\/UL\]/g,'<span style="text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--gold);">$1</span>')
+      .replace(/\[SIDE\]([\s\S]*?)\[\/SIDE\]/g,'<blockquote style="border-left:4px solid var(--gold);padding:10px 16px;margin:12px 0;color:#555;background:#fffdf5;font-style:italic;line-height:1.8;">$1</blockquote>')
+      .replace(/\[HR\]/g,'<hr style="border:none;border-top:1px solid #e0d5b0;margin:16px 0;">')
+      .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+      .replace(/\n/g,'<br>');
+  }
+  async function loadPageContent() {
+    try {
+      _pageContents=await SB.getAll('site_content',{limit:500,order:'sort_order.asc'});
+      const get=k=>(_pageContents.find(c=>c.key===k)||{}).content||'';
+      PAGE_FIELDS.forEach((f,i)=>{
+        const el=document.querySelector(PAGE_SELECTORS[i]);
+        if(!el)return;
+        const val=get(f.key);
+        if(!val)return;
+        if(f.type==='input')el.textContent=val;
+        else el.innerHTML=renderFmt(val);
+      });
+      if(Auth.getSession&&Auth.getSession()?.username==='admin'){
+        const grid=document.getElementById('edit-fields-grid');
+        if(grid)grid.innerHTML=PAGE_FIELDS.map(makeEditField).join('');
+        PAGE_FIELDS.forEach((f,i)=>{
+          const srcEl=document.querySelector(PAGE_SELECTORS[i]);
+          const el=document.getElementById('ef-'+f.key);
+          if(!el)return;
+          el.value=get(f.key)||(srcEl?srcEl.innerHTML.replace(/<br\s*\/?>/gi,'\n').replace(/<strong>(.*?)<\/strong>/gi,'**$1**').replace(/<[^>]+>/g,'').trim():'');
+        });
+        document.getElementById('svc-admin-edit-panel').style.display='block';
+      }
+    }catch(e){console.error('[consulting]',e);}
+  }
+  async function savePageContent(){
+    try{
+      for(const f of PAGE_FIELDS){
+        const el=document.getElementById('ef-'+f.key);
+        if(!el)continue;
+        await SB.upsertContent(f.key,el.value,f.label,'service_detail',0);
+      }
+      const msg=document.getElementById('page-save-msg');
+      if(msg){msg.style.display='inline';setTimeout(()=>msg.style.display='none',3000);}
+      await loadPageContent();
+    }catch(e){alert('저장 실패: '+e.message);}
+  }
+  loadPageContent();
+</script>
+</body>
+</html>

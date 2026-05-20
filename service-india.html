@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>인도 여행 | 한국 아가스티아 협회</title>
+  <meta name="description" content="고대부터 이어져 온 에너지의 원류, 남인도의 성지를 방문해 카르마를 해소하는 실천적 변용의 여정.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .svc-detail-hero { position: relative; min-height: 420px; display: flex; align-items: flex-end; overflow: hidden; background: var(--navy); }
+    .svc-detail-hero__bg { position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=1400') center/cover no-repeat; opacity: 0.4; }
+    .svc-detail-hero__inner { position: relative; z-index: 1; padding: 60px 0 56px; width: 100%; }
+    .svc-detail-hero__num { font-size: 0.68rem; letter-spacing: 0.35em; text-transform: uppercase; color: var(--gold); margin-bottom: 12px; display: block; }
+    .svc-detail-hero__title { font-family: 'Noto Serif KR', serif; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 400; color: white; line-height: 1.3; margin-bottom: 12px; }
+    .svc-detail-hero__sub { font-size: 0.95rem; color: rgba(255,255,255,0.7); line-height: 1.8; max-width: 600px; }
+    .breadcrumb { font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-bottom: 20px; }
+    .breadcrumb a { color: rgba(255,255,255,0.5); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--gold); }
+    .breadcrumb span { margin: 0 8px; }
+
+    .svc-content { max-width: 800px; margin: 0 auto; }
+    .svc-lead { font-size: 1.05rem; color: var(--text-dark); line-height: 2; font-family: 'Noto Serif KR', serif; margin-bottom: 48px; padding-bottom: 48px; border-bottom: 1px solid var(--border); }
+    .svc-section { margin-bottom: 56px; }
+    .svc-section__num { font-size: 0.65rem; letter-spacing: 0.25em; color: var(--gold); text-transform: uppercase; margin-bottom: 8px; display: block; }
+    .svc-section__title { font-family: 'Noto Serif KR', serif; font-size: 1.4rem; font-weight: 500; color: var(--text-dark); margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px solid var(--gold); display: inline-block; }
+    .svc-section__body { font-size: 0.93rem; color: var(--text-mid); line-height: 2.1; }
+    .svc-section__body p { margin-bottom: 16px; }
+    .svc-section__body strong { color: var(--text-dark); }
+
+    .svc-box { background: var(--cream); border-left: 3px solid var(--gold); padding: 24px 28px; border-radius: 0 var(--radius) var(--radius) 0; margin: 28px 0; }
+    .svc-box__title { font-size: 0.78rem; letter-spacing: 0.15em; color: var(--gold); text-transform: uppercase; margin-bottom: 12px; }
+    .svc-box p { font-size: 0.9rem; color: var(--text-mid); line-height: 1.9; margin-bottom: 8px; }
+
+    /* 사원 카드 */
+    .temple-list { display: flex; flex-direction: column; gap: 12px; margin: 24px 0; }
+    .temple-item { display: flex; gap: 16px; align-items: flex-start; padding: 16px 20px; background: white; border: 1px solid var(--border); border-radius: var(--radius); }
+    .temple-item__icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; }
+    .temple-item__body { font-size: 0.9rem; color: var(--text-mid); line-height: 1.8; }
+    .temple-item__body strong { display: block; color: var(--text-dark); margin-bottom: 2px; }
+
+    /* 비교 블록 */
+    .compare-block { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 24px 0; }
+    .compare-item { padding: 20px; border-radius: var(--radius); text-align: center; }
+    .compare-item--before { background: #f5f5f5; }
+    .compare-item--after { background: linear-gradient(135deg, var(--gold) 0%, #c9a227 100%); }
+    .compare-item__label { font-size: 0.72rem; letter-spacing: 0.2em; margin-bottom: 8px; }
+    .compare-item--before .compare-item__label { color: var(--text-light); }
+    .compare-item--after .compare-item__label { color: rgba(255,255,255,0.8); }
+    .compare-item__text { font-family: 'Noto Serif KR', serif; font-size: 1.1rem; }
+    .compare-item--before .compare-item__text { color: var(--text-dark); }
+    .compare-item--after .compare-item__text { color: white; }
+
+    .svc-cta { background: var(--navy); border-radius: var(--radius); padding: 48px; text-align: center; margin-top: 64px; }
+    .svc-cta__title { font-family: 'Noto Serif KR', serif; font-size: 1.3rem; color: white; margin-bottom: 12px; }
+    .svc-cta__sub { font-size: 0.88rem; color: rgba(255,255,255,0.65); margin-bottom: 28px; line-height: 1.8; }
+
+    .other-services { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 48px; }
+    .other-svc-card { border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-decoration: none; transition: var(--transition); display: block; }
+    .other-svc-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .other-svc-card__num { font-size: 0.62rem; letter-spacing: 0.2em; color: var(--gold); margin-bottom: 4px; }
+    .other-svc-card__title { font-size: 0.95rem; color: var(--text-dark); font-weight: 500; }
+
+    @media (max-width: 768px) { .compare-block { grid-template-columns: 1fr; } .svc-cta { padding: 36px 24px; } .other-services { grid-template-columns: repeat(2,1fr); } }
+    @media (max-width: 480px) { .other-services { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+
+<div class="svc-detail-hero">
+  <div class="svc-detail-hero__bg"></div>
+  <div class="container svc-detail-hero__inner">
+    <div class="breadcrumb">
+      <a href="index.html">홈</a><span>›</span>
+      <a href="service.html">서비스</a><span>›</span>
+      인도 여행
+    </div>
+    <span class="svc-detail-hero__num">04 · INDIA JOURNEY</span>
+    <h1 class="svc-detail-hero__title">인도 여행</h1>
+    <p class="svc-detail-hero__sub">이 여행은 관광이 아닙니다. 불요한 프로그램을 초기화(리셋)하기 위한, 실천적 변용의 프로세스.</p>
+  </div>
+</div>
+
+<section class="section bg-cream">
+  <div class="container">
+    <div class="svc-content">
+
+      <p class="svc-lead">
+        우리가 일상에서 안고 있는 막막함이나, 반복되는 부조리한 사건들.<br><br>
+        그 원인의 많은 부분은, 물리적인 노력 부족이 아니라, 눈에 보이지 않는 영역(깊은 의식이나 과거의 축적)에 새겨진 <strong>「부정적 프로그램(카르마)」</strong>에 있습니다.
+      </p>
+
+      <!-- 왜 남인도인가 -->
+      <div class="svc-section">
+        <span class="svc-section__num">01 · THE SOURCE</span>
+        <h2 class="svc-section__title">「원류」에 닿다 — 왜 남인도인가</h2>
+        <div class="svc-section__body">
+          <p>왜, 굳이 바다를 건너 남인도로 향할 필요가 있을까요?</p>
+          <p>그것은, 그곳이 <strong>「에너지의 순도」</strong>가 유지된, 세계적으로도 희소한 장소이기 때문입니다.</p>
+          <p>한국을 포함한 많은 지역에 전해진 의식이나 만트라(음의 기술)는, 긴 역사 속에서 형태를 바꾸고 간략화되어, 본래의 에너지적 출력이 약해져 있습니다.</p>
+          <p>반면, 남인도의 깊은 곳에는, 수천 년 전의 스타일을 그대로 유지한 <strong>「원초의 의식」</strong>이 현존합니다.</p>
+        </div>
+        <div class="svc-box">
+          <div class="svc-box__title">🔥 불의 의식 비교</div>
+          <p><strong>일반적인 경우:</strong> 나무 막대기(호마목)만을 사용</p>
+          <p><strong>현지의 원초 의식:</strong> 108가지의 약초, 과일, 곡물 등 특정 주파수를 지닌 물질을 대량으로 투입</p>
+          <p>이 물질적 질량과, 정확한 음의 울림(만트라)이 조합되어 만들어지는 에너지의 차이는, 「도보」와 「로켓」 정도의 차이가 있습니다.</p>
+        </div>
+      </div>
+
+      <!-- 카르마 해소 메커니즘 -->
+      <div class="svc-section">
+        <span class="svc-section__num">02 · THE MECHANISM</span>
+        <h2 class="svc-section__title">주파수의 조정 — 카르마 해소의 메커니즘</h2>
+        <div class="svc-section__body">
+          <p>「카르마의 해소」란, 오컬트적 기적이 아닌, 물리학적 「상쇄(캔슬링)」의 원리에 기반합니다.</p>
+          <p>과거의 행위에 의해 생긴 「부정적 에너지(빚)」에는, 특정 주파수가 존재합니다. 예를 들어, 어떤 카르마가 「-500」의 주파수를 가지고 있다면, 이것을 지우기 위해서는 같은 「+500」의 주파수를 생성해 부딪힐 필요가 있습니다.</p>
+          <p>이 여행에서는, 당신 개인의 카르마(질병, 인간관계, 경제적 블록 등)에 대응한 특정 사원을 방문합니다.</p>
+        </div>
+
+        <div class="temple-list">
+          <div class="temple-item">
+            <div class="temple-item__icon">🔥</div>
+            <div class="temple-item__body">
+              <strong>불의 에너지를 지닌 사원</strong>
+              정체된 상황을 태워 없애고, 변용을 촉진한다.
+            </div>
+          </div>
+          <div class="temple-item">
+            <div class="temple-item__icon">🪐</div>
+            <div class="temple-item__body">
+              <strong>행성의 에너지를 관장하는 사원</strong>
+              운명의 사이클(타이밍)을 조정한다.
+            </div>
+          </div>
+        </div>
+        <div class="svc-section__body">
+          <p>각각의 장소에서, 치밀하게 계산된 순서(처방전)를 실행함으로써, 「본질」에 새겨진 부정적 패턴을 논리적으로 무효화해 나갑니다.</p>
+        </div>
+      </div>
+
+      <!-- 성역으로의 접근 -->
+      <div class="svc-section">
+        <span class="svc-section__num">03 · EXCLUSIVE ACCESS</span>
+        <h2 class="svc-section__title">통상적으로는 들어갈 수 없는 「성역」으로의 접근</h2>
+        <div class="svc-section__body">
+          <p>많은 사원에서는, 이교도나 외국인의 출입이 제한된 <strong>「최심부(생크텀)」</strong>가 존재합니다. 그곳은, 에너지가 가장 고밀도로 응축된 장소입니다.</p>
+          <p>본 서비스에서는, 현지의 최고위 지도자나 사원과의 깊은 신뢰 관계(커넥션)에 기반하여, 통상적으로는 관광객이 발을 들일 수 없는 성역으로의 접근이 허용되는 경우가 있습니다.</p>
+          <p>「장」과 일체화하고, 고대의 지혜와 공명하는 순간, 많은 참가자가 이치를 초월한 눈물이나, 깊은 안도감을 체험합니다. 그것은, 「본래의 자신」이 거처를 기억해낸 증거이기도 합니다.</p>
+        </div>
+      </div>
+
+      <!-- 결론 -->
+      <div class="svc-section">
+        <span class="svc-section__num">CONCLUSION</span>
+        <h2 class="svc-section__title">인생의 이동 수단을 「도보」에서 「비행기」로</h2>
+
+        <div class="compare-block">
+          <div class="compare-item compare-item--before">
+            <div class="compare-item__label">BEFORE</div>
+            <div class="compare-item__text">무거운 짐을 지고<br>도보로 산을 오른다</div>
+          </div>
+          <div class="compare-item compare-item--after">
+            <div class="compare-item__label">AFTER</div>
+            <div class="compare-item__text">짐을 내려 놓고<br>비행기로 이동한다</div>
+          </div>
+        </div>
+
+        <div class="svc-section__body">
+          <p>귀국 후, 당신은 일상의 경치가 다르게 보인다는 것을 알게 될 것입니다.</p>
+          <p>문제가 해결되는 것뿐만 아니라, 「문제 자체가 발생하지 않는」 매끄러운 흐름 속에 몸을 두게 됩니다. 이것은, 일생에 한 번, 운명을 바꿔 쓰기 위한 극히 전략적인 투자입니다.</p>
+        </div>
+      </div>
+
+      <div class="svc-cta">
+        <h3 class="svc-cta__title">인도 여행 프로그램에 관심 있으신 분께</h3>
+        <p class="svc-cta__sub">다음 일정이나 참가 방법에 대해서는<br>문의 페이지를 통해 안내해 드립니다.</p>
+        <a href="contact.html" class="btn btn--gold btn--lg">문의하기</a>
+      </div>
+
+      <div style="margin-top:72px;">
+        <div class="section-label" style="margin-bottom:20px;">OTHER SERVICES</div>
+        <div class="other-services">
+          <a href="service-leaf.html" class="other-svc-card">
+            <div class="other-svc-card__num">01 · SEARCHING</div>
+            <div class="other-svc-card__title">아가스티아잎 탐색</div>
+          </a>
+          <a href="service-reading.html" class="other-svc-card">
+            <div class="other-svc-card__num">02 · READING</div>
+            <div class="other-svc-card__title">리딩</div>
+          </a>
+          <a href="service-consulting.html" class="other-svc-card">
+            <div class="other-svc-card__num">03 · CONSULTING</div>
+            <div class="other-svc-card__title">컨설팅</div>
+          </a>
+          <a href="service-retreat.html" class="other-svc-card">
+            <div class="other-svc-card__num">05 · RETREAT</div>
+            <div class="other-svc-card__title">리트리트</div>
+          </a>
+          <a href="service-ayurveda.html" class="other-svc-card">
+            <div class="other-svc-card__num">06 · AYURVEDA</div>
+            <div class="other-svc-card__title">아유르베다</div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ 관리자 편집 FAB 버튼 ══ -->
+<button id="admin-edit-fab" onclick="document.getElementById('svc-admin-edit-panel').style.display='block';this.style.display='none';" style="display:none;position:fixed;bottom:28px;right:28px;z-index:7999;background:#d4af37;color:#1a1a2e;border:none;border-radius:50px;padding:13px 22px;font-size:0.85rem;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.25);align-items:center;gap:8px;letter-spacing:0.04em;">✏ 콘텐츠 편집</button>
+
+<!-- ══ 관리자 편집 패널 ══ -->
+<div id="svc-admin-edit-panel" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:8000;background:#1a1a2e;color:white;box-shadow:0 -4px 24px rgba(0,0,0,0.4);max-height:70vh;overflow-y:auto;">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid rgba(255,255,255,0.1);position:sticky;top:0;background:#1a1a2e;z-index:1;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="color:#d4af37;font-weight:700;font-size:0.85rem;letter-spacing:0.1em;">✏ 관리자 편집 모드 — 인도 여행</span>
+      <span style="font-size:0.72rem;color:rgba(255,255,255,0.45);">**굵게** 표현 사용 가능</span>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="savePageContent()" style="background:#d4af37;color:#1a1a2e;border:none;border-radius:5px;padding:7px 18px;font-weight:700;cursor:pointer;font-size:0.82rem;">💾 저장</button>
+      <button onclick="document.getElementById('svc-admin-edit-panel').style.display='none';document.getElementById('admin-edit-fab').style.display='flex';" style="background:none;border:1px solid rgba(255,255,255,0.3);color:white;border-radius:5px;padding:7px 14px;cursor:pointer;font-size:0.82rem;">✕</button>
+    </div>
+  </div>
+  <div style="padding:20px 24px;display:grid;grid-template-columns:1fr 1fr;gap:16px;" id="edit-fields-grid"></div>
+  <div style="padding:0 24px 16px;text-align:center;"><span id="page-save-msg" style="font-size:0.8rem;color:#68d391;display:none;">✔ 저장되었습니다!</span></div>
+</div>
+
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  renderNavbar('service');
+  renderFooter();
+
+  const PAGE_FIELDS = [
+    { key:'svc_india_lead',      label:'리드 문단',   type:'textarea', rows:4 },
+    { key:'svc_india_sec1_title',label:'섹션1 제목',  type:'input' },
+    { key:'svc_india_sec1_body', label:'섹션1 본문',  type:'textarea', rows:5 },
+    { key:'svc_india_sec2_title',label:'섹션2 제목',  type:'input' },
+    { key:'svc_india_sec2_body', label:'섹션2 본문',  type:'textarea', rows:5 },
+    { key:'svc_india_sec3_title',label:'섹션3 제목',  type:'input' },
+    { key:'svc_india_sec3_body', label:'섹션3 본문',  type:'textarea', rows:5 },
+    { key:'svc_india_cta_title', label:'CTA 제목',    type:'input' },
+    { key:'svc_india_cta_sub',   label:'CTA 설명',    type:'textarea', rows:2 },
+  ];
+  const PAGE_SELECTORS = [
+    '.svc-lead',
+    '.svc-section:nth-of-type(1) .svc-section__title',
+    '.svc-section:nth-of-type(1) .svc-section__body',
+    '.svc-section:nth-of-type(2) .svc-section__title',
+    '.svc-section:nth-of-type(2) .svc-section__body',
+    '.svc-section:nth-of-type(3) .svc-section__title',
+    '.svc-section:nth-of-type(3) .svc-section__body',
+    '.svc-cta__title',
+    '.svc-cta__sub',
+  ];
+  let _pageContents = [];
+  function makeEditField(f) {
+    const s='width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:white;border-radius:5px;padding:8px 10px;font-size:0.82rem;box-sizing:border-box;';
+    const el=f.type==='textarea'?`<textarea id="ef-${f.key}" rows="${f.rows||3}" style="${s}resize:vertical;"></textarea>`:`<input type="text" id="ef-${f.key}" style="${s}">`;
+    return `<div><label style="font-size:0.7rem;color:#d4af37;letter-spacing:0.1em;display:block;margin-bottom:5px;">${f.label}</label>${el}</div>`;
+  }
+  function renderFmt(val){
+    if(!val)return'';
+    return val
+      .replace(/\[LEAD\]([\s\S]*?)\[\/LEAD\]/g,'<p style="font-size:1.05rem;font-weight:500;color:var(--navy);line-height:1.9;margin-bottom:18px;">$1</p>')
+      .replace(/\[BOX1\]([\s\S]*?)\|\|\|([\s\S]*?)\[\/BOX1\]/g,'<div style="border:2px solid var(--gold);border-radius:8px;padding:14px 18px;margin:14px 0;"><div style="font-size:0.78rem;font-weight:700;color:var(--gold);margin-bottom:6px;">$1</div><div>$2</div></div>')
+      .replace(/\[BOX2\]([\s\S]*?)\|\|\|([\s\S]*?)\[\/BOX2\]/g,'<div style="background:#f5f5f5;border-left:4px solid #4a5568;border-radius:0 8px 8px 0;padding:14px 18px;margin:14px 0;"><div style="font-size:0.78rem;font-weight:700;color:#4a5568;margin-bottom:6px;">$1</div><div>$2</div></div>')
+      .replace(/\[SEC\]([\s\S]*?)\[\/SEC\]/g,'<h3 style="font-family:\'Noto Serif KR\',serif;font-size:1rem;color:var(--navy);font-weight:600;margin:20px 0 8px;padding-bottom:5px;border-bottom:1px solid #e0d5b0;">$1</h3>')
+      .replace(/\[UL\]([\s\S]*?)\[\/UL\]/g,'<span style="text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--gold);">$1</span>')
+      .replace(/\[SIDE\]([\s\S]*?)\[\/SIDE\]/g,'<blockquote style="border-left:4px solid var(--gold);padding:10px 16px;margin:12px 0;color:#555;background:#fffdf5;font-style:italic;line-height:1.8;">$1</blockquote>')
+      .replace(/\[HR\]/g,'<hr style="border:none;border-top:1px solid #e0d5b0;margin:16px 0;">')
+      .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+      .replace(/\n/g,'<br>');
+  }
+  async function loadPageContent() {
+    try {
+      _pageContents=await SB.getAll('site_content',{limit:500,order:'sort_order.asc'});
+      const get=k=>(_pageContents.find(c=>c.key===k)||{}).content||'';
+      PAGE_FIELDS.forEach((f,i)=>{
+        const el=document.querySelector(PAGE_SELECTORS[i]);
+        if(!el)return;
+        const val=get(f.key);
+        if(!val)return;
+        if(f.type==='input')el.textContent=val;
+        else el.innerHTML=renderFmt(val);
+      });
+      if(Auth.getSession&&Auth.getSession()?.username==='admin'){
+        const grid=document.getElementById('edit-fields-grid');
+        if(grid)grid.innerHTML=PAGE_FIELDS.map(makeEditField).join('');
+        PAGE_FIELDS.forEach((f,i)=>{
+          const srcEl=document.querySelector(PAGE_SELECTORS[i]);
+          const el=document.getElementById('ef-'+f.key);
+          if(!el)return;
+          el.value=get(f.key)||(srcEl?srcEl.innerHTML.replace(/<br\s*\/?>/gi,'\n').replace(/<strong>(.*?)<\/strong>/gi,'**$1**').replace(/<[^>]+>/g,'').trim():'');
+        });
+        document.getElementById('admin-edit-fab').style.display='flex';
+      }
+    }catch(e){console.error('[india]',e);}
+  }
+  async function savePageContent(){
+    try{
+      for(const f of PAGE_FIELDS){
+        const el=document.getElementById('ef-'+f.key);
+        if(!el)continue;
+        await SB.upsertContent(f.key,el.value,f.label,'service_detail',0);
+      }
+      const msg=document.getElementById('page-save-msg');
+      if(msg){msg.style.display='inline';setTimeout(()=>msg.style.display='none',3000);}
+      await loadPageContent();
+    }catch(e){alert('저장 실패: '+e.message);}
+  }
+  loadPageContent();
+</script>
+</body>
+</html>

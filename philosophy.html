@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>철학 | 한국 아가스티아 협회</title>
+  <meta name="description" content="아가스티아 철학 — 인생의 불확실성을 공략하는 실천 철학. 인생을 결정하는 4개의 심층 요인.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { opacity: 0; transition: opacity 0.25s ease; }
+
+    /* ── 1. 히어로 : 빛의 법칙 ── */
+    .law-hero {
+      position: relative;
+      min-height: 520px;
+      display: flex;
+      align-items: center;
+      background: #0b1629;
+      overflow: hidden;
+    }
+    .law-hero__bg {
+      position: absolute;
+      inset: 0;
+      background: url('https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1400&auto=format&fit=crop') center/cover no-repeat;
+      opacity: 0.55;
+    }
+    .law-hero__inner {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      padding: 100px 0 80px;
+    }
+    .law-hero__label {
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: block;
+      margin-bottom: 4px;
+    }
+    .law-hero__sub {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      display: block;
+      margin-bottom: 6px;
+    }
+    .law-hero__line {
+      width: 36px;
+      height: 2px;
+      background: var(--gold);
+      margin-bottom: 36px;
+    }
+    .law-hero__title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(2rem, 4.5vw, 3rem);
+      color: white;
+      font-weight: 400;
+      line-height: 1.45;
+      margin-bottom: 32px;
+      word-break: keep-all;
+    }
+    .law-hero__body {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.6);
+      line-height: 2;
+    }
+
+    /* ── 2. 4개 심층 요인 ── */
+    .factors-header {
+      text-align: center;
+      padding: 80px 0 56px;
+    }
+    .factors-header__num {
+      font-family: Georgia, serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    .factors-header__title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(1.3rem, 3vw, 1.8rem);
+      color: var(--text-dark);
+      font-weight: 500;
+      margin-bottom: 20px;
+      word-break: keep-all;
+    }
+    .factors-header__divider {
+      width: 48px;
+      height: 2px;
+      background: var(--gold);
+      margin: 0 auto;
+    }
+
+    .factors-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-top: 1px solid var(--border);
+      border-left: 1px solid var(--border);
+    }
+    .factor-cell {
+      padding: 48px 52px;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .factor-cell__num {
+      font-family: Georgia, serif;
+      font-size: 2rem;
+      color: var(--gold);
+      opacity: 0.25;
+      line-height: 1;
+      margin-bottom: 12px;
+    }
+    .factor-cell__title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--gold);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+    .factor-cell__body {
+      font-size: 0.87rem;
+      color: var(--text-mid);
+      line-height: 2.1;
+    }
+    .factor-cell__body p { margin-bottom: 12px; }
+    .factor-cell__body p:last-child { margin-bottom: 0; }
+    .factor-cell__body strong { color: var(--text-dark); }
+
+    /* ── 카르마 3차원 섹션 ── */
+    .karma-wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+    }
+    .karma-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      text-align: center;
+    }
+    .karma-card__symbol {
+      font-size: 1.6rem;
+      display: block;
+      margin-bottom: 12px;
+    }
+    .karma-card__title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+    .karma-card__desc {
+      font-size: 0.82rem;
+      color: var(--text-mid);
+      line-height: 1.9;
+    }
+
+    /* ── 3. 세계관 ── */
+    .worldview-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .worldview-img {
+      width: 100%;
+      border-radius: 2px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.15);
+    }
+    .worldview-divider {
+      width: 4px;
+      height: 48px;
+      background: var(--gold);
+      margin-bottom: 28px;
+    }
+    .worldview-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+      color: var(--text-dark);
+      line-height: 1.6;
+      margin-bottom: 24px;
+      word-break: keep-all;
+    }
+    .worldview-body {
+      font-size: 0.9rem;
+      color: var(--text-mid);
+      line-height: 2.1;
+      margin-bottom: 20px;
+      word-break: keep-all;
+    }
+    .worldview-quote {
+      border-left: 3px solid var(--gold);
+      padding: 16px 20px;
+      margin: 24px 0;
+      font-family: 'Noto Serif KR', serif;
+      font-size: 0.92rem;
+      color: var(--text-dark);
+      line-height: 2;
+      background: var(--cream);
+    }
+
+    /* ── 4. 접근법 ── */
+    .approach-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .approach-img {
+      width: 100%;
+      border-radius: 2px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.12);
+    }
+    .approach-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(1.15rem, 2.5vw, 1.5rem);
+      color: var(--text-dark);
+      line-height: 1.6;
+      margin-bottom: 24px;
+      word-break: keep-all;
+    }
+    .approach-body {
+      font-size: 0.9rem;
+      color: var(--text-mid);
+      line-height: 2.1;
+      margin-bottom: 32px;
+      word-break: keep-all;
+    }
+
+    /* ── 5단계 실천 ── */
+    .practice-steps {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+    .practice-step {
+      display: flex;
+      gap: 24px;
+      padding: 24px 0;
+      border-bottom: 1px dashed var(--border);
+      align-items: flex-start;
+    }
+    .practice-step:last-child { border-bottom: none; }
+    .practice-step__num {
+      width: 40px;
+      height: 40px;
+      flex-shrink: 0;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Georgia, serif;
+      font-size: 0.85rem;
+      color: var(--gold);
+    }
+    .practice-step__title {
+      font-size: 0.93rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-bottom: 6px;
+    }
+    .practice-step__desc {
+      font-size: 0.87rem;
+      color: var(--text-mid);
+      line-height: 2;
+    }
+
+    /* ── CTA ── */
+    .phil-cta {
+      background: #0b1629;
+      padding: 80px 0;
+      text-align: center;
+    }
+    .phil-cta__title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(1.3rem, 3vw, 1.9rem);
+      color: white;
+      margin-bottom: 16px;
+      word-break: keep-all;
+    }
+    .phil-cta__sub {
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.6);
+      line-height: 1.9;
+      margin-bottom: 32px;
+    }
+
+    @media (max-width: 900px) {
+      .factors-grid { grid-template-columns: 1fr; }
+      .factor-cell { padding: 36px 28px; }
+      .worldview-wrap { grid-template-columns: 1fr; gap: 40px; }
+      .approach-wrap { grid-template-columns: 1fr; gap: 40px; }
+      .approach-wrap .approach-img { order: -1; }
+      .karma-wrap { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ── 모바일 (768px) ── */
+    @media (max-width: 768px) {
+      /* 세계관·접근법 세로 바 숨김 */
+      .worldview-divider { display: none; }
+      .law-hero__inner { padding: 90px 0 64px; }
+      .law-hero__title { font-size: clamp(1.7rem, 7vw, 2.4rem); line-height: 1.45; }
+      .factors-header { padding: 56px 0 40px; }
+      .factor-cell { padding: 28px 20px; }
+      .factor-cell__body { font-size: 0.85rem; }
+      .karma-wrap { gap: 16px; }
+      .karma-card { padding: 22px 16px; }
+      .practice-step { gap: 16px; }
+      .phil-cta { padding: 60px 0; }
+    }
+
+    /* ── 스마트폰 (480px) ── */
+    @media (max-width: 480px) {
+      /* 히어로 */
+      .law-hero { min-height: 420px; }
+      .law-hero__inner { padding: 80px 0 52px; }
+      .law-hero__label { font-size: 0.62rem; letter-spacing: 0.28em; }
+      .law-hero__sub { font-size: 0.62rem; letter-spacing: 0.2em; }
+      .law-hero__line { margin-bottom: 24px; }
+      .law-hero__title {
+        font-size: clamp(1.5rem, 7.5vw, 2rem);
+        line-height: 1.5;
+        word-break: keep-all;
+        margin-bottom: 20px;
+      }
+      .law-hero__body { font-size: 0.83rem; line-height: 1.85; word-break: keep-all; }
+
+      /* 4요인 섹션 */
+      .factors-header { padding: 44px 0 32px; }
+      .factors-header__title { font-size: clamp(1.1rem, 5vw, 1.4rem); word-break: keep-all; }
+      .factor-cell { padding: 24px 16px; }
+      .factor-cell__num { font-size: 1.5rem; }
+      .factor-cell__title { font-size: 0.9rem; margin-bottom: 14px; }
+      .factor-cell__body { font-size: 0.83rem; line-height: 1.9; }
+
+      /* 카르마 */
+      .karma-wrap { grid-template-columns: 1fr; gap: 12px; }
+      .karma-card { padding: 20px 16px; }
+      .karma-card__symbol { font-size: 1.3rem; }
+      .karma-card__title { font-size: 0.88rem; }
+      .karma-card__desc { font-size: 0.8rem; }
+
+      /* 세계관·접근법 */
+      .worldview-title, .approach-title { font-size: clamp(1.05rem, 4.5vw, 1.3rem); word-break: keep-all; }
+      .worldview-body, .approach-body { font-size: 0.87rem; word-break: keep-all; }
+      .worldview-quote { font-size: 0.87rem; padding: 12px 16px; }
+
+      /* 5단계 */
+      .practice-step { gap: 14px; padding: 20px 0; }
+      .practice-step__num { width: 34px; height: 34px; font-size: 0.8rem; flex-shrink: 0; }
+      .practice-step__title { font-size: 0.9rem; }
+      .practice-step__desc { font-size: 0.83rem; }
+
+      /* CTA */
+      .phil-cta { padding: 48px 0; }
+      .phil-cta__title { font-size: clamp(1.1rem, 5vw, 1.5rem); word-break: keep-all; }
+      .phil-cta__sub { font-size: 0.85rem; word-break: keep-all; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ① 빛의 법칙 히어로 -->
+<div class="law-hero">
+  <div class="law-hero__bg"></div>
+  <div class="container">
+    <div class="law-hero__inner">
+      <span class="law-hero__label">PHILOSOPHY</span>
+      <span class="law-hero__sub">LAW OF RADIANCE</span>
+      <div class="law-hero__line"></div>
+      <h1 class="law-hero__title" id="philo-hero-title">인생의 불확실성을 꿰뚫는<br>실천 철학 「빛의 법칙」</h1>
+      <div class="law-hero__body" id="philo-hero-body">
+        <p>고대의 현자들이 체계화한 지혜.<br>인생의 불확실한 요소를 논리적으로 풀어낸 「<strong style="border-bottom:2px solid #c8973a;padding-bottom:1px;">아가스티아 잎</strong>」</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ① 보조 설명 -->
+<section class="section" style="padding-top:64px;padding-bottom:64px;">
+  <div class="container">
+    <div style="max-width:720px;margin:0 auto;text-align:center;">
+      <p id="philo-intro-body" style="font-size:0.95rem;color:var(--text-mid);line-height:2.2;word-break:keep-all;">
+        아무리 논리적으로 노력해도 설명되지 않는 '벽'.<br>
+        계획을 세우고 실행해도 원하는 결과를 얻지 못하는 이유는 어디에 있을까요.<br><br>
+        「빛의 법칙」은 인생의 성과 중 <strong style="color:var(--text-dark);">80%가 눈에 보이지 않는 영역(심층 요인)에 의해 결정</strong>된다는 통찰에 기반합니다.<br><br>
+        이 법칙은 고대 베다 문명의 지혜와, 싯다(Siddha) 성자들이 수천 년에 걸쳐 인류에게 전해온 우주의 원리를 현대인이 실천 가능한 형태로 재구성한 것입니다.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ② 4개의 심층 요인 -->
+<section style="background:var(--cream);">
+  <div class="container">
+    <div class="factors-header">
+      <div class="factors-header__num">DEEP FACTORS</div>
+      <h2 class="factors-header__title">인생을 결정하는 「4개의 심층 요인」</h2>
+      <div class="factors-header__divider"></div>
+    </div>
+    <div class="factors-grid">
+
+      <!-- 01 -->
+      <div class="factor-cell">
+        <div class="factor-cell__num">01</div>
+        <div class="factor-cell__title" id="factor1-title">인과율 (Causality / 과거 집적)</div>
+        <div class="factor-cell__body" id="factor1-body">
+          <p>"원인과 결과의 법칙"입니다. 과거의 모든 선택과 행동의 축적은 현재 상황을 엄격하게 규정하고 있습니다.</p>
+          <p>현재의 과제와 장벽은 과거에 발생한 불균형을 시정하려고 하는 프로세스 <strong>(밸런스의 회복 작용)</strong>라고 파악합니다.</p>
+          <p>이 메커니즘을 이해하면 어려움조차도 "부채를 청산하고 가벼워지기 위한 과정"으로 긍정적으로 재정의할 수 있게 됩니다.</p>
+          <p>카르마는 단순한 징벌이 아닙니다. 그것은 영혼이 성장하기 위해 스스로 설정한 학습의 커리큘럼이며, 아가스티아잎은 그 커리큘럼의 전체 지도를 보여줍니다.</p>
+        </div>
+      </div>
+
+      <!-- 02 -->
+      <div class="factor-cell">
+        <div class="factor-cell__num">02</div>
+        <div class="factor-cell__title" id="factor2-title">역사적 연속성 (Heritage / 조상의 영향)</div>
+        <div class="factor-cell__body" id="factor2-body">
+          <p>개인은 독립된 점이 아니라 면면을 따르는 생명의 선 위에 존재합니다.</p>
+          <p>조상이 타인과의 관계에서 일으킨 미해결 감정과 에너지 대사 대조표는 자손인 우리에게 상속됩니다.</p>
+          <p>이것은 생물학적 유전을 넘어선 운명적인 정보의 계승이며, 이 <strong>「가계의 패턴」</strong>을 인식하고 청산하는 것이 차세대에 대한 부의 계승을 거절하는 열쇠가 됩니다.</p>
+          <p>아가스티아잎 제9장에는 조상과의 카르마적 연결과 그 정화 방법이 상세히 기록되어 있습니다.</p>
+        </div>
+      </div>
+
+      <!-- 03 -->
+      <div class="factor-cell">
+        <div class="factor-cell__num">03</div>
+        <div class="factor-cell__title" id="factor3-title">환경주기 (사이클 / 천체의 영향)</div>
+        <div class="factor-cell__body" id="factor3-body">
+          <p>태어난 순간의 천체의 배치와 현재의 우주의 사이클(타이밍)이 개인의 자질과 운기의 바이오 리듬에 물리적 영향을 미친다는 관점입니다.</p>
+          <p>이것은 단순한 운세가 아니고 인간도 자연의 일부이며, 매크로(우주)의 환경 변화와 마이크로(개인)의 상태는 상관하고 있다는 <strong>「조응의 원리(As Above, So Below)」</strong>에 근거하고 있습니다.</p>
+          <p>자신의 「득수 불득수」나 「공격해야 할 때·지켜야 할 때」를 객관적인 데이터로서 파악함으로써, 쓸데없는 에너지 손실을 막습니다.</p>
+          <p>나디 점성술은 나바그라하(9행성)의 주기를 정밀하게 분석하여 각 시기의 운기 흐름과 최적의 행동 타이밍을 제시합니다.</p>
+        </div>
+      </div>
+
+      <!-- 04 -->
+      <div class="factor-cell">
+        <div class="factor-cell__num">04</div>
+        <div class="factor-cell__title" id="factor4-title">의식의 상호작용 (Interference / 환경의 영향)</div>
+        <div class="factor-cell__body" id="factor4-body">
+          <p>타인의 의식(질투, 부러움, 적의 등)이 보이지 않는 간섭파로서 개인의 퍼포먼스에 영향을 미친다는 생각입니다.</p>
+          <p>인간 관계를 의식의 네트워크로 파악하고 부정적인 간섭을 차단하고 자신의 필드를 청정하게 유지하는 위험 관리가 필요합니다.</p>
+          <p>베다 전통에서는 이를 「도슈(Dosha)」라고 부르며, 특정 의식(푸자, 야가)과 만트라 수행을 통해 이러한 에너지적 오염을 정화하고 자신의 의식 필드를 보호할 수 있다고 가르칩니다.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div style="padding-bottom:80px;"></div>
+</section>
+
+
+<!-- ③ 세계관 -->
+<section class="section bg-cream">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:64px;">
+      <span class="section-label">WORLDVIEW</span>
+      <h2 style="font-family:'Noto Serif KR',serif;font-size:clamp(1.3rem,3vw,1.8rem);color:var(--text-dark);font-weight:500;margin-top:8px;word-break:keep-all;">세계관 : 인생이라는 '무대'를 한눈에 내려다보다</h2>
+      <div style="width:48px;height:2px;background:var(--gold);margin:16px auto 0;"></div>
+    </div>
+    <div class="worldview-wrap">
+      <div>
+        <img id="worldview-img" src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=800&auto=format&fit=crop" alt="인생이라는 무대" class="worldview-img">
+      </div>
+      <div>
+        <div class="worldview-divider"></div>
+        <h3 class="worldview-title" id="worldview-title">「인생이란 거대한 무대이며,<br>우리는 각자의 배역을 맡은 배우이다」</h3>
+        <p class="worldview-body" id="worldview-body1">정해진 '시나리오(숙명)'를 깊이 이해하고 그 의도를 파악함으로써, 상황에 휘둘리는 것이 아니라 '명배우'로서 인생을 살아갈 수 있게 됩니다.</p>
+        <div class="worldview-quote" id="worldview-quote">
+          숙명을 이해한다는 것은 포기가 아닙니다.<br>
+          그것은 자신의 역할을 온전히 받아들이고,<br>
+          최고의 모습을 발휘하기 위한 출발점입니다.
+        </div>
+        <p class="worldview-body" id="worldview-body2">「빛의 법칙」은 이 시나리오를 읽어내고, 인생이라는 무대 위에서 가장 빛나는 역할을 살아가기 위한 실천 철학입니다. 고대 싯다 성자들의 통찰은 오늘을 살아가는 우리에게도 여전히 강력한 나침반이 됩니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ④ 접근법 -->
+<section class="section">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:64px;">
+      <span class="section-label">APPROACH</span>
+      <h2 id="approach-title" style="font-family:'Noto Serif KR',serif;font-size:clamp(1.3rem,3vw,1.8rem);color:var(--text-dark);font-weight:500;margin-top:8px;word-break:keep-all;">접근법 : '짐'을 내려놓고 최단 거리로 나아간다</h2>
+      <div style="width:48px;height:2px;background:var(--gold);margin:16px auto 0;"></div>
+    </div>
+    <div class="approach-wrap">
+      <div>
+        <div class="worldview-divider"></div>
+        <p class="approach-body" id="approach-body1">눈에 보이지 않는 「무거운 짐」을 진 채 걸어가는 것이 아니라, 그 짐을 내려놓고 「비행기」로 이동 수단을 바꾸는 패러다임의 전환.</p>
+        <p class="approach-body" id="approach-body2">그것은 단지 노력의 축적이 아니라 삶의 차원 자체를 한 단계 끌어올리는 과정입니다. 본래 자신이 있어야 할 최고의 인생에 도달하기 위한 강력한 나침반이 됩니다.</p>
+        <p class="approach-body">「빛의 법칙」은 아가스티아의 잎을 통한 자기 이해를 바탕으로, 카르마적 짐을 정화하고 우주의 흐름에 맞춰 삶을 설계하는 통합적 접근법입니다.</p>
+      </div>
+      <div>
+        <img id="approach-img" src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&auto=format&fit=crop" alt="비상, 자유" class="approach-img">
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- CTA -->
+<div class="phil-cta">
+  <div class="container">
+    <h2 class="phil-cta__title">당신의 인생 시나리오를 읽을 준비가 되셨나요?</h2>
+    <p class="phil-cta__sub">
+      「빛의 법칙」의 실천은 아가스티아의 아가스티아잎을 통한<br>
+      자기 이해에서 시작됩니다.
+    </p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+      <a href="service-leaf.html" class="btn btn--gold btn--lg">아가스티아잎 탐색 알아보기</a>
+      <a href="contact.html" class="btn btn--outline-gold btn--lg">문의하기</a>
+    </div>
+  </div>
+</div>
+
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  renderNavbar('philosophy');
+  renderFooter();
+
+  async function loadPhiloContent() {
+    try {
+      const contentMap = await SB.loadContentMap(500);
+      const map = {};
+      Object.entries(contentMap).forEach(([k, v]) => { map[k] = v.content || ''; });
+
+      // **텍스트** → <strong>텍스트</strong> 변환
+      const md2html = (val) => val
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\n/g, '<br>');
+
+      const set = (id, val, mode) => {
+        const el = document.getElementById(id);
+        if (!el || !val) return;
+        if (mode === 'html') el.innerHTML = md2html(val);
+        else el.textContent = val;
+      };
+
+      // 히어로 타이틀
+      if (map['law_title']) set('philo-hero-title', map['law_title'], 'html');
+      // 히어로 서브텍스트
+      if (map['law_body']) set('philo-hero-body', map['law_body'], 'html');
+      // 도입 설명
+      if (map['phil_intro']) set('philo-intro-body', map['phil_intro'], 'html');
+      // 4개 심층 요인
+      for (let i = 1; i <= 4; i++) {
+        if (map['factor' + i + '_title']) set('factor' + i + '-title', map['factor' + i + '_title'], 'text');
+        if (map['factor' + i + '_body']) set('factor' + i + '-body', map['factor' + i + '_body'], 'html');
+      }
+      // 세계관
+      if (map['worldview_title'])  set('worldview-title',  map['worldview_title'],  'html');
+      if (map['worldview_body1'])  set('worldview-body1',  map['worldview_body1'],  'html');
+      if (map['worldview_quote'])  set('worldview-quote',  map['worldview_quote'],  'html');
+      if (map['worldview_body2'])  set('worldview-body2',  map['worldview_body2'],  'html');
+      // 세계관 이미지
+      if (map['worldview_img']) {
+        const wImg = document.getElementById('worldview-img');
+        if (wImg) wImg.src = map['worldview_img'];
+      }
+      // 접근법
+      if (map['approach_title']) set('approach-title', map['approach_title'], 'text');
+      if (map['approach_body1'])   set('approach-body1',   map['approach_body1'],   'html');
+      if (map['approach_body2'])   set('approach-body2',   map['approach_body2'],   'html');
+      // 접근법 이미지
+      if (map['approach_img']) {
+        const aImg = document.getElementById('approach-img');
+        if (aImg) aImg.src = map['approach_img'];
+      }
+    } catch(e) {}
+  }
+  loadPhiloContent().finally(() => { document.body.style.opacity = '1'; });
+</script>
+</body>
+</html>

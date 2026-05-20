@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>아이디 · 비밀번호 찾기 | 한국 아가스티아 협회</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- EmailJS -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <style>
+    body { background: var(--bg-cream); }
+    .auth-wrap {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 100px 20px 60px;
+    }
+    .auth-card {
+      width: 100%; max-width: 480px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 48px 40px;
+      box-shadow: var(--shadow-sm);
+    }
+    .auth-logo { text-align: center; margin-bottom: 36px; }
+    .auth-logo__main { font-family: 'Noto Serif KR',serif; font-size:1.05rem; font-weight:500; color:var(--navy); margin-bottom:2px; }
+    .auth-logo__sub { font-family:'Cormorant Garamond',serif; font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold); margin-bottom:16px; }
+    .auth-logo__divider { width:40px; height:1px; background:var(--gold); margin:0 auto; }
+
+    /* 탭 */
+    .find-tabs {
+      display: flex; gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 6px; overflow: hidden;
+      margin-bottom: 28px;
+    }
+    .find-tab {
+      flex: 1; padding: 11px 0;
+      text-align: center; font-size: 0.85rem;
+      cursor: pointer; background: var(--bg-cream);
+      color: var(--text-mid); border: none;
+      border-right: 1px solid var(--border);
+      transition: var(--transition); font-family: inherit;
+    }
+    .find-tab:last-child { border-right: none; }
+    .find-tab.active {
+      background: var(--navy); color: white; font-weight: 500;
+    }
+
+    /* 스텝 패널 */
+    .find-step { display: none; }
+    .find-step.active { display: block; }
+
+    /* 본인인증 블록 */
+    .verify-block {
+      background: linear-gradient(135deg, #f9f5ee, #fffdf7);
+      border: 1px solid rgba(200,151,58,0.3);
+      border-radius: 8px; padding: 22px 20px;
+      margin-bottom: 20px; text-align: center;
+    }
+    .verify-block__icon { font-size: 2.2rem; margin-bottom: 10px; }
+    .verify-block__title { font-family: 'Noto Serif KR',serif; font-size: 0.95rem; color: var(--text-dark); margin-bottom: 6px; }
+    .verify-block__desc { font-size: 0.78rem; color: var(--text-mid); line-height: 1.8; margin-bottom: 16px; }
+    .verify-block__provider {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.72rem; color: var(--text-light);
+      border: 1px solid var(--border); border-radius: 4px;
+      padding: 5px 12px; margin-bottom: 16px;
+      background: white;
+    }
+
+    /* 보안 뱃지 */
+    .security-badges {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      justify-content: center; margin-bottom: 20px;
+    }
+    .security-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 0.68rem; color: var(--text-mid);
+      background: white; border: 1px solid var(--border);
+      border-radius: 20px; padding: 3px 10px;
+    }
+    .security-badge .dot { width:6px; height:6px; border-radius:50%; background:#38a169; flex-shrink:0; }
+
+    /* 결과 카드 */
+    .result-card {
+      background: var(--bg-cream); border-radius: 8px;
+      padding: 20px; margin-bottom: 20px;
+      border: 1px solid var(--border);
+    }
+    .result-card__label { font-size: 0.75rem; color: var(--text-light); margin-bottom: 4px; }
+    .result-card__value { font-size: 1rem; font-weight: 600; color: var(--navy); }
+
+    /* 코드 입력 */
+    .code-inputs {
+      display: flex; gap: 8px; justify-content: center; margin: 20px 0;
+    }
+    .code-input {
+      width: 48px; height: 56px;
+      border: 2px solid var(--border); border-radius: 4px;
+      text-align: center; font-size: 1.4rem; font-weight: 600;
+      color: var(--text-dark); outline: none; transition: var(--transition);
+      font-family: inherit;
+    }
+    .code-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(200,151,58,0.1); }
+
+    /* 타이머 */
+    .timer { text-align: center; font-size: 0.85rem; color: var(--gold); margin-bottom: 16px; font-weight: 500; }
+
+    /* 완료 아이콘 */
+    .complete-icon {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: rgba(200,151,58,0.12);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; margin: 0 auto 20px;
+    }
+
+    /* 알림 박스 */
+    .notice-box {
+      background: rgba(200,151,58,0.06);
+      border: 1px solid rgba(200,151,58,0.25);
+      border-radius: 6px; padding: 12px 16px;
+      font-size: 0.78rem; color: var(--text-mid);
+      line-height: 1.7; margin-bottom: 18px;
+    }
+    .notice-box strong { color: var(--gold); }
+
+    /* 구분선 */
+    .divider-or {
+      display: flex; align-items: center; gap: 12px;
+      margin: 16px 0; font-size: 0.75rem; color: var(--text-light);
+    }
+    .divider-or::before, .divider-or::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    @media (max-width: 480px) { .auth-card { padding: 32px 20px; } }
+  </style>
+</head>
+<body>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+
+    <!-- 로고 -->
+    <div class="auth-logo">
+      <a href="/">
+        <div class="auth-logo__main">한국 아가스티아 협회</div>
+        <div class="auth-logo__sub">Agastya Korea Association</div>
+        <div class="auth-logo__divider"></div>
+      </a>
+    </div>
+
+    <!-- 탭 전환 -->
+    <div class="find-tabs">
+      <button class="find-tab active" id="tab-id" onclick="switchTab('id')">🔍 아이디 찾기</button>
+      <button class="find-tab" id="tab-pw" onclick="switchTab('pw')">🔑 비밀번호 찾기</button>
+    </div>
+
+    <!-- ══════════════ 아이디 찾기 ══════════════ -->
+    <div id="section-id">
+
+      <!-- STEP 1: 본인인증 -->
+      <div class="find-step active" id="id-step1">
+        <div class="verify-block">
+          <div class="verify-block__icon">🛡️</div>
+          <div class="verify-block__title">본인 인증이 필요합니다</div>
+          <div class="verify-block__desc">
+            가입 시 등록하신 이름 · 휴대폰 번호로<br>
+            본인 확인 후 아이디를 조회할 수 있습니다.
+          </div>
+          <div class="verify-block__provider">
+            <span>🔒</span>
+            <span>드림시큐리티 SafeKey™ 본인인증</span>
+          </div>
+
+          <button class="btn btn--gold btn--full" onclick="startVerifyForId()">
+            📱 휴대폰 본인인증 시작
+          </button>
+        </div>
+
+        <div class="notice-box">
+          📌 <strong>안내</strong><br>
+          본인인증 서비스는 <strong>드림시큐리티</strong>와 연동될 예정입니다.<br>
+          현재는 이메일로 이름을 직접 입력하여 조회할 수 있습니다.
+        </div>
+
+        <div class="divider-or">또는 이메일로 직접 조회</div>
+
+        <!-- 이메일 직접 조회 (임시 방법) -->
+        <div class="form-group">
+          <label class="form-label">가입 이메일 <span class="required">*</span></label>
+          <input type="email" class="form-input" id="id-find-email" placeholder="example@email.com" autocomplete="email">
+          <div class="form-error" id="e-id-email"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">이름 <span class="required">*</span></label>
+          <input type="text" class="form-input" id="id-find-name" placeholder="가입 시 등록한 이름" autocomplete="name">
+          <div class="form-error" id="e-id-name"></div>
+        </div>
+        <button class="btn btn--primary btn--full mt-8" onclick="findId()">아이디 조회</button>
+
+        <div style="text-align:center; margin-top:20px;">
+          <a href="/login" style="font-size:0.82rem; color:var(--text-light);">← 로그인으로 돌아가기</a>
+        </div>
+      </div>
+
+      <!-- STEP 2: 본인인증 진행 중 (드림시큐리티 팝업 대기) -->
+      <div class="find-step" id="id-step2">
+        <div style="text-align:center; padding: 30px 0;">
+          <div style="font-size:2.5rem; margin-bottom:16px;">📱</div>
+          <div style="font-family:'Noto Serif KR',serif; font-size:1rem; margin-bottom:10px; color:var(--text-dark);">본인인증 진행 중</div>
+          <p style="font-size:0.82rem; color:var(--text-mid); line-height:1.8; margin-bottom:24px;">
+            팝업 창에서 본인인증을 완료하시면<br>
+            자동으로 결과가 표시됩니다.
+          </p>
+          <div class="timer" id="id-verify-timer">대기 중...</div>
+          <button class="btn btn--outline btn--sm" onclick="goIdStep(1)">이전으로</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: 결과 -->
+      <div class="find-step" id="id-step3">
+        <div style="text-align:center; margin-bottom:20px;">
+          <div class="complete-icon">🔍</div>
+          <div style="font-family:'Noto Serif KR',serif; font-size:1.1rem; margin-bottom:6px; color:var(--text-dark);">아이디를 찾았습니다</div>
+        </div>
+        <div class="result-card">
+          <div class="result-card__label">가입된 아이디 (이메일)</div>
+          <div class="result-card__value" id="id-result-value">-</div>
+          <div style="font-size:0.72rem; color:var(--text-light); margin-top:4px;" id="id-result-date"></div>
+        </div>
+        <a href="/login" class="btn btn--gold btn--full" style="display:block; text-align:center;">로그인하기</a>
+        <div style="text-align:center; margin-top:12px;">
+          <button onclick="switchTab('pw')" style="font-size:0.82rem; color:var(--gold); background:none; border:none; cursor:pointer;">비밀번호도 잊으셨나요? →</button>
+        </div>
+      </div>
+
+      <!-- STEP 4: 찾기 실패 -->
+      <div class="find-step" id="id-step4">
+        <div style="text-align:center; padding: 20px 0;">
+          <div style="font-size:2rem; margin-bottom:12px;">😕</div>
+          <div style="font-family:'Noto Serif KR',serif; font-size:1rem; margin-bottom:10px; color:var(--text-dark);">일치하는 계정이 없습니다</div>
+          <p style="font-size:0.82rem; color:var(--text-mid); line-height:1.8; margin-bottom:24px;">
+            입력하신 정보와 일치하는 계정을 찾지 못했습니다.<br>
+            정보를 다시 확인해 주세요.
+          </p>
+          <button class="btn btn--outline btn--full" onclick="goIdStep(1)">다시 시도</button>
+          <div style="margin-top:12px;">
+            <a href="/contact" style="font-size:0.82rem; color:var(--text-light);">고객센터 문의 →</a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /section-id -->
+
+
+    <!-- ══════════════ 비밀번호 찾기 ══════════════ -->
+    <div id="section-pw" style="display:none;">
+
+      <!-- PW STEP 1: 본인인증 -->
+      <div class="find-step active" id="pw-step1">
+        <div class="verify-block">
+          <div class="verify-block__icon">🔐</div>
+          <div class="verify-block__title">본인 인증이 필요합니다</div>
+          <div class="verify-block__desc">
+            보안을 위해 비밀번호 재설정 전<br>
+            본인 확인을 진행합니다.
+          </div>
+          <div class="verify-block__provider">
+            <span>🔒</span>
+            <span>드림시큐리티 SafeKey™ 본인인증</span>
+          </div>
+
+          <button class="btn btn--gold btn--full" onclick="startVerifyForPw()">
+            📱 휴대폰 본인인증 시작
+          </button>
+        </div>
+
+        <div class="notice-box">
+          📌 <strong>안내</strong><br>
+          본인인증 서비스는 <strong>드림시큐리티</strong>와 연동될 예정입니다.<br>
+          현재는 이메일 인증 코드 방식으로 비밀번호를 재설정할 수 있습니다.
+        </div>
+
+        <div class="divider-or">또는 이메일 인증으로 진행</div>
+
+        <!-- 이메일 인증 방식 (현재 운영 중) -->
+        <div class="form-group">
+          <label class="form-label">가입한 이메일 <span class="required">*</span></label>
+          <input type="email" class="form-input" id="pw-email" placeholder="example@email.com" autocomplete="email">
+          <div class="form-error" id="e-pw-email"></div>
+        </div>
+        <button class="btn btn--primary btn--full mt-8" id="pw-send-btn" onclick="sendPwCode()">인증 코드 전송</button>
+
+        <div style="text-align:center; margin-top:20px;">
+          <a href="/login" style="font-size:0.82rem; color:var(--text-light);">← 로그인으로 돌아가기</a>
+        </div>
+      </div>
+
+      <!-- PW STEP 2: 코드 입력 -->
+      <div class="find-step" id="pw-step2">
+        <h2 style="font-family:'Noto Serif KR',serif; font-size:1.15rem; text-align:center; margin-bottom:10px; color:var(--text-dark);">인증 코드 확인</h2>
+        <p class="auth-desc" id="pw-email-display" style="font-size:0.85rem; color:var(--text-mid); text-align:center; line-height:1.8; margin-bottom:20px;">
+          이메일로 전송된 6자리 코드를 입력해주세요.
+        </p>
+
+        <div class="code-inputs">
+          <input type="text" class="code-input" maxlength="1" id="pc0" oninput="pwMoveNext(0)" onkeydown="pwMovePrev(event,0)" inputmode="numeric">
+          <input type="text" class="code-input" maxlength="1" id="pc1" oninput="pwMoveNext(1)" onkeydown="pwMovePrev(event,1)" inputmode="numeric">
+          <input type="text" class="code-input" maxlength="1" id="pc2" oninput="pwMoveNext(2)" onkeydown="pwMovePrev(event,2)" inputmode="numeric">
+          <input type="text" class="code-input" maxlength="1" id="pc3" oninput="pwMoveNext(3)" onkeydown="pwMovePrev(event,3)" inputmode="numeric">
+          <input type="text" class="code-input" maxlength="1" id="pc4" oninput="pwMoveNext(4)" onkeydown="pwMovePrev(event,4)" inputmode="numeric">
+          <input type="text" class="code-input" maxlength="1" id="pc5" oninput="pwMoveNext(5)" onkeydown="pwMovePrev(event,5)" inputmode="numeric">
+        </div>
+
+        <div class="timer" id="pw-timer">유효시간: 10:00</div>
+        <div class="form-error" id="e-pw-code" style="text-align:center; margin-bottom:12px;"></div>
+
+        <button class="btn btn--primary btn--full" onclick="verifyPwCode()">인증 확인</button>
+        <button class="btn btn--outline btn--full mt-8" onclick="resendPwCode()">코드 재전송</button>
+        <div style="text-align:center; margin-top:14px;">
+          <a href="#" onclick="goPwStep(1); return false;" style="font-size:0.82rem; color:var(--text-light);">이메일 다시 입력</a>
+        </div>
+      </div>
+
+      <!-- PW STEP 3: 새 비밀번호 -->
+      <div class="find-step" id="pw-step3">
+        <h2 style="font-family:'Noto Serif KR',serif; font-size:1.15rem; text-align:center; margin-bottom:10px; color:var(--text-dark);">새 비밀번호 설정</h2>
+        <p style="font-size:0.82rem; color:var(--text-mid); text-align:center; margin-bottom:24px;">새로운 비밀번호를 입력해주세요.</p>
+
+        <div class="form-group">
+          <label class="form-label">새 비밀번호 <span class="required">*</span></label>
+          <input type="password" class="form-input" id="new-pw" placeholder="8자 이상 입력" autocomplete="new-password">
+          <div class="form-error" id="e-new-pw"></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">비밀번호 확인 <span class="required">*</span></label>
+          <input type="password" class="form-input" id="new-pw2" placeholder="비밀번호 재입력" autocomplete="new-password">
+          <div class="form-error" id="e-new-pw2"></div>
+        </div>
+        <button class="btn btn--primary btn--full mt-8" onclick="changePasswordNow()">비밀번호 변경</button>
+      </div>
+
+      <!-- PW STEP 4: 완료 -->
+      <div class="find-step" id="pw-step4">
+        <div style="text-align:center; padding: 20px 0;">
+          <div class="complete-icon">✓</div>
+          <div style="font-family:'Noto Serif KR',serif; font-size:1.2rem; margin-bottom:10px; color:var(--text-dark);">비밀번호가 변경되었습니다!</div>
+          <p style="font-size:0.85rem; color:var(--text-mid); margin-bottom:28px;">새로운 비밀번호로 로그인해 주세요.</p>
+          <a href="/login" class="btn btn--gold btn--full" style="display:block; text-align:center;">로그인하기</a>
+        </div>
+      </div>
+
+    </div><!-- /section-pw -->
+
+  </div>
+</div>
+
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  /* ── EmailJS 설정 ── */
+  const EMAILJS_CONFIG = {
+    publicKey: 'xpy3QTLs8yi2VT1Ax',
+    serviceId: 'agastya-kr',
+    templateId: 'template_zgdvsie'
+  };
+  emailjs.init({ publicKey: EMAILJS_CONFIG.publicKey });
+
+  let currentTab = 'id';
+  let pwResetUserId = null;
+  let pwGeneratedCode = '';
+  let pwTimerInterval = null;
+
+  /* ── 탭 전환 ── */
+  function switchTab(tab) {
+    currentTab = tab;
+    document.getElementById('section-id').style.display = (tab === 'id') ? 'block' : 'none';
+    document.getElementById('section-pw').style.display = (tab === 'pw') ? 'block' : 'none';
+    document.getElementById('tab-id').classList.toggle('active', tab === 'id');
+    document.getElementById('tab-pw').classList.toggle('active', tab === 'pw');
+  }
+
+  /* ── 스텝 전환 ── */
+  function goIdStep(n) {
+    document.querySelectorAll('#section-id .find-step').forEach(el => el.classList.remove('active'));
+    const el = document.getElementById('id-step' + n);
+    if (el) el.classList.add('active');
+  }
+  function goPwStep(n) {
+    document.querySelectorAll('#section-pw .find-step').forEach(el => el.classList.remove('active'));
+    const el = document.getElementById('pw-step' + n);
+    if (el) el.classList.add('active');
+  }
+
+  /* ══════════════════════════════
+     🔍 아이디 찾기
+  ══════════════════════════════ */
+
+  /* 본인인증 버튼 클릭 (드림시큐리티 연동 예정) */
+  function startVerifyForId() {
+    // TODO: 드림시큐리티 SafeKey 팝업 호출
+    // window.open('/nice/check.php?type=findId', 'verify', 'width=500,height=600');
+    Toast.show('본인인증 서비스는 현재 준비 중입니다. 아래 이메일 조회를 이용해 주세요.', 'info');
+  }
+
+  /* 이메일+이름으로 아이디 찾기 */
+  async function findId() {
+    const email = document.getElementById('id-find-email').value.trim();
+    const name  = document.getElementById('id-find-name').value.trim();
+    const eEmail = document.getElementById('e-id-email');
+    const eName  = document.getElementById('e-id-name');
+
+    eEmail.classList.remove('show'); eName.classList.remove('show');
+
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      eEmail.textContent = '올바른 이메일을 입력해주세요.';
+      eEmail.classList.add('show'); return;
+    }
+    if (!name) {
+      eName.textContent = '이름을 입력해주세요.';
+      eName.classList.add('show'); return;
+    }
+
+    try {
+      const allUsers = await SB.getAll('users', { limit: 500 });
+      const matched = allUsers.find(u =>
+        u.email && u.email.toLowerCase() === email.toLowerCase() &&
+        u.name && u.name.trim() === name.trim() &&
+        u.is_active !== false
+      );
+
+      if (matched) {
+        // 이메일 마스킹 (앞 2자 + *** + @domain)
+        const parts = matched.email.split('@');
+        const masked = parts[0].slice(0, 2) + '***@' + parts[1];
+        document.getElementById('id-result-value').textContent = masked;
+        const regDate = matched.created_at
+          ? '가입일: ' + new Date(Number(matched.created_at)).toLocaleDateString('ko-KR')
+          : '';
+        document.getElementById('id-result-date').textContent = regDate;
+        goIdStep(3);
+      } else {
+        goIdStep(4);
+      }
+    } catch(e) {
+      console.error('[findId]', e);
+      Toast.show('조회 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.', 'error');
+    }
+  }
+
+  /* ══════════════════════════════
+     🔑 비밀번호 찾기
+  ══════════════════════════════ */
+
+  /* 본인인증 버튼 클릭 (드림시큐리티 연동 예정) */
+  function startVerifyForPw() {
+    Toast.show('본인인증 서비스는 현재 준비 중입니다. 아래 이메일 인증을 이용해 주세요.', 'info');
+  }
+
+  /* 6자리 코드 생성 */
+  function generateCode() {
+    return String(Math.floor(100000 + Math.random() * 900000));
+  }
+
+  /* 인증 코드 전송 */
+  async function sendPwCode() {
+    const email = document.getElementById('pw-email').value.trim();
+    const errEl = document.getElementById('e-pw-email');
+    errEl.classList.remove('show');
+
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      errEl.textContent = '올바른 이메일을 입력해주세요.';
+      errEl.classList.add('show'); return;
+    }
+
+    const btn = document.getElementById('pw-send-btn');
+    btn.disabled = true;
+    btn.innerHTML = '전송 중...';
+
+    pwGeneratedCode = generateCode();
+    const result = await Auth.saveResetCode(email, pwGeneratedCode);
+
+    if (!result.success) {
+      Toast.show(result.message || '등록된 이메일을 찾을 수 없습니다.', 'error');
+      btn.disabled = false; btn.textContent = '인증 코드 전송'; return;
+    }
+
+    try {
+      await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, {
+        to_email: email,
+        to_name: result.name || '회원',
+        reset_code: pwGeneratedCode,
+        valid_minutes: '10'
+      });
+      Toast.show('인증 코드가 이메일로 전송되었습니다. 스팸함도 확인해주세요.', 'success');
+    } catch(emailErr) {
+      console.error('EmailJS 오류:', emailErr);
+      Toast.show('이메일 전송에 실패했습니다. 잠시 후 다시 시도해주세요.', 'error');
+      btn.disabled = false; btn.textContent = '인증 코드 전송'; return;
+    }
+
+    pwResetUserId = result.userId;
+    document.getElementById('pw-email-display').innerHTML =
+      '<strong style="color:var(--text-dark);">' + email + '</strong>으로 전송된<br>6자리 코드를 입력해주세요.';
+    goPwStep(2);
+    startPwTimer(10 * 60);
+    btn.disabled = false; btn.textContent = '인증 코드 전송';
+  }
+
+  /* 코드 재전송 */
+  async function resendPwCode() {
+    const email = document.getElementById('pw-email').value.trim();
+    pwGeneratedCode = generateCode();
+    await Auth.saveResetCode(email, pwGeneratedCode);
+    [0,1,2,3,4,5].forEach(i => { const el = document.getElementById('pc'+i); if(el) el.value=''; });
+    if (pwTimerInterval) clearInterval(pwTimerInterval);
+    startPwTimer(10 * 60);
+    try {
+      await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, {
+        to_email: email, to_name: '회원',
+        reset_code: pwGeneratedCode, valid_minutes: '10'
+      });
+    } catch(e) { console.error('EmailJS 재전송:', e); }
+    Toast.show('인증 코드를 재전송했습니다.', 'success');
+  }
+
+  /* 타이머 */
+  function startPwTimer(seconds) {
+    const el = document.getElementById('pw-timer');
+    let remaining = seconds;
+    pwTimerInterval = setInterval(() => {
+      remaining--;
+      const m = String(Math.floor(remaining / 60)).padStart(2, '0');
+      const s = String(remaining % 60).padStart(2, '0');
+      if (el) el.textContent = '유효시간: ' + m + ':' + s;
+      if (remaining <= 0) {
+        clearInterval(pwTimerInterval);
+        if (el) { el.textContent = '코드가 만료되었습니다. 다시 요청해주세요.'; el.style.color = '#e53e3e'; }
+        pwGeneratedCode = '';
+      }
+    }, 1000);
+  }
+
+  /* 코드 입력 이동 */
+  function pwMoveNext(idx) {
+    const el = document.getElementById('pc' + idx);
+    el.value = el.value.replace(/\D/g, '');
+    if (el.value && idx < 5) document.getElementById('pc' + (idx+1)).focus();
+    const code = [0,1,2,3,4,5].map(i => document.getElementById('pc' + i).value).join('');
+    if (code.length === 6) verifyPwCode();
+  }
+  function pwMovePrev(e, idx) {
+    if (e.key === 'Backspace' && !document.getElementById('pc' + idx).value && idx > 0)
+      document.getElementById('pc' + (idx-1)).focus();
+  }
+
+  /* 코드 검증 */
+  async function verifyPwCode() {
+    const code = [0,1,2,3,4,5].map(i => document.getElementById('pc' + i).value).join('');
+    const errEl = document.getElementById('e-pw-code');
+    errEl.classList.remove('show');
+
+    if (code.length < 6) {
+      errEl.textContent = '6자리 코드를 모두 입력해주세요.'; errEl.classList.add('show'); return;
+    }
+    if (!pwGeneratedCode) {
+      errEl.textContent = '코드가 만료되었습니다. 다시 전송해주세요.'; errEl.classList.add('show'); return;
+    }
+    if (code !== pwGeneratedCode) {
+      errEl.textContent = '인증 코드가 올바르지 않습니다.'; errEl.classList.add('show'); return;
+    }
+
+    if (pwTimerInterval) clearInterval(pwTimerInterval);
+    goPwStep(3);
+  }
+
+  /* 새 비밀번호 변경 */
+  async function changePasswordNow() {
+    const nw  = document.getElementById('new-pw').value;
+    const nw2 = document.getElementById('new-pw2').value;
+    const showErr = (id, msg) => {
+      const el = document.getElementById(id);
+      el.textContent = msg; el.classList.toggle('show', !!msg);
+    };
+    let ok = true;
+    if (!nw || nw.length < 8) { showErr('e-new-pw', '8자 이상 입력해주세요.'); ok = false; }
+    else showErr('e-new-pw', '');
+    if (nw !== nw2) { showErr('e-new-pw2', '비밀번호가 일치하지 않습니다.'); ok = false; }
+    else showErr('e-new-pw2', '');
+    if (!ok) return;
+
+    if (!pwResetUserId) { Toast.show('인증 정보가 만료되었습니다. 처음부터 다시 시도해주세요.', 'error'); goPwStep(1); return; }
+
+    const result = await Auth.changePassword(pwResetUserId, nw);
+    if (result.success) {
+      goPwStep(4);
+    } else {
+      Toast.show(result.message || '변경 중 오류가 발생했습니다.', 'error');
+    }
+  }
+
+  /* ── URL 파라미터로 탭 자동 전환 ── */
+  const urlParams = new URLSearchParams(window.location.search);
+  const tabParam = urlParams.get('tab');
+  if (tabParam === 'pw') switchTab('pw');
+
+  /* ── Toast info 지원 추가 ── */
+  const _origToastShow = Toast.show.bind(Toast);
+  Toast.show = function(msg, type) {
+    if (type === 'info') type = 'success';
+    _origToastShow(msg, type);
+  };
+</script>
+</body>
+</html>

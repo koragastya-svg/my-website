@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>문의 | 한국 아가스티아 협회</title>
+  <meta name="description" content="한국 아가스티아 협회에 문의하세요.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { opacity: 0; transition: opacity 0.25s ease; }
+    /* 전체 레이아웃: 폼 단일 컬럼 */
+    .contact-grid {
+      display: block;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+    .contact-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 24px 28px;
+      box-shadow: var(--shadow-sm);
+    }
+    .contact-card__icon {
+      font-size: 1.6rem; margin-bottom: 10px;
+    }
+    .contact-card__label {
+      font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 8px;
+    }
+    .contact-card__title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.2rem; color: var(--text-dark);
+      margin-bottom: 16px; font-weight: 500;
+    }
+    .contact-card__text {
+      font-size: 0.88rem; color: var(--text-mid);
+      line-height: 1.8; margin-bottom: 16px;
+    }
+    .contact-card__email {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 1rem; color: var(--gold);
+      font-weight: 500; margin-bottom: 24px;
+      word-break: break-all;
+    }
+    .line-box {
+      display: flex; align-items: center; gap: 16px;
+      padding: 14px 16px; background: var(--bg-cream);
+      border-radius: 6px; margin-bottom: 16px;
+    }
+    .line-qr {
+      width: 90px; height: 90px; background: #ddd;
+      border-radius: 4px; display: flex; align-items: center;
+      justify-content: center; font-size: 0.7rem; color: #999;
+      flex-shrink: 0;
+    }
+    .line-info__name {
+      font-family: 'Noto Serif KR', serif;
+      color: var(--gold); font-size: 0.9rem; margin-bottom: 6px;
+    }
+    .line-info__url {
+      font-size: 0.82rem; color: var(--text-mid);
+      word-break: break-all;
+    }
+
+    /* 문의 폼 */
+    .contact-form-wrap {
+      background: white; border: 1px solid var(--border);
+      border-radius: 8px; padding: 40px;
+      box-shadow: var(--shadow-sm);
+      height: 100%; box-sizing: border-box;
+    }
+    .contact-form-wrap__label {
+      font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 8px;
+    }
+    .contact-form-wrap__title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.4rem; color: var(--text-dark);
+      margin-bottom: 8px; font-weight: 400;
+    }
+    .contact-form-wrap__sub {
+      font-size: 0.85rem; color: var(--text-light);
+      margin-bottom: 32px; line-height: 1.7;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-success {
+      text-align: center; padding: 40px 20px;
+      display: none;
+    }
+    .form-success__icon { font-size: 3rem; margin-bottom: 16px; }
+    .form-success__title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.3rem; color: var(--text-dark); margin-bottom: 12px;
+    }
+    .form-success__text { font-size: 0.88rem; color: var(--text-mid); line-height: 1.8; }
+
+    /* 지도/오시는 길 */
+    .map-placeholder {
+      width: 100%; height: 280px; background: var(--bg-cream);
+      border-radius: 6px; display: flex; align-items: center;
+      justify-content: center; color: var(--text-light);
+      font-size: 0.85rem; border: 1px solid var(--border);
+      margin-top: 32px; flex-direction: column; gap: 8px;
+    }
+
+    .contact-info-col { display: none; }
+
+    /* 답변 방법 라디오 래퍼 */
+    .reply-method-row {
+      display: flex; gap: 12px; margin-top: 4px;
+    }
+    .reply-method-label {
+      display: flex; align-items: center; gap: 8px;
+      cursor: pointer; font-size: 0.88rem;
+      padding: 10px 16px;
+      border: 1px solid var(--border); border-radius: 6px;
+      flex: 1; transition: border-color 0.2s;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 700px) {
+      .form-row { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 480px) {
+      /* 폼 패딩 축소 */
+      .contact-form-wrap { padding: 24px 18px; }
+      .contact-form-wrap__title { font-size: 1.15rem; }
+      .contact-form-wrap__sub {
+        font-size: 0.82rem;
+        word-break: keep-all;
+        margin-bottom: 22px;
+      }
+      /* form-group 간격 */
+      .form-group { margin-bottom: 14px; }
+      /* 라디오 버튼: 한 줄 유지, 패딩·폰트 축소 */
+      .reply-method-row { gap: 8px; }
+      .reply-method-label {
+        font-size: 0.8rem;
+        padding: 9px 10px;
+        gap: 6px;
+        justify-content: center;
+      }
+      /* 제출 버튼 */
+      .btn-submit { width: 100%; padding: 14px; font-size: 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-header">
+  <span class="page-header__label">INQUIRY</span>
+  <h1 class="page-header__title">문의</h1>
+  <p class="page-header__sub" id="contact-text">본 페이지는 한국 아가스티아 협회의 공식 문의 창구입니다. 미디어 취재, 국제 협력 제안 등을 접수하고 있습니다.</p>
+  <style>#contact-form-success-text-wrap{display:none}</style>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="contact-grid">
+
+      <!-- 문의 폼 -->
+      <div class="contact-form-wrap">
+        <div id="form-area">
+          <div class="contact-form-wrap__label">CONTACT FORM</div>
+          <div class="contact-form-wrap__title">온라인 문의</div>
+          <p class="contact-form-wrap__sub" id="contact-form-sub-text">아래 양식을 작성해 주시면 담당자가 확인 후 빠르게 연락드리겠습니다.</p>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">이름 <span class="required">*</span></label>
+              <input type="text" class="form-input" id="cf-name" placeholder="홍길동">
+            </div>
+            <div class="form-group">
+              <label class="form-label">전화번호 <span class="required">*</span></label>
+              <input type="tel" class="form-input" id="cf-phone" placeholder="010-0000-0000" oninput="formatPhone(this)" maxlength="13">
+              <div class="form-error" id="e-cf-phone" style="display:none;color:#e53e3e;font-size:0.78rem;margin-top:4px;">전화번호를 입력해주세요.</div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">이메일 <span class="required">*</span></label>
+            <input type="email" class="form-input" id="cf-email" placeholder="example@email.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">답변 받으실 방법 <span class="required">*</span></label>
+            <div class="reply-method-row">
+              <label class="reply-method-label" id="reply-email-label">
+                <input type="radio" name="cf-reply" value="email" id="reply-email" checked style="accent-color:var(--gold);flex-shrink:0;" onchange="updateReplyLabel()">
+                📧 이메일로 받기
+              </label>
+              <label class="reply-method-label" id="reply-phone-label">
+                <input type="radio" name="cf-reply" value="phone" id="reply-phone" style="accent-color:var(--gold);flex-shrink:0;" onchange="updateReplyLabel()">
+                📱 휴대폰으로 받기
+              </label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">문의 유형</label>
+            <select class="form-select" id="cf-type" onchange="handleTypeChange(this.value)">
+              <option>세미나 문의</option>
+              <option>잎 리딩 및 세미나 신청 취소</option>
+              <option>미성년자 세미나 신청 문의</option>
+              <option>미디어/취재 문의</option>
+              <option>국제 협력 제안</option>
+              <option>기타</option>
+            </select>
+          </div>
+          <!-- 미성년자 세미나 신청 안내 -->
+          <div id="minor-seminar-notice" style="display:none;">
+            <div style="background:#f0f4ff;border:1px solid #b8c8ef;border-radius:8px;padding:16px 20px;margin-bottom:16px;font-size:0.85rem;color:#2d3a6e;line-height:2;">
+              👶 <strong>미성년 자녀를 동반하시는 경우, 아래 사항을 꼭 확인해 주세요.</strong>
+              <ul style="margin:8px 0 4px 4px;padding-left:18px;list-style:disc;">
+                <li style="margin-bottom:6px;">미성년 자녀는 온라인 예약 및 결제가 어렵습니다.<br>주최측에 문자로 신청해 주시고, 결제는 현장에서 진행해 주시기 바랍니다.</li>
+                <li>동반 자녀와 함께 친목회 참석을 원하시는 경우에도 주최측에 문의 후 신청해 주세요.</li>
+              </ul>
+              이 페이지의 문의폼으로 접수하시면 담당자가 안내드리겠습니다.
+            </div>
+          </div>
+          <!-- 세미나 신청 취소 안내 배너 -->
+          <div id="cancel-notice" style="display:none;">
+            <div style="background:#fff8e6;border:1px solid #f6c94a;border-radius:8px;padding:14px 18px;margin-bottom:16px;font-size:0.85rem;color:#7a5700;line-height:1.8;">
+              📋 <strong>잎 리딩 및 세미나 신청 취소 안내</strong><br>
+              취소 요청은 한국 아가스티아 협회 문의 폼으로 접수됩니다.<br>
+              <span style="font-size:0.78rem;color:#999;">※ 환불 규정은 <strong style="color:#c53030;">신청일 기준</strong>으로 적용됩니다. 담당자 확인 후 1~3 영업일 내 안내드립니다.</span>
+            </div>
+
+            <!-- 로그인 시: 내 세미나 신청 선택 (드롭다운) -->
+            <div id="cancel-seminar-select" style="display:none;background:#f8f9ff;border:1px solid #c3d0f0;border-radius:8px;padding:16px;margin-bottom:16px;">
+              <div style="font-size:0.8rem;font-weight:700;color:var(--navy);margin-bottom:10px;">📅 취소할 세미나를 선택하세요</div>
+              <select id="cancel-seminar-list" class="form-select" onchange="onCancelSeminarChange()" style="font-size:0.85rem;">
+                <option value="">-- 신청한 세미나 선택 --</option>
+              </select>
+              <div id="cancel-seminar-info" style="display:none;margin-top:12px;padding:12px;background:white;border-radius:6px;border:1px solid #dde3f5;font-size:0.82rem;line-height:1.8;">
+              </div>
+            </div>
+
+            <!-- 비로그인 시: 세미나명 직접 입력 -->
+            <div id="cancel-seminar-manual" style="display:none;background:#f8f9ff;border:1px solid #c3d0f0;border-radius:8px;padding:16px;margin-bottom:16px;">
+              <div style="font-size:0.8rem;font-weight:700;color:var(--navy);margin-bottom:10px;">📅 취소할 세미나 정보를 입력해주세요</div>
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <div>
+                  <label style="font-size:0.75rem;color:var(--text-light);font-weight:600;display:block;margin-bottom:4px;">세미나명</label>
+                  <input type="text" id="cancel-manual-title" class="form-input" placeholder="신청하신 세미나 이름을 입력하세요" style="font-size:0.85rem;">
+                </div>
+                <div>
+                  <label style="font-size:0.75rem;color:var(--text-light);font-weight:600;display:block;margin-bottom:4px;">세미나 날짜</label>
+                  <input type="date" id="cancel-manual-date" class="form-input" style="font-size:0.85rem;" oninput="onCancelManualDateChange()">
+                </div>
+                <div>
+                  <label style="font-size:0.75rem;color:var(--text-light);font-weight:600;display:block;margin-bottom:4px;">신청(결제)일</label>
+                  <input type="date" id="cancel-manual-payment-date" class="form-input" style="font-size:0.85rem;" oninput="onCancelManualDateChange()">
+                </div>
+                <div>
+                  <label style="font-size:0.75rem;color:var(--text-light);font-weight:600;display:block;margin-bottom:4px;">결제 금액 (원)</label>
+                  <input type="number" id="cancel-manual-price" class="form-input" placeholder="예: 300000" style="font-size:0.85rem;" oninput="onCancelManualDateChange()">
+                </div>
+              </div>
+            </div>
+
+            <!-- 환불 계산기 -->
+            <div id="cancel-refund-calc" style="display:none;background:#f0f4ff;border:1px solid #c3d0f0;border-radius:8px;padding:16px;margin-bottom:16px;">
+              <div style="font-size:0.8rem;font-weight:700;color:var(--navy);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+                🧮 환불 금액 미리 확인
+                <span style="font-size:0.7rem;font-weight:400;color:var(--text-light);">공정거래위원회 표준약관 기준</span>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+                <div>
+                  <label style="font-size:0.72rem;color:var(--text-light);font-weight:600;display:block;margin-bottom:4px;">📅 세미나 날짜</label>
+                  <input type="date" id="cc-seminar-date" class="form-input" style="font-size:0.82rem;padding:7px 10px;" oninput="calcContactRefund()">
+                </div>
+                <div>
+                  <label style="font-size:0.72rem;color:var(--text-light);font-weight:600;display:block;margin-bottom:4px;">❌ 취소 요청일 <span style="font-weight:400;color:#999;">(오늘)</span></label>
+                  <input type="date" id="cc-cancel-date" class="form-input" style="font-size:0.82rem;padding:7px 10px;" oninput="calcContactRefund()">
+                </div>
+                <div>
+                  <label style="font-size:0.72rem;color:var(--text-light);font-weight:600;display:block;margin-bottom:4px;">🗓 신청(결제)일</label>
+                  <input type="date" id="cc-payment-date" class="form-input" style="font-size:0.82rem;padding:7px 10px;" oninput="calcContactRefund()">
+                </div>
+                <div>
+                  <label style="font-size:0.72rem;color:var(--text-light);font-weight:600;display:block;margin-bottom:4px;">💰 결제 금액 (원)</label>
+                  <input type="number" id="cc-price" class="form-input" style="font-size:0.82rem;padding:7px 10px;" placeholder="예: 300000" oninput="calcContactRefund()">
+                </div>
+              </div>
+              <div id="cc-refund-result" style="display:none;background:white;border-radius:6px;padding:14px;border-left:4px solid var(--gold);">
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+                  <div>
+                    <div style="font-size:0.7rem;color:var(--text-light);margin-bottom:2px;" id="cc-rule-label">적용 규정</div>
+                    <div style="font-size:0.85rem;font-weight:600;color:var(--navy);" id="cc-rule-text">-</div>
+                  </div>
+                  <div style="text-align:right;">
+                    <div style="font-size:0.7rem;color:var(--text-light);margin-bottom:2px;">예상 환불 금액</div>
+                    <div style="font-size:1.2rem;font-weight:700;" id="cc-amount-text">-</div>
+                    <div style="font-size:0.7rem;color:var(--text-light);" id="cc-penalty-text"></div>
+                  </div>
+                </div>
+              </div>
+              <!-- 환불 규정 표 -->
+              <details style="margin-top:10px;">
+                <summary style="font-size:0.75rem;color:var(--navy);cursor:pointer;font-weight:600;">환불 규정 표 보기 ▾</summary>
+                <table style="width:100%;border-collapse:collapse;font-size:0.75rem;margin-top:8px;">
+                  <thead><tr style="background:var(--navy);">
+                    <th style="padding:7px 10px;text-align:left;color:white;border:1px solid #2a3560;">취소 시점</th>
+                    <th style="padding:7px 10px;text-align:left;color:white;border:1px solid #2a3560;">환불 금액</th>
+                  </tr></thead>
+                  <tbody>
+                    <tr><td style="padding:7px 10px;border:1px solid #dde3f5;">신청일로부터 7일 이내 &amp; 세미나 30일 이전</td><td style="padding:7px 10px;border:1px solid #dde3f5;color:#2a7a2a;font-weight:600;">전액 환불</td></tr>
+                    <tr style="background:#f7f9ff;"><td style="padding:7px 10px;border:1px solid #dde3f5;">세미나 30일 ~ 15일 이전</td><td style="padding:7px 10px;border:1px solid #dde3f5;">70% 환불 (위약금 10만원 기준)</td></tr>
+                    <tr><td style="padding:7px 10px;border:1px solid #dde3f5;">세미나 14일 ~ 7일 이전</td><td style="padding:7px 10px;border:1px solid #dde3f5;">50% 환불 (위약금 15만원 기준)</td></tr>
+                    <tr style="background:#f7f9ff;"><td style="padding:7px 10px;border:1px solid #dde3f5;">세미나 6일 ~ 3일 이전</td><td style="padding:7px 10px;border:1px solid #dde3f5;">30% 환불 (위약금 21만원 기준)</td></tr>
+                    <tr><td style="padding:7px 10px;border:1px solid #dde3f5;">세미나 2일 이전 ~ 당일</td><td style="padding:7px 10px;border:1px solid #dde3f5;color:#c53030;font-weight:600;">환불 불가</td></tr>
+                  </tbody>
+                </table>
+                <div style="margin-top:8px;padding:8px 12px;background:#fff8e6;border-radius:4px;font-size:0.72rem;color:#7a5700;line-height:1.7;">
+                  <strong>※ 환불 기준:</strong> 입금일이 아닌 <strong>신청(신청 접수)일 기준</strong>으로 적용됩니다.<br>
+                  천재지변·갑작스러운 입원 등 불가항력 사유(증빙 제출 시) 전액 환불 가능<br>
+                  환불 대신 지인에게 참가권 양도 허용 (세미나 3일 전까지, 사전 통보 조건)
+                </div>
+              </details>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">문의 내용 <span class="required">*</span></label>
+            <textarea class="form-textarea" id="cf-message" placeholder="문의하실 내용을 자유롭게 작성해 주세요." style="min-height:140px;"></textarea>
+          </div>
+          <div class="form-group" style="display:flex;align-items:flex-start;gap:10px;margin-bottom:24px;">
+            <input type="checkbox" id="cf-agree" style="width:16px;height:16px;margin-top:3px;accent-color:var(--gold);">
+            <label for="cf-agree" style="font-size:0.82rem;color:var(--text-mid);cursor:pointer;line-height:1.6;">
+              개인정보 수집 및 이용에 동의합니다. (이름, 이메일, 전화번호는 문의 처리 목적으로만 사용됩니다.)
+            </label>
+          </div>
+          <button class="btn btn--gold btn--full btn--lg" onclick="submitForm()">문의 보내기</button>
+        </div>
+
+        <!-- 전송 완료 -->
+        <div class="form-success" id="form-success">
+          <div class="form-success__icon">✅</div>
+          <div class="form-success__title">문의가 접수되었습니다</div>
+          <p class="form-success__text" id="form-success-text"><span id="form-success-default-text">소중한 문의를 보내주셔서 감사합니다.<br>담당자가 확인 후 연락드리겠습니다.<br><br>통상 1~3 영업일 내에 답변 드립니다.</span></p>
+          <button class="btn btn--outline" style="margin-top:24px;" onclick="resetForm()">다른 문의하기</button>
+        </div>
+      </div>
+
+    </div><!-- /.contact-grid -->
+  </div>
+</section>
+
+<!-- 오시는 길 -->
+<section class="section">
+  <div class="container">
+    <div style="margin-top:0;">
+      <div class="section-header" style="text-align:left;margin-bottom:24px;">
+        <span class="section-label">LOCATION</span>
+        <h2 class="section-title" style="margin-bottom:0;">오시는 길</h2>
+      </div>
+      <!-- 주소 -->
+      <div style="margin-bottom:28px;">
+        <div style="font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;">ADDRESS</div>
+        <p style="font-size:1rem;color:var(--text-dark);font-weight:500;margin-bottom:4px;" id="footer-address-display">서울특별시 마포구 월드컵로 37, 201-A호 한국 아가스티아 협회</p>
+        <p style="font-size:0.82rem;color:var(--text-mid);" id="contact-address-sub">지하철 6호선 월드컵경기장역 또는 합정역 인근</p>
+      </div>
+      <!-- 구글맵 임베드 -->
+      <div style="width:100%;border-radius:8px;overflow:hidden;border:1px solid var(--border);">
+        <iframe
+          id="contact-map-iframe"
+          src="https://maps.google.com/maps?q=37.55232,126.9117&z=15&output=embed&hl=ko"
+          style="width:100%;height:360px;border:none;"
+          allowfullscreen
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="한국 아가스티아 협회 오시는 길">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  renderNavbar('contact');
+  renderFooter();
+
+  async function loadSiteContent() {
+    try {
+      const map = await SB.loadContentMap(500);
+
+      // 페이지 타이틀
+      const pageTitle = (map['contact_page_title']||{}).content||'';
+      if (pageTitle) {
+        const el = document.querySelector('.page-header__title');
+        if (el) el.textContent = pageTitle;
+      }
+
+      // 헤더 안내 문구 (신버전 키 우선, 없으면 구버전 contact_text 폴백)
+      const headerSub = (map['contact_header_sub']||{}).content || (map['contact_text']||{}).content || '';
+      if (headerSub) {
+        const el = document.querySelector('.page-header__sub');
+        if (el) el.innerHTML = headerSub.replace(/\n/g,'<br>');
+      }
+
+      // 폼 안내 문구
+      const formSub = (map['contact_form_sub']||{}).content||'';
+      if (formSub) {
+        const el = document.querySelector('.contact-form-wrap__sub');
+        if (el) el.innerHTML = formSub.replace(/\n/g,'<br>');
+      }
+
+      // 전송 완료 메시지
+      const successMsg = (map['contact_success_msg']||{}).content||'';
+      if (successMsg) {
+        const el = document.getElementById('form-success-default-text');
+        if (el) el.innerHTML = successMsg.replace(/\n/g,'<br>');
+      }
+
+      // 주소
+      const addr = (map['contact_address']||{}).content||'';
+      if (addr) {
+        const el = document.getElementById('footer-address-display');
+        if (el) el.textContent = addr;
+      }
+
+      // 주소 부가 설명
+      const addrSub = (map['contact_address_sub']||{}).content||'';
+      if (addrSub) {
+        const el = document.getElementById('contact-address-sub');
+        if (el) el.textContent = addrSub;
+      }
+
+      // 지도 좌표
+      const lat = (map['contact_map_lat']||{}).content||'';
+      const lng = (map['contact_map_lng']||{}).content||'';
+      if (lat && lng) {
+        const iframe = document.getElementById('contact-map-iframe');
+        if (iframe) {
+          const parsedLat = parseFloat(lat);
+          const parsedLng = parseFloat(lng);
+          if (!isNaN(parsedLat) && !isNaN(parsedLng)) {
+            iframe.src = `https://maps.google.com/maps?q=${parsedLat},${parsedLng}&z=15&output=embed&hl=ko`;
+          }
+        }
+      }
+
+    } catch(e) {}
+  }
+
+  // 내 신청 내역 (취소용)
+  let _myAppsForCancel = [];
+
+  function handleTypeChange(val) {
+    toggleCancelNotice(val);
+    // 미성년자 세미나 신청 문의 안내
+    const minorNotice = document.getElementById('minor-seminar-notice');
+    if (minorNotice) minorNotice.style.display = (val === '미성년자 세미나 신청 문의') ? 'block' : 'none';
+  }
+
+  function toggleCancelNotice(val) {
+    const notice = document.getElementById('cancel-notice');
+    if (!notice) return;
+    const isCancel = val === '잎 리딩 및 세미나 신청 취소';
+    notice.style.display = isCancel ? 'block' : 'none';
+    if (isCancel) loadMyAppsForCancel();
+  }
+
+  async function loadMyAppsForCancel() {
+    const session = Auth.getSession && Auth.getSession();
+    const selectWrap = document.getElementById('cancel-seminar-select');
+    const manualWrap = document.getElementById('cancel-seminar-manual');
+    const calcWrap = document.getElementById('cancel-refund-calc');
+    if (!session) {
+      // 비로그인: 직접 입력 필드 + 계산기 표시
+      if (selectWrap) selectWrap.style.display = 'none';
+      if (manualWrap) manualWrap.style.display = 'block';
+      if (calcWrap) calcWrap.style.display = 'block';
+      // 취소일 오늘로 자동세팅
+      const today = new Date().toISOString().split('T')[0];
+      const ccDate = document.getElementById('cc-cancel-date');
+      if (ccDate && !ccDate.value) ccDate.value = today;
+      return;
+    }
+    if (manualWrap) manualWrap.style.display = 'none';
+    try {
+      // 내 신청 내역 로드 (진행 중 세미나만)
+      const allAppsRaw = await SB.getAll('applications', { limit: 200 });
+      const allApps = allAppsRaw.filter(a => a.user_id === session.id);
+      const today = new Date();
+      // 종료되지 않은 세미나만
+      _myAppsForCancel = allApps.filter(a => {
+        if (!a.seminar_date) return true; // 날짜 없으면 포함
+        const sDate = new Date(a.seminar_date);
+        return sDate >= today;
+      });
+
+      const sel = document.getElementById('cancel-seminar-list');
+      if (sel) {
+        sel.innerHTML = '<option value="">-- 신청한 세미나 선택 --</option>';
+        _myAppsForCancel.forEach(a => {
+          const opt = document.createElement('option');
+          opt.value = a.id;
+          opt.textContent = `${a.seminar_title || '세미나'} (${a.seminar_date || '날짜미상'}) · ${Number(a.payment_amount||0).toLocaleString('ko-KR')}원`;
+          sel.appendChild(opt);
+        });
+      }
+      if (selectWrap) selectWrap.style.display = 'block';
+      if (calcWrap) calcWrap.style.display = 'block';
+
+      // 취소일 오늘로 자동세팅
+      const ccDate = document.getElementById('cc-cancel-date');
+      if (ccDate && !ccDate.value) ccDate.value = today.toISOString().split('T')[0];
+    } catch(e) {
+      console.error('[loadMyAppsForCancel]', e);
+      if (calcWrap) calcWrap.style.display = 'block';
+    }
+  }
+
+  function onCancelSeminarChange() {
+    const sel = document.getElementById('cancel-seminar-list');
+    if (!sel || !sel.value) {
+      document.getElementById('cancel-seminar-info').style.display = 'none';
+      return;
+    }
+    const app = _myAppsForCancel.find(a => a.id === sel.value);
+    if (!app) return;
+
+    // 정보 패널 채우기
+    const infoEl = document.getElementById('cancel-seminar-info');
+    if (infoEl) {
+      infoEl.style.display = 'block';
+      infoEl.innerHTML = `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+          <div><span style="font-size:0.7rem;color:var(--text-light);">세미나명</span><br><strong>${app.seminar_title||'-'}</strong></div>
+          <div><span style="font-size:0.7rem;color:var(--text-light);">세미나 날짜</span><br><strong>${app.seminar_date||'-'}</strong></div>
+          <div><span style="font-size:0.7rem;color:var(--text-light);">결제 금액</span><br><strong style="color:var(--gold);">${Number(app.payment_amount||0).toLocaleString('ko-KR')}원</strong></div>
+          <div><span style="font-size:0.7rem;color:var(--text-light);">신청일</span><br><strong>${app.created_at ? new Date(app.created_at).toLocaleDateString('ko-KR') : '-'}</strong></div>
+        </div>`;
+    }
+
+    // 계산기에 자동 입력
+    if (app.seminar_date) {
+      const semEl = document.getElementById('cc-seminar-date');
+      if (semEl) semEl.value = app.seminar_date;
+    }
+    if (app.created_at) {
+      const payEl = document.getElementById('cc-payment-date');
+      if (payEl) payEl.value = new Date(app.created_at).toISOString().split('T')[0];
+    }
+    if (app.payment_amount) {
+      const priceEl = document.getElementById('cc-price');
+      if (priceEl) priceEl.value = app.payment_amount;
+    }
+    calcContactRefund();
+
+    // 문의 내용에 세미나 정보 자동 삽입
+    const msgEl = document.getElementById('cf-message');
+    if (msgEl && !msgEl.value) {
+      msgEl.value = `[취소 신청]\n세미나명: ${app.seminar_title||''}\n세미나 날짜: ${app.seminar_date||''}\n신청일: ${app.created_at ? new Date(app.created_at).toLocaleDateString('ko-KR') : ''}\n결제 금액: ${Number(app.payment_amount||0).toLocaleString('ko-KR')}원\n\n취소 사유: `;
+    }
+  }
+
+  // 비회원 직접 입력 시 환불 계산기에 자동 반영
+  function onCancelManualDateChange() {
+    const semDate = document.getElementById('cancel-manual-date')?.value;
+    const payDate = document.getElementById('cancel-manual-payment-date')?.value;
+    const price   = document.getElementById('cancel-manual-price')?.value;
+    if (semDate) {
+      const el = document.getElementById('cc-seminar-date');
+      if (el) el.value = semDate;
+    }
+    if (payDate) {
+      const el = document.getElementById('cc-payment-date');
+      if (el) el.value = payDate;
+    }
+    if (price) {
+      const el = document.getElementById('cc-price');
+      if (el) el.value = price;
+    }
+    // 세미나명을 문의 내용에 자동 반영
+    const title = document.getElementById('cancel-manual-title')?.value || '';
+    const msgEl = document.getElementById('cf-message');
+    if (msgEl && title && !msgEl.value) {
+      msgEl.value = `[취소 신청]\n세미나명: ${title}\n세미나 날짜: ${semDate||''}\n신청일: ${payDate||''}\n결제 금액: ${price ? Number(price).toLocaleString('ko-KR')+'원' : ''}\n\n취소 사유: `;
+    }
+    calcContactRefund();
+  }
+
+  function calcContactRefund() {
+    const semDateStr  = (document.getElementById('cc-seminar-date')||{}).value || '';
+    const cancelDateStr = (document.getElementById('cc-cancel-date')||{}).value || '';
+    const paymentDateStr = (document.getElementById('cc-payment-date')||{}).value || '';
+    const price = parseInt((document.getElementById('cc-price')||{}).value) || 0;
+    const resultEl = document.getElementById('cc-refund-result');
+    if (!semDateStr || !cancelDateStr || price <= 0) {
+      if (resultEl) resultEl.style.display = 'none';
+      return;
+    }
+    const semDate = new Date(semDateStr);
+    const cancelDate = new Date(cancelDateStr);
+    const paymentDate = paymentDateStr ? new Date(paymentDateStr) : null;
+    const diffDays = Math.ceil((semDate - cancelDate) / (1000*60*60*24));
+    const daysSincePayment = paymentDate ? Math.floor((cancelDate - paymentDate)/(1000*60*60*24)) : null;
+
+    let rule='', refundRate=0, penalty=0, extra='';
+    if (paymentDate && daysSincePayment !== null && daysSincePayment <= 7 && diffDays >= 30) {
+      rule='✨ 신청 후 7일 이내 & 세미나 30일 이상 이전'; refundRate=100; penalty=0;
+      extra=`(신청후 ${daysSincePayment}일, 세미나 D-${Math.max(diffDays,0)})`;
+    } else if (diffDays >= 30) {
+      rule='세미나 30일 이상 이전 취소'; refundRate=100; penalty=0; extra=`(D-${diffDays})`;
+    } else if (diffDays >= 15) {
+      rule='세미나 30일 ~ 15일 이전 취소'; refundRate=70; penalty=100000; extra=`(D-${diffDays})`;
+    } else if (diffDays >= 7) {
+      rule='세미나 14일 ~ 7일 이전 취소'; refundRate=50; penalty=150000; extra=`(D-${diffDays})`;
+    } else if (diffDays >= 3) {
+      rule='세미나 6일 ~ 3일 이전 취소'; refundRate=30; penalty=210000; extra=`(D-${diffDays})`;
+    } else if (diffDays >= 0) {
+      rule='세미나 2일 이전 ~ 당일 취소'; refundRate=0; penalty=price; extra=`(D-${diffDays})`;
+    } else {
+      rule='세미나 종료 후 취소 요청'; refundRate=0; penalty=price; extra='(종료 후)';
+    }
+    const refundAmt = Math.floor(price * refundRate / 100);
+    const ruleEl = document.getElementById('cc-rule-text');
+    const ruleLabel = document.getElementById('cc-rule-label');
+    const amtEl = document.getElementById('cc-amount-text');
+    const penEl = document.getElementById('cc-penalty-text');
+    if (ruleEl) ruleEl.textContent = rule;
+    if (ruleLabel) ruleLabel.textContent = '적용 규정  ' + extra;
+    if (amtEl) {
+      amtEl.textContent = refundRate===0 ? '환불 불가' : refundAmt.toLocaleString('ko-KR')+'원';
+      amtEl.style.color = refundRate===0 ? '#c53030' : refundRate===100 ? '#2a7a2a' : 'var(--gold)';
+    }
+    if (penEl) penEl.textContent = penalty>0&&refundRate>0 ? `위약금 ${penalty.toLocaleString('ko-KR')}원 / 환불율 ${refundRate}%` : refundRate===100 ? '✅ 전액 환불' : '⛔ 환불 불가';
+    if (resultEl) resultEl.style.display = 'block';
+  }
+
+  function formatPhone(input) {
+    let v = input.value.replace(/\D/g, '');
+    if (v.length <= 3) { input.value = v; }
+    else if (v.length <= 7) { input.value = v.slice(0,3)+'-'+v.slice(3); }
+    else {
+      if (v.startsWith('02')) input.value = v.slice(0,2)+'-'+v.slice(2,6)+(v.length>6?'-'+v.slice(6,10):'');
+      else input.value = v.slice(0,3)+'-'+v.slice(3,7)+(v.length>7?'-'+v.slice(7,11):'');
+    }
+  }
+
+  function updateReplyLabel() {
+    const emailLabel = document.getElementById('reply-email-label');
+    const phoneLabel = document.getElementById('reply-phone-label');
+    const isEmail = document.getElementById('reply-email').checked;
+    if (emailLabel) emailLabel.style.borderColor = isEmail ? 'var(--gold)' : 'var(--border)';
+    if (phoneLabel) phoneLabel.style.borderColor = !isEmail ? 'var(--gold)' : 'var(--border)';
+  }
+  // 초기 선택 표시
+  document.addEventListener('DOMContentLoaded', updateReplyLabel);
+
+  async function submitForm() {
+    const name = document.getElementById('cf-name').value.trim();
+    const email = document.getElementById('cf-email').value.trim();
+    const phone = document.getElementById('cf-phone').value.trim();
+    const type = document.getElementById('cf-type').value;
+    const message = document.getElementById('cf-message').value.trim();
+    const agree = document.getElementById('cf-agree').checked;
+    const replyMethod = document.querySelector('input[name="cf-reply"]:checked')?.value || 'email';
+
+    if (!name) { Toast.show('이름을 입력해주세요.', 'error'); return; }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { Toast.show('올바른 이메일을 입력해주세요.', 'error'); return; }
+    if (!phone) {
+      const errEl = document.getElementById('e-cf-phone');
+      if (errEl) errEl.style.display = 'block';
+      Toast.show('전화번호를 입력해주세요.', 'error'); return;
+    } else {
+      const errEl = document.getElementById('e-cf-phone');
+      if (errEl) errEl.style.display = 'none';
+    }
+    if (!message) { Toast.show('문의 내용을 입력해주세요.', 'error'); return; }
+    if (!agree) { Toast.show('개인정보 수집에 동의해주세요.', 'error'); return; }
+
+    const submitBtn = document.querySelector('[onclick="submitForm()"]');
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '전송 중...'; }
+
+    const replyLabel = replyMethod === 'email' ? '이메일' : '휴대폰';
+
+    try {
+      const _now = Date.now();
+      const result = await SB.insert('inquiries', {
+        name, email, phone,
+        inquiry_type: type,
+        message,
+        status: '신규',
+        reply_method: replyMethod,
+        agree_privacy: true,
+        admin_note: `답변 수단: ${replyLabel}`,
+        original_created_at: _now
+      });
+      if (!result) throw new Error('서버 응답이 없습니다.');
+      // 완료 메세지: site_content 커스텀 메시지 우선, 없으면 기본값
+      const successText = document.getElementById('form-success-text');
+      if (successText) {
+        const customMsgEl = document.getElementById('form-success-default-text');
+        const customMsg = customMsgEl ? customMsgEl.innerHTML : '';
+        const replyStr = replyMethod === 'email' ? '<strong>등록하신 이메일</strong>' : '<strong>등록하신 휴대폰 번호</strong>';
+        if (customMsg && customMsg.trim()) {
+          // 커스텀 메시지에 답변 수단 부가
+          successText.innerHTML = customMsg + `<br><br>📩 답변 수단: ${replyStr}`;
+        } else {
+          successText.innerHTML = `소중한 문의를 보내주셔서 감사합니다.<br>담당자가 확인 후 ${replyStr}로 연락드리겠습니다.<br><br>통상 1~3 영업일 내에 답변 드립니다.`;
+        }
+      }
+      document.getElementById('form-area').style.display = 'none';
+      document.getElementById('form-success').style.display = 'block';
+    } catch(e) {
+      Toast.show('전송 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.', 'error');
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = '문의 보내기'; }
+    }
+  }
+
+  function resetForm() {
+    document.getElementById('cf-name').value = '';
+    document.getElementById('cf-email').value = '';
+    document.getElementById('cf-phone').value = '';
+    document.getElementById('cf-message').value = '';
+    document.getElementById('cf-agree').checked = false;
+    const emailRadio = document.getElementById('reply-email');
+    if (emailRadio) emailRadio.checked = true;
+    updateReplyLabel();
+    document.getElementById('form-area').style.display = 'block';
+    document.getElementById('form-success').style.display = 'none';
+  }
+
+  /* ── 로그인 회원 정보 자동 입력 ── */
+  function autoFillUserInfo() {
+    const session = Auth.getSession && Auth.getSession();
+    if (!session) return;
+    const nameEl = document.getElementById('cf-name');
+    const emailEl = document.getElementById('cf-email');
+    const phoneEl = document.getElementById('cf-phone');
+    if (nameEl && !nameEl.value && session.name) nameEl.value = session.name;
+    if (emailEl && !emailEl.value && session.email) emailEl.value = session.email;
+    if (phoneEl && !phoneEl.value && session.phone) phoneEl.value = session.phone;
+  }
+
+  Promise.all([loadSiteContent()])
+    .finally(() => {
+      document.body.style.opacity = '1';
+      autoFillUserInfo();
+    });
+
+  // URL 파라미터로 자동 취소 유형 선택
+  document.addEventListener('DOMContentLoaded', function() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('type') === 'cancel') {
+      const sel = document.getElementById('cf-type');
+      if (sel) {
+        for (let i=0; i<sel.options.length; i++) {
+          if (sel.options[i].value === '잎 리딩 및 세미나 신청 취소' || sel.options[i].text === '잎 리딩 및 세미나 신청 취소') {
+            sel.selectedIndex = i;
+            toggleCancelNotice('잎 리딩 및 세미나 신청 취소');
+            break;
+          }
+        }
+      }
+    }
+  });
+</script>
+</body>
+</html>

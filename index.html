@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>한국 아가스티아 협회 | Korea Agastya Association</title>
+  <meta name="description" content="고대의 지혜를 현대를 살아가는 확신으로. 한국 아가스티아 협회 공식 사이트입니다.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/index.css">
+</head>
+<body style="opacity:0;transition:opacity 0.25s ease;">
+
+<!-- ── 히어로 섹션 ── -->
+<section class="hero" id="hero">
+  <div class="hero__bg">
+    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1600&auto=format&fit=crop" alt="하늘" class="hero__img">
+    <div class="hero__overlay"></div>
+  </div>
+
+  <div class="hero__content">
+    <span class="hero__label">KOREA AGASTYA ASSOCIATION</span>
+    <h1 class="hero__title" id="hero-title">유구한 지혜를,<br>지금을 사는 확신으로.</h1>
+    <p class="hero__sub" id="hero-subtitle">수천 년 전부터 남인도의 땅에 보존되어 온<br class="hero__sub-br"> 당신의 영혼의 기록</p>
+    <div class="hero__btns">
+      <a href="about.html" class="btn btn--white btn--lg">협회 소개</a>
+      <a href="seminar.html" class="btn btn--outline-gold btn--lg" style="border-color:rgba(255,255,255,0.6);color:white;">세미나 보기</a>
+    </div>
+  </div>
+  <div class="hero__scroll">
+    <span>SCROLL</span>
+    <div class="hero__scroll-line"></div>
+  </div>
+</section>
+
+<!-- ── 인트로 메시지 섹션 ── -->
+<section class="section intro-section">
+  <div class="container">
+    <div class="intro-section__inner">
+      <p class="intro-section__lead" id="intro-lead">「아가스티아잎」은 수천 년 전부터<br>남인도 땅에서 소중히 보존되어 온<br class="intro__lead-br"> 당신의 영혼의 기록입니다.</p>
+
+      <p class="intro-section__text text-mid" id="intro-text1">그 안에는 당신이 왜 이 세상에 태어났는지에 대한 사명,<br>장점·단점, 재능, 지금까지 걸어온 삶의 발자취,<br>그리고 앞으로 펼쳐질 일들까지 모든 것이 상세하게 기록되어 있습니다.</p>
+
+      <p class="intro-section__text text-gold" id="intro-text2" style="margin-top:24px;">저희 협회는 이 신성한 메시지를 성실하고 진실되게 여러분께 전달하고,<br>이제껏 한 치 앞이 어두웠던 인생에 빛을 비추어,<br>여러분의 인생이 현실적으로도 정신적으로도 더없이 풍요롭고 행복해질 수 있도록<br>이끄는 안내자가 될 것입니다.</p>
+
+      <p class="intro-section__text text-mid" id="intro-text3"></p>
+
+      <div style="margin-top:40px; text-align:center;">
+        <a href="philosophy.html" class="btn btn--outline">EXPLORE OUR PHILOSOPHY</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── NEWS & ARTICLES ── -->
+<section class="section bg-cream" id="news">
+  <div class="container">
+    <div class="section-header" style="display:flex;align-items:center;justify-content:space-between;text-align:left;margin-bottom:0;">
+      <div>
+        <span class="section-label">NEWS & ARTICLES</span>
+        <h2 class="section-title" style="margin-bottom:0;">소식 · 기사</h2>
+      </div>
+      <a href="news.html" class="btn btn--outline btn--sm" style="white-space:nowrap;">전체 보기 →</a>
+    </div>
+    <div class="hr-gold" style="margin-top:24px;"></div>
+
+    <!-- 주요 뉴스 리스트 -->
+    <div class="news-important" style="margin-bottom:48px;">
+      <div class="news-important__label" style="margin-top:8px;">IMPORTANT NEWS</div>
+      <div class="news-list" id="news-list">
+        <div style="padding:20px 0;color:var(--text-light);font-size:0.85rem;">로딩 중...</div>
+      </div>
+    </div>
+
+    <!-- 최신 기사 카드 -->
+    <div class="grid-2" id="articles-grid"></div>
+  </div>
+</section>
+
+
+
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script>
+
+
+  renderNavbar('home');
+  renderFooter();
+
+  /* ── site_content 로드 ── */
+  async function loadSiteContent() {
+    try {
+      const map = await SB.loadContentMap(300);
+      const get = (key) => (map[key] || {}).content || '';
+
+      const heroTitle = get('hero_title');
+      if (heroTitle) document.getElementById('hero-title').innerHTML = heroTitle.replace(/\n/g, '<br>');
+      // hero_subtitle은 <br class="hero__sub-br"> 태그 유지를 위해 DB 덮어쓰기 방지
+      // const heroSub = get('hero_subtitle');
+      // if (heroSub) document.getElementById('hero-subtitle').textContent = heroSub;
+
+      // intro 텍스트는 HTML 고정값 사용 (DB 덮어쓰기 방지)
+      // const introLead = get('intro_lead');
+      // if (introLead) document.getElementById('intro-lead').innerHTML = introLead.replace(/\n/g, '<br>');
+    } catch(e) {}
+  }
+
+  /* ── 소식&기사 동적 로드 ── */
+  async function loadNews() {
+    try {
+      const rows = await SB.getAll('news', { limit: 100, order: 'published_date.desc' });
+      const news = rows.filter(n => n.status === '발행');
+
+      const listEl = document.getElementById('news-list');
+      const listItems = news.slice(0, 5);
+      listEl.innerHTML = listItems.length
+        ? listItems.map(n => `
+          <div class="news-item" style="cursor:pointer;" onclick="window.location.href='news-detail.html?id=${n.id}'">
+            <span class="news-item__date">${(n.published_date||'').replace(/-/g,'.')}</span>
+            <span class="badge badge--gold">${n.category||''}</span>
+            <div class="news-item__text">
+              <div class="news-item__title">${n.title}</div>
+            </div>
+          </div>`).join('')
+        : '<div style="padding:20px 0;color:var(--text-light);font-size:0.85rem;">등록된 소식이 없습니다.</div>';
+
+      const gridEl = document.getElementById('articles-grid');
+      const cardItems = news.filter(n => n.is_featured).slice(0, 2);
+      const cards = cardItems.length >= 2 ? cardItems : news.slice(0, 2);
+      gridEl.innerHTML = cards.length
+        ? cards.map(n => `
+          <div class="article-card" style="cursor:pointer;" onclick="window.location.href='news-detail.html?id=${n.id}'">
+            <div class="article-card__img-wrap">
+              <img src="${(n.image_url && n.image_url.startsWith('http')) ? n.image_url : 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'}"
+                   alt="${n.title}" class="article-card__img"
+                   onerror="this.src='https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600'">
+            </div>
+            <div class="article-card__body">
+              <div class="article-card__sub">${n.subtitle||''}</div>
+              <h3 class="article-card__title">${n.title}</h3>
+              <p class="article-card__text">${(n.content||'').substring(0,80)}...</p>
+
+            </div>
+          </div>`).join('')
+        : '';
+    } catch(e) {
+      document.getElementById('news-list').innerHTML = '<div style="color:var(--text-light);padding:16px 0;font-size:0.85rem;">소식을 불러오지 못했습니다.</div>';
+    }
+  }
+
+  Promise.all([loadSiteContent(), loadNews()])
+    .finally(() => { document.body.style.opacity = '1'; });
+</script>
+</body>
+</html>

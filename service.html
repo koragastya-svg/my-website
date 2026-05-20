@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>서비스 | 한국 아가스티아 협회</title>
+  <meta name="description" content="한국 아가스티아 협회의 서비스를 소개합니다. 아가스티아잎 탐색, 리딩, 컨설팅, 인도 여행, 리트리트, 아유르베다.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* 서비스 카드 그리드 */
+    .services-full-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+    .svc-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: var(--transition);
+      display: flex; flex-direction: column;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .svc-card:hover {
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+      transform: translateY(-4px);
+    }
+    .svc-card__img-wrap {
+      height: 240px; overflow: hidden; position: relative;
+    }
+    .svc-card__img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+    .svc-card:hover .svc-card__img { transform: scale(1.06); }
+    .svc-card__num-badge {
+      position: absolute; top: 16px; left: 16px;
+      background: var(--gold); color: white;
+      font-size: 0.65rem; letter-spacing: 0.2em;
+      padding: 4px 10px; border-radius: 2px;
+    }
+    .svc-card__body {
+      padding: 28px 28px 32px;
+      flex: 1; display: flex; flex-direction: column;
+    }
+    .svc-card__label {
+      font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 8px;
+    }
+    .svc-card__title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.2rem; font-weight: 500;
+      color: var(--text-dark); margin-bottom: 12px; line-height: 1.5;
+    }
+    .svc-card__text {
+      font-size: 0.88rem; color: var(--text-mid);
+      line-height: 1.9; flex: 1; margin-bottom: 24px;
+    }
+    .svc-card__btn { align-self: flex-start; }
+
+    /* 빛의 법칙 CTA */
+    .law-cta {
+      background: var(--navy);
+      padding: 80px 0;
+      text-align: center;
+    }
+    .law-cta__title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      color: white; margin-bottom: 16px; line-height: 1.5;
+    }
+    .law-cta__sub {
+      font-size: 0.9rem; color: rgba(255,255,255,0.65);
+      line-height: 1.9; margin-bottom: 32px; max-width: 560px;
+      margin-left: auto; margin-right: auto;
+    }
+
+    /* 세미나 배너 */
+    .seminar-cta {
+      background: var(--gold);
+      padding: 64px 0;
+    }
+    .seminar-cta__inner {
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 32px;
+    }
+
+    @media (max-width: 1024px) {
+      .services-full-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .services-full-grid { grid-template-columns: 1fr; }
+      .seminar-cta__inner { flex-direction: column; text-align: center; }
+    }
+    @media (max-width: 480px) {
+      .services-full-grid { gap: 16px; }
+      .seminar-cta__inner { gap: 16px; }
+      .svc-edit-modal { padding: 22px 16px; }
+    }
+
+    /* 관리자 전용 수정 버튼 */
+    .svc-admin-btn {
+      display: none;
+      position: absolute; top: 10px; right: 10px; z-index: 10;
+      background: rgba(26,26,46,0.85); color: #d4af37;
+      border: 1px solid #d4af37; border-radius: 4px;
+      padding: 4px 10px; font-size: 0.7rem; font-weight: 600;
+      cursor: pointer; letter-spacing: 0.05em; backdrop-filter: blur(2px);
+      transition: background 0.2s;
+    }
+    .svc-admin-btn:hover { background: #1a1a2e; }
+    body.is-admin .svc-admin-btn { display: block; }
+    .svc-card__img-wrap { position: relative; }
+
+    /* 관리자 편집 모달 */
+    .svc-edit-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.55); z-index: 9000;
+      align-items: center; justify-content: center; padding: 20px;
+    }
+    .svc-edit-overlay.show { display: flex; }
+    .svc-edit-modal {
+      background: white; border-radius: 12px; padding: 32px;
+      width: 100%; max-width: 520px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      max-height: 90vh; overflow-y: auto;
+    }
+    .svc-edit-modal h3 {
+      font-family: 'Noto Serif KR', serif; font-size: 1.1rem;
+      color: var(--navy); margin-bottom: 20px; padding-bottom: 14px;
+      border-bottom: 2px solid var(--gold);
+    }
+    .svc-edit-field { margin-bottom: 16px; }
+    .svc-edit-field label {
+      display: block; font-size: 0.72rem; font-weight: 700;
+      color: var(--text-light); letter-spacing: 0.1em;
+      text-transform: uppercase; margin-bottom: 6px;
+    }
+    .svc-edit-field input, .svc-edit-field textarea {
+      width: 100%; border: 1px solid var(--border); border-radius: 5px;
+      padding: 10px 12px; font-size: 0.88rem; font-family: inherit;
+      box-sizing: border-box; outline: none; transition: border-color 0.2s;
+    }
+    .svc-edit-field input:focus, .svc-edit-field textarea:focus {
+      border-color: var(--gold); box-shadow: 0 0 0 3px rgba(200,151,58,0.1);
+    }
+    .svc-edit-field textarea { min-height: 80px; resize: vertical; }
+    .svc-img-preview-box {
+      width: 100%; height: 120px; border-radius: 6px;
+      background: #f0f0f0; overflow: hidden; margin-top: 8px;
+      border: 1px solid var(--border);
+    }
+    .svc-img-preview-box img { width: 100%; height: 100%; object-fit: cover; }
+    .svc-edit-footer {
+      display: flex; justify-content: flex-end; gap: 10px;
+      margin-top: 20px; padding-top: 16px; border-top: 1px solid #eee;
+    }
+  </style>
+</head>
+<body>
+
+<!-- 페이지 헤더 -->
+<div class="page-header">
+  <span class="page-header__label">OUR SERVICES</span>
+  <h1 class="page-header__title">서비스</h1>
+  <p class="page-header__sub" id="service-subtitle">고대의 지혜와 현대의 매니지먼트를 융합하여,<br>한 사람, 한 사람의 본질이 최상의 빛을 되찾기 위한 다각적인 접근 방식을 제공합니다.</p>
+</div>
+
+<!-- 서비스 목록 -->
+<section class="section bg-cream">
+  <div class="container">
+    <div class="services-full-grid">
+
+      <!-- 01 아가스티아잎 탐색 -->
+      <div class="svc-card" id="svc-card-s1">
+        <div class="svc-card__img-wrap">
+          <img id="svc-s1-img" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=700" alt="아가스티아잎 탐색" class="svc-card__img">
+          <span class="svc-card__num-badge">01</span>
+          <button class="svc-admin-btn" onclick="openSvcEdit('s1')">✏ 수정</button>
+        </div>
+        <div class="svc-card__body">
+          <div class="svc-card__label">SEARCHING</div>
+          <h2 class="svc-card__title" id="svc-s1-title">아가스티아잎 탐색</h2>
+          <p class="svc-card__text" id="svc-s1-desc">지문의 패턴을 바탕으로, 당신만을 위해 배정된 「아가스티아잎」을 특정합니다.</p>
+          <a href="service-leaf.html" class="btn btn--outline btn--sm svc-card__btn">MORE</a>
+        </div>
+      </div>
+
+      <!-- 02 리딩 -->
+      <div class="svc-card" id="svc-card-s2">
+        <div class="svc-card__img-wrap">
+          <img id="svc-s2-img" src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=700" alt="리딩" class="svc-card__img">
+          <span class="svc-card__num-badge">02</span>
+          <button class="svc-admin-btn" onclick="openSvcEdit('s2')">✏ 수정</button>
+        </div>
+        <div class="svc-card__body">
+          <div class="svc-card__label">READING</div>
+          <h2 class="svc-card__title" id="svc-s2-title">리딩</h2>
+          <p class="svc-card__text" id="svc-s2-desc">발견된 아가스티아잎에 기록된 고대 타밀어 시를 해독. 미래의 가능성을 읽어냅니다.</p>
+          <a href="service-reading.html" class="btn btn--outline btn--sm svc-card__btn">MORE</a>
+        </div>
+      </div>
+
+      <!-- 03 리트리트 (구 05) -->
+      <div class="svc-card" id="svc-card-s5">
+        <div class="svc-card__img-wrap">
+          <img id="svc-s5-img" src="https://images.unsplash.com/photo-1599901860904-17e6ed7083a0?w=700" alt="리트리트" class="svc-card__img">
+          <span class="svc-card__num-badge">03</span>
+          <button class="svc-admin-btn" onclick="openSvcEdit('s5')">✏ 수정</button>
+        </div>
+        <div class="svc-card__body">
+          <div class="svc-card__label">RETREAT</div>
+          <h2 class="svc-card__title" id="svc-s5-title">국내 리트리트</h2>
+          <p class="svc-card__text" id="svc-s5-desc">수천 년의 지혜와 우주의 법칙에 닿아, 자신의 사명과 인생의 흐름이 명확하게 떨어지는 2박 3일.</p>
+          <a href="service-retreat.html" class="btn btn--outline btn--sm svc-card__btn">MORE</a>
+        </div>
+      </div>
+
+      <!-- 04 인도 여행 (그대로 유지) -->
+      <div class="svc-card" id="svc-card-s4">
+        <div class="svc-card__img-wrap">
+          <img id="svc-s4-img" src="https://images.unsplash.com/photo-1524492412937-b28074a5d7da?w=700&auto=format&fit=crop" alt="인도 여행" class="svc-card__img">
+          <span class="svc-card__num-badge">04</span>
+          <button class="svc-admin-btn" onclick="openSvcEdit('s4')">✏ 수정</button>
+        </div>
+        <div class="svc-card__body">
+          <div class="svc-card__label">INDIA JOURNEY</div>
+          <h2 class="svc-card__title" id="svc-s4-title">인도 여행</h2>
+          <p class="svc-card__text" id="svc-s4-desc">카르마 해소의 사원을 순례. 남인도의 성스러운 땅을 밟으며, 그 순수한 에너지로 정화와 변용의 과정을 경험합니다.</p>
+          <a href="service-india.html" class="btn btn--outline btn--sm svc-card__btn">MORE</a>
+        </div>
+      </div>
+
+      <!-- 05 아유르베다 (구 06) -->
+      <div class="svc-card" id="svc-card-s6">
+        <div class="svc-card__img-wrap">
+          <img id="svc-s6-img" src="https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=700&auto=format&fit=crop" alt="아유르베다" class="svc-card__img">
+          <span class="svc-card__num-badge">05</span>
+          <button class="svc-admin-btn" onclick="openSvcEdit('s6')">✏ 수정</button>
+        </div>
+        <div class="svc-card__body">
+          <div class="svc-card__label">AYURVEDA</div>
+          <h2 class="svc-card__title" id="svc-s6-title">아유르베다</h2>
+          <p class="svc-card__text" id="svc-s6-desc">체질에 맞는 양생법. 신체 레벨에서 에너지의 조화를 목표로 합니다.</p>
+          <a href="service-ayurveda.html" class="btn btn--outline btn--sm svc-card__btn">MORE</a>
+        </div>
+      </div>
+
+      <!-- 06 컨설팅 (구 03) -->
+      <div class="svc-card" id="svc-card-s3">
+        <div class="svc-card__img-wrap">
+          <img id="svc-s3-img" src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=700" alt="컨설팅" class="svc-card__img">
+          <span class="svc-card__num-badge">06</span>
+          <button class="svc-admin-btn" onclick="openSvcEdit('s3')">✏ 수정</button>
+        </div>
+        <div class="svc-card__body">
+          <div class="svc-card__label">CONSULTING</div>
+          <h2 class="svc-card__title" id="svc-s3-title">컨설팅</h2>
+          <p class="svc-card__text" id="svc-s3-desc">바라쿰바구루무니에 의한 특별 해설·어드바이스를 개별적으로 실시하는 서비스입니다.</p>
+          <a href="service-consulting.html" class="btn btn--outline btn--sm svc-card__btn">MORE</a>
+        </div>
+      </div>
+
+      <!-- 추가 서비스 (DB에서 동적 로드) -->
+      <div id="svc-extra-container" style="display:contents;"></div>
+
+    </div>
+  </div>
+</section>
+
+<!-- 관리자 서비스 편집 모달 (admin 계정 전용) -->
+<div class="svc-edit-overlay" id="svc-edit-overlay" onclick="if(event.target===this)closeSvcEdit()">
+  <div class="svc-edit-modal" style="max-width:700px;max-height:90vh;overflow-y:auto;">
+    <h3 id="svc-edit-modal-title">✎ 서비스 수정</h3>
+    <input type="hidden" id="svc-edit-slug">
+    <div class="svc-edit-field">
+      <label>이미지 URL</label>
+      <input type="text" id="svc-edit-img" placeholder="https://..." oninput="updateSvcEditPreview()">
+      <div class="svc-img-preview-box" id="svc-edit-preview-box">
+        <img id="svc-edit-preview-img" src="" alt="" onerror="this.style.display='none'">
+      </div>
+    </div>
+    <div class="svc-edit-field">
+      <label>제목</label>
+      <input type="text" id="svc-edit-title" placeholder="서비스 제목">
+    </div>
+    <div class="svc-edit-field">
+      <label>카드 설명</label>
+      <textarea id="svc-edit-desc" rows="3" placeholder="카드에 표시되는 짧은 설명"></textarea>
+    </div>
+    <div class="svc-edit-field" id="svc-edit-body-field">
+      <label>상세 본문 <span style="font-weight:400;color:#999;font-size:0.7rem;">(MORE 클릭 시 표시)</span></label>
+      <!-- 서식 도우미 버튼 -->
+      <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;padding:8px;background:#f5f5f5;border-radius:6px;border:1px solid #e0e0e0;">
+        <span style="font-size:0.7rem;color:#666;width:100%;margin-bottom:4px;font-weight:600;">📝 서식 삽입</span>
+        <button type="button" onclick="insertFormat('[LEAD]내용[/LEAD]')" title="리드 문단 — 크고 강조된 도입 텍스트" style="font-size:0.7rem;padding:4px 8px;background:#1a1a2e;color:#d4af37;border:none;border-radius:4px;cursor:pointer;">¶ 리드문단</button>
+        <button type="button" onclick="insertFormat('[BOX1]제목|||내용[/BOX1]')" title="Box 1 — 황금 테두리 박스" style="font-size:0.7rem;padding:4px 8px;background:#c8973a;color:white;border:none;border-radius:4px;cursor:pointer;">□ Box 1</button>
+        <button type="button" onclick="insertFormat('[BOX2]제목|||내용[/BOX2]')" title="Box 2 — 연한 배경 박스" style="font-size:0.7rem;padding:4px 8px;background:#4a5568;color:white;border:none;border-radius:4px;cursor:pointer;">▪ Box 2</button>
+        <button type="button" onclick="insertFormat('[SEC]섹션 제목[/SEC]\n내용')" title="섹션 제목" style="font-size:0.7rem;padding:4px 8px;background:#2d3748;color:white;border:none;border-radius:4px;cursor:pointer;">H 섹션</button>
+        <button type="button" onclick="insertFormat('[UL]내용[/UL]')" title="언더라인 텍스트" style="font-size:0.7rem;padding:4px 8px;background:#553c9a;color:white;border:none;border-radius:4px;cursor:pointer;text-decoration:underline;">U 언더라인</button>
+        <button type="button" onclick="insertFormat('[SIDE]내용[/SIDE]')" title="사이드라인 — 좌측 금색 선 강조" style="font-size:0.7rem;padding:4px 8px;background:#276749;color:white;border:none;border-radius:4px;cursor:pointer;">| 사이드라인</button>
+        <button type="button" onclick="insertFormat('**굵게**')" title="굵은 텍스트" style="font-size:0.7rem;padding:4px 8px;background:#e2e8f0;color:#1a202c;border:1px solid #cbd5e0;border-radius:4px;cursor:pointer;font-weight:700;">B 굵게</button>
+        <button type="button" onclick="insertFormat('[HR]')" title="수평 구분선" style="font-size:0.7rem;padding:4px 8px;background:#e2e8f0;color:#718096;border:1px solid #cbd5e0;border-radius:4px;cursor:pointer;">— 구분선</button>
+      </div>
+      <!-- 서식 미리보기 토글 -->
+      <div style="display:flex;gap:8px;margin-bottom:6px;">
+        <button type="button" onclick="toggleBodyPreview()" style="font-size:0.7rem;padding:3px 10px;background:#eef2ff;color:#4361ee;border:1px solid #c5d0fa;border-radius:4px;cursor:pointer;">👁 미리보기 토글</button>
+        <span style="font-size:0.68rem;color:#999;align-self:center;">서식 문법 도움말: **굵게** / [LEAD]리드[/LEAD] / [BOX1]제목|||내용[/BOX1] / [SEC]제목[/SEC] / [UL]언더[/UL] / [SIDE]사이드[/SIDE] / [HR]</span>
+      </div>
+      <textarea id="svc-edit-body" rows="10" placeholder="상세 내용을 입력하세요.&#10;&#10;예시:&#10;[LEAD]리드 문단 — 크고 강조된 도입 텍스트[/LEAD]&#10;&#10;[SEC]첫 번째 섹션[/SEC]&#10;섹션 내용을 입력하세요.&#10;&#10;[BOX1]포인트 제목|||박스 안에 강조할 내용[/BOX1]&#10;&#10;[SIDE]사이드라인으로 강조할 내용[/SIDE]" style="font-family:monospace;font-size:0.82rem;" oninput="updateBodyPreview()"></textarea>
+      <div id="svc-body-preview" style="display:none;margin-top:10px;padding:16px;background:#fafafa;border:1px solid #e2e8f0;border-radius:6px;font-size:0.88rem;line-height:1.9;"></div>
+    </div>
+    <!-- 카드 숨김 토글 -->
+    <div class="svc-edit-field" style="background:#fff8f8;border:1.5px solid #fecaca;border-radius:8px;padding:12px 16px;">
+      <label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin:0;">
+        <input type="checkbox" id="svc-edit-hidden" style="width:16px;height:16px;accent-color:#e53e3e;cursor:pointer;">
+        <span style="font-size:0.85rem;font-weight:600;color:#c53030;">🚫 이 카드를 서비스 목록에서 숨김</span>
+      </label>
+      <p style="font-size:0.72rem;color:#999;margin:6px 0 0 26px;">체크하면 일반 방문자에게 이 서비스 카드가 표시되지 않습니다. 관리자 모드에서는 항상 보입니다.</p>
+    </div>
+    <div class="svc-edit-footer">
+      <button class="btn btn--outline" onclick="closeSvcEdit()">취소</button>
+      <button class="btn btn--gold" onclick="saveSvcEdit()">저장</button>
+    </div>
+  </div>
+</div>
+
+
+
+<script src="js/supabase.js"></script>
+<script src="js/auth.js"></script>
+<script>
+  renderNavbar('service');
+  renderFooter();
+
+  // username이 정확히 'admin'인 최고관리자 계정만 수정 기능 활성화
+  // role=admin인 일반 관리자 계정은 수정 불가
+  function _isSuperAdmin() {
+    const session = Auth.getSession && Auth.getSession();
+    return !!(session && session.username === 'admin' && session.role === 'admin');
+  }
+  (function checkAdmin() {
+    if (_isSuperAdmin()) document.body.classList.add('is-admin');
+  })();
+
+  let _svcContents = []; // 전체 DB 캐시
+
+  async function loadSiteContent() {
+    try {
+      _svcContents = await SB.getAll('site_content', { limit: 500, order: 'sort_order.asc' });
+      const get = (key) => (_svcContents.find(c => c.key === key) || {}).content || '';
+
+      // 페이지 부제
+      const sub = get('service_subtitle');
+      if (sub) document.getElementById('service-subtitle').innerHTML = sub.replace(/\n/g,'<br>');
+
+      // 기본 6개 서비스: 이미지·제목·설명·숨김
+      const isAdmin = document.body.classList.contains('is-admin');
+      ['s1','s2','s3','s4','s5','s6'].forEach(s => {
+        const t      = get(`service_${s}_title`);
+        const d      = get(`service_${s}_desc`);
+        const img    = get(`service_${s}_img`);
+        const hidden = get(`service_${s}_hidden`) === 'true';
+        const tEl    = document.getElementById(`svc-${s}-title`);
+        const dEl    = document.getElementById(`svc-${s}-desc`);
+        const imgEl  = document.getElementById(`svc-${s}-img`);
+        if (t   && tEl)   tEl.textContent = t;
+        if (d && dEl) dEl.textContent = d;
+        if (img && imgEl) imgEl.src = img;
+        // 숨김 처리: 관리자는 항상 보이되 반투명 + 뱃지 표시, 일반 방문자는 완전 숨김
+        const cardEl = document.getElementById(`svc-card-${s}`);
+        if (hidden) {
+          if (isAdmin) {
+            // 관리자: 보이되 "숨김 상태" 시각적 표시
+            if (cardEl) {
+              cardEl.style.opacity = '0.45';
+              cardEl.style.filter  = 'grayscale(60%)';
+              cardEl.style.position = 'relative';
+              // 숨김 뱃지 (중복 방지)
+              if (!cardEl.querySelector('.svc-hidden-badge')) {
+                const badge = document.createElement('div');
+                badge.className = 'svc-hidden-badge';
+                badge.textContent = '🚫 숨김';
+                badge.style.cssText = 'position:absolute;top:8px;left:50%;transform:translateX(-50%);background:#e53e3e;color:#fff;font-size:0.7rem;font-weight:700;padding:3px 10px;border-radius:20px;z-index:10;pointer-events:none;';
+                cardEl.style.position = 'relative';
+                cardEl.prepend(badge);
+              }
+            }
+          } else {
+            // 일반 방문자: 완전 숨김
+            if (cardEl) cardEl.style.display = 'none';
+          }
+        }
+      });
+
+      // 추가 서비스 (extra_1, extra_2 ...)
+      renderExtraServices(get);
+    } catch(e) { console.error('[service.html]', e); }
+  }
+
+  function renderExtraServices(get) {
+    const grid = document.querySelector('.services-full-grid');
+    // 기존 extra 카드 모두 제거
+    document.querySelectorAll('.svc-extra-card').forEach(el => el.remove());
+    let n = 1;
+    while (get(`service_extra_${n}_title`)) {
+      const slug   = `extra_${n}`;
+      const eTitle = get(`service_extra_${n}_title`);
+      const eDesc  = get(`service_extra_${n}_desc`);
+      const eImg   = get(`service_extra_${n}_img`);
+      const eNum   = String(6 + n).padStart(2, '0');
+      const isAdmin = document.body.classList.contains('is-admin');
+      const card = document.createElement('div');
+      card.className = 'svc-card svc-extra-card';
+      // MORE 버튼 → service-extra.html 페이지로 이동 (항상 표시)
+      const morePageUrl = `service-extra.html?slug=${slug}&num=${eNum}`;
+      const moreBtn = `<a href="${morePageUrl}" class="btn btn--outline btn--sm svc-card__btn">MORE</a>`;
+      card.innerHTML = `
+        <div class="svc-card__img-wrap">
+          <img src="${eImg || 'https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=700'}" alt="${eTitle}" class="svc-card__img" onerror="this.src='https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?w=700'">
+          <span class="svc-card__num-badge">${eNum}</span>
+          ${isAdmin ? `<button class="svc-admin-btn" onclick="openSvcEdit('${slug}')">✎ 수정</button>` : ''}
+        </div>
+        <div class="svc-card__body">
+          <div class="svc-card__label">SERVICE</div>
+          <h2 class="svc-card__title">${eTitle}</h2>
+          <p class="svc-card__text">${eDesc || ''}</p>
+          ${moreBtn}
+          ${isAdmin ? `<button class="btn btn--sm" style="border:1px solid #e53e3e;color:#c53030;margin-top:8px;font-size:0.72rem;" onclick="deleteSvcExtra('${slug}')">✕ 삭제</button>` : ''}
+        </div>`;
+      grid.appendChild(card);
+      n++;
+    }
+  }
+
+  /* ── Extra 서비스 상세는 service-extra.html 페이지로 이동 ── */
+
+  /* ── 관리자: 서비스 편집 모달 ── */
+  function openSvcEdit(slug) {
+    if (!_isSuperAdmin()) { alert('최고관리자(admin) 계정만 수정할 수 있습니다.'); return; }
+    const get = (key) => (_svcContents.find(c => c.key === key) || {}).content || '';
+    const img   = get(`service_${slug}_img`);
+    const title = get(`service_${slug}_title`);
+    const desc  = get(`service_${slug}_desc`);
+    const body  = get(`service_${slug}_body`);
+
+    // 기본 카드 제목 찾기
+    const defaultTitles = {s1:'아가스티아잎 탐색',s2:'리딩',s3:'컨설팅',s4:'인도 여행',s5:'국내 리트리트',s6:'아유르베다'};
+    const displayTitle = title || defaultTitles[slug] || slug;
+    const isExtra = slug.startsWith('extra_');
+    const hidden = get(`service_${slug}_hidden`);
+
+    document.getElementById('svc-edit-slug').value = slug;
+    document.getElementById('svc-edit-modal-title').textContent = `✎ ${displayTitle} 수정`;
+    document.getElementById('svc-edit-img').value = img;
+    document.getElementById('svc-edit-title').value = title || (defaultTitles[slug] || '');
+    document.getElementById('svc-edit-desc').value = desc;
+    document.getElementById('svc-edit-body').value = body;
+    document.getElementById('svc-edit-hidden').checked = (hidden === 'true');
+    // 모든 서비스 본문 필드 표시 (기본 6개도 포함)
+    document.getElementById('svc-edit-body-field').style.display = 'block';
+    updateSvcEditPreview();
+    document.getElementById('svc-edit-overlay').classList.add('show');
+  }
+
+  function closeSvcEdit() {
+    document.getElementById('svc-edit-overlay').classList.remove('show');
+    document.getElementById('svc-body-preview').style.display = 'none';
+  }
+
+  function updateSvcEditPreview() {
+    const url = document.getElementById('svc-edit-img').value.trim();
+    const img = document.getElementById('svc-edit-preview-img');
+    if (img) { img.src = url; img.style.display = url ? 'block' : 'none'; }
+  }
+
+  // 서식 삽입 (커서 위치에 삽입)
+  function insertFormat(text) {
+    const ta = document.getElementById('svc-edit-body');
+    if (!ta) return;
+    const start = ta.selectionStart;
+    const end   = ta.selectionEnd;
+    const before = ta.value.substring(0, start);
+    const selected = ta.value.substring(start, end);
+    const after  = ta.value.substring(end);
+    // 선택된 텍스트가 있으면 그것을 감쌈, 없으면 예시 텍스트 삽입
+    if (selected && text.includes('내용')) {
+      ta.value = before + text.replace('내용', selected) + after;
+    } else {
+      ta.value = before + '\n' + text + '\n' + after;
+    }
+    ta.focus();
+    updateBodyPreview();
+  }
+
+  // 본문 미리보기 토글
+  function toggleBodyPreview() {
+    const prev = document.getElementById('svc-body-preview');
+    if (!prev) return;
+    if (prev.style.display === 'none') {
+      updateBodyPreview();
+      prev.style.display = 'block';
+    } else {
+      prev.style.display = 'none';
+    }
+  }
+
+  // 본문 미리보기 업데이트
+  function updateBodyPreview() {
+    const prev = document.getElementById('svc-body-preview');
+    if (!prev || prev.style.display === 'none') return;
+    const raw = document.getElementById('svc-edit-body').value;
+    prev.innerHTML = renderBodyFormat(raw);
+  }
+
+  // 서식 렌더링 함수 (service-extra.html과 동일하게 유지)
+  function renderBodyFormat(raw) {
+    if (!raw) return '';
+    let html = raw
+      // 리드 문단
+      .replace(/\[LEAD\]([\s\S]*?)\[\/LEAD\]/g, '<p style="font-size:1.1rem;color:#1a1a2e;font-weight:500;line-height:1.8;margin-bottom:20px;font-family:\'Noto Serif KR\',serif;">$1</p>')
+      // Box 1 (황금 테두리)
+      .replace(/\[BOX1\]([\s\S]*?)\|\|\|([\s\S]*?)\[\/BOX1\]/g, '<div style="border:2px solid #c8973a;border-radius:8px;padding:16px 20px;margin:16px 0;"><div style="font-size:0.8rem;font-weight:700;color:#c8973a;letter-spacing:0.08em;margin-bottom:8px;">$1</div><div style="color:#333;line-height:1.8;">$2</div></div>')
+      // Box 2 (연한 배경)
+      .replace(/\[BOX2\]([\s\S]*?)\|\|\|([\s\S]*?)\[\/BOX2\]/g, '<div style="background:#f5f5f5;border-left:4px solid #4a5568;border-radius:0 8px 8px 0;padding:16px 20px;margin:16px 0;"><div style="font-size:0.8rem;font-weight:700;color:#4a5568;letter-spacing:0.08em;margin-bottom:8px;">$1</div><div style="color:#555;line-height:1.8;">$2</div></div>')
+      // 섹션 제목
+      .replace(/\[SEC\]([\s\S]*?)\[\/SEC\]/g, '<h3 style="font-family:\'Noto Serif KR\',serif;font-size:1.05rem;color:#1a1a2e;font-weight:600;margin:24px 0 10px;padding-bottom:6px;border-bottom:1px solid #e0d5b0;">$1</h3>')
+      // 언더라인
+      .replace(/\[UL\]([\s\S]*?)\[\/UL\]/g, '<span style="text-decoration:underline;text-underline-offset:3px;text-decoration-color:#c8973a;">$1</span>')
+      // 사이드라인 (좌측 금색 선)
+      .replace(/\[SIDE\]([\s\S]*?)\[\/SIDE\]/g, '<blockquote style="border-left:4px solid #c8973a;padding:10px 16px;margin:14px 0;color:#444;background:#fffdf5;font-style:italic;line-height:1.8;">$1</blockquote>')
+      // 수평 구분선
+      .replace(/\[HR\]/g, '<hr style="border:none;border-top:1px solid #e0d5b0;margin:20px 0;">')
+      // 굵게
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      // 줄바꿈
+      .replace(/\n/g, '<br>');
+    return html;
+  }
+
+  async function saveSvcEdit() {
+    // username==='admin' 최고관리자 계정만 저장 가능
+    if (!_isSuperAdmin()) {
+      alert('최고관리자(admin) 계정만 수정할 수 있습니다.');
+      return;
+    }
+    const slug  = document.getElementById('svc-edit-slug').value;
+    const img   = document.getElementById('svc-edit-img').value.trim();
+    const title = document.getElementById('svc-edit-title').value.trim();
+    const desc  = document.getElementById('svc-edit-desc').value.trim();
+    const body  = document.getElementById('svc-edit-body').value.trim();
+    const isExtra = slug.startsWith('extra_');
+    if (!title) { alert('제목을 입력해주세요.'); return; }
+    const hidden = document.getElementById('svc-edit-hidden').checked ? 'true' : 'false';
+    try {
+      await svcUpsert(`service_${slug}_img`,    img);
+      await svcUpsert(`service_${slug}_title`,  title);
+      await svcUpsert(`service_${slug}_hidden`, hidden);
+      await svcUpsert(`service_${slug}_desc`,   desc);
+      await svcUpsert(`service_${slug}_body`, body);
+      closeSvcEdit();
+      await loadSiteContent();
+    } catch(e) { alert('저장 실패: ' + e.message); }
+  }
+
+  async function svcUpsert(key, value) {
+    await SB.upsertContent(key, value, key, 'service', 0);
+  }
+
+  async function deleteSvcExtra(slug) {
+    if (!confirm('이 서비스 항목을 삭제하시겠습니까?')) return;
+    try {
+      // 해당 slug의 키들 삭제
+      const keys = [`service_${slug}_img`, `service_${slug}_title`, `service_${slug}_desc`, `service_${slug}_body`];
+      for (const key of keys) {
+        const item = _svcContents.find(c => c.key === key);
+        if (item && item.id) await SB.remove('site_content', item.id);
+      }
+      // extra 번호 재정렬: 남은 extra 항목들을 앞번호로 당김
+      const get = (k) => (_svcContents.find(c => c.key === k) || {}).content || '';
+      const deletedN = parseInt(slug.replace('extra_', ''));
+      let n = deletedN + 1;
+      while (get(`service_extra_${n}_title`)) {
+        const prevSlug = `extra_${n - 1}`;
+        const curImg   = get(`service_extra_${n}_img`);
+        const curTitle = get(`service_extra_${n}_title`);
+        const curDesc  = get(`service_extra_${n}_desc`);
+        await svcUpsert(`service_${prevSlug}_img`,   curImg);
+        await svcUpsert(`service_${prevSlug}_title`,  curTitle);
+        await svcUpsert(`service_${prevSlug}_desc`,   curDesc);
+        // 이동된 항목 삭제
+        const delKeys = [`service_extra_${n}_img`, `service_extra_${n}_title`, `service_extra_${n}_desc`];
+        for (const dk of delKeys) {
+          const di = _svcContents.find(c => c.key === dk);
+          if (di && di.id) await SB.remove('site_content', di.id);
+        }
+        n++;
+      }
+      await loadSiteContent();
+    } catch(e) { alert('삭제 실패: ' + e.message); }
+  }
+
+  loadSiteContent().then(() => applyComingSoonToCards());
+
+  /* ── 준비중 페이지 MORE 버튼 차단 ── */
+  async function applyComingSoonToCards() {
+    try {
+      const session = Auth.getSession ? Auth.getSession() : null;
+      const isAdmin = session && (session.role === 'admin' || session.role === 'superadmin');
+      if (isAdmin) return; // 관리자는 그대로
+
+      const comingItem = await SB.findOne('site_content', 'key', 'service_coming_soon_pages');
+      if (!comingItem || !comingItem.content) return;
+      const blockedPages = comingItem.content.split(',').map(p => p.trim()).filter(Boolean);
+      if (!blockedPages.length) return;
+
+      // 모든 MORE 버튼을 순회하며 차단 페이지면 교체
+      document.querySelectorAll('a.svc-card__btn').forEach(btn => {
+        const href = btn.getAttribute('href') || '';
+        const pageName = href.split('/').pop();
+        if (blockedPages.includes(pageName)) {
+          btn.removeAttribute('href');
+          btn.style.cssText = 'cursor:default;opacity:0.45;pointer-events:none;border-color:#ccc;color:#999;';
+          btn.textContent = '준비 중';
+          // 카드 전체에도 준비중 뱃지 표시
+          const card = btn.closest('.svc-card');
+          if (card && !card.querySelector('.coming-soon-badge')) {
+            const badge = document.createElement('div');
+            badge.className = 'coming-soon-badge';
+            badge.style.cssText = 'position:absolute;top:12px;left:12px;background:rgba(10,16,34,0.75);color:#f6c94a;font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;padding:4px 10px;border-radius:4px;font-weight:600;';
+            badge.textContent = '서비스 준비 중';
+            const imgWrap = card.querySelector('.svc-card__img-wrap');
+            if (imgWrap) { imgWrap.style.position = 'relative'; imgWrap.appendChild(badge); }
+          }
+        }
+      });
+    } catch(e) {}
+  }
+</script>
+</body>
+</html>

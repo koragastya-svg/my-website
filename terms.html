@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>서비스 이용약관 | 한국 아가스티아 협회</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { background: #fff; }
+    .policy-wrap { max-width: 820px; margin: 0 auto; padding: 40px 28px 80px; }
+
+    .policy-header { margin-bottom: 36px; border-bottom: 2px solid var(--gold); padding-bottom: 22px; }
+    .policy-header__label { font-size: 0.68rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+    .policy-header__title { font-family: 'Noto Serif KR', serif; font-size: 1.8rem; color: var(--text-dark); margin-bottom: 8px; }
+    .policy-header__company { font-family: 'Noto Serif KR', serif; font-size: 1rem; color: var(--text-dark); margin-bottom: 4px; }
+    .policy-header__meta { font-size: 0.82rem; color: var(--text-light); }
+
+    /* 장(章) 제목 */
+    .chapter-heading {
+      font-family: 'Noto Serif KR', serif; font-size: 1.05rem; font-weight: 700;
+      color: white; background: #0b1629;
+      padding: 10px 18px; border-radius: 4px;
+      margin: 52px 0 0;
+    }
+
+    /* 조(條) */
+    .policy-article { margin: 28px 0 0; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+    .policy-article:last-child { border-bottom: none; }
+    .policy-article__title {
+      font-family: 'Noto Serif KR', serif; font-size: 0.98rem; font-weight: 700;
+      color: var(--text-dark); margin-bottom: 12px;
+    }
+    .policy-article p { font-size: 0.88rem; color: var(--text-mid); line-height: 2.1; margin-bottom: 10px; }
+    .policy-article ol { padding-left: 22px; font-size: 0.88rem; color: var(--text-mid); line-height: 2.1; margin-bottom: 10px; }
+    .policy-article ul { padding-left: 22px; font-size: 0.88rem; color: var(--text-mid); line-height: 2.1; margin-bottom: 10px; }
+    .policy-article li { margin-bottom: 3px; }
+    .policy-article .note { font-size: 0.83rem; color: #666; background: #fafaf7; border-left: 3px solid var(--gold); padding: 12px 16px; margin: 14px 0; line-height: 2; border-radius: 0 4px 4px 0; }
+
+    /* 환불 표 */
+    .refund-table-wrap { overflow-x: auto; margin: 14px 0; }
+    .refund-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; min-width: 480px; }
+    .refund-table th { background: var(--bg-cream); padding: 10px 14px; font-weight: 700; border: 1px solid var(--border); color: var(--text-dark); text-align: center; }
+    .refund-table td { padding: 10px 14px; border: 1px solid var(--border); color: var(--text-mid); text-align: center; vertical-align: middle; line-height: 1.7; }
+    .refund-table tr:nth-child(even) td { background: #fafaf8; }
+
+    /* 부칙 */
+    .addendum { margin-top: 52px; padding: 22px 24px; background: #fafaf7; border: 1px solid var(--border); border-radius: 6px; }
+    .addendum h3 { font-family: 'Noto Serif KR', serif; font-size: 1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 10px; }
+    .addendum p { font-size: 0.88rem; color: var(--text-mid); line-height: 2.1; margin: 0; }
+
+    /* 단독 헤더/푸터 */
+    .standalone-header {
+      position: sticky; top: 0; z-index: 100;
+      background: white; border-bottom: 1px solid #e8e0d0;
+      padding: 14px 28px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .standalone-header__logo { font-family: 'Noto Serif KR', serif; font-size: 1rem; font-weight: 600; color: #0b1629; text-decoration: none; }
+    .standalone-header__back { font-size: 0.82rem; color: #c8973a; text-decoration: none; }
+    .standalone-footer { text-align: center; padding: 28px 24px 36px; border-top: 1px solid #e8e0d0; margin-top: 8px; display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+    .standalone-footer a { display: inline-block; padding: 10px 26px; border-radius: 4px; font-size: 0.87rem; text-decoration: none; }
+    .standalone-footer .btn-home { background: #0b1629; color: white; }
+    .standalone-footer .btn-back { border: 1px solid #c8973a; color: #c8973a; }
+
+    @media (max-width: 600px) {
+      .policy-wrap { padding: 24px 16px 60px; }
+      .standalone-header { padding: 12px 16px; }
+      .chapter-heading { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- 단독 헤더 -->
+<div class="standalone-header">
+  <a href="index.html" class="standalone-header__logo">한국 아가스티아 협회</a>
+  <a href="javascript:history.back()" class="standalone-header__back">← 돌아가기</a>
+</div>
+
+<div class="policy-wrap">
+
+  <!-- 헤더 -->
+  <div class="policy-header">
+    <div class="policy-header__label">TERMS OF SERVICE</div>
+    <h1 class="policy-header__title">서비스 이용약관</h1>
+    <p class="policy-header__company">한국 아가스티아 협회</p>
+    <p class="policy-header__meta">시행일: 2026년 4월 12일</p>
+  </div>
+
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 제1장 총칙 -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="chapter-heading" id="ch1">제1장 총칙</div>
+
+  <div class="policy-article" id="art1">
+    <h2 class="policy-article__title">제1조 (목적)</h2>
+    <p>이 약관은 한국 아가스티아 협회(이하 '협회')이 운영하는 웹사이트(agastya-kr.com, 이하 '사이트')를 통해 제공하는 세미나 예약, 결제 및 관련 서비스(이하 '서비스')의 이용 조건과 절차, 회사와 이용자의 권리·의무·책임 사항을 규정함을 목적으로 합니다.</p>
+  </div>
+
+  <div class="policy-article" id="art2">
+    <h2 class="policy-article__title">제2조 (약관의 명시, 효력 및 변경)</h2>
+    <ol>
+      <li>이 약관은 서비스 화면에 게시하거나 기타의 방법으로 이용자에게 공지함으로써 효력이 발생합니다.</li>
+      <li>회사는 「약관의 규제에 관한 법률」, 「전자상거래 등에서의 소비자보호에 관한 법률」 등 관련 법령을 위반하지 않는 범위 내에서 이 약관을 개정할 수 있습니다.</li>
+      <li>약관을 개정할 경우 회사는 개정 내용과 시행일을 명시하여 시행일 기준 최소 7일 전부터 사이트 공지사항에 게시합니다. 다만, 이용자에게 불리한 변경의 경우 최소 30일 전에 공지하며, 공지 후에도 변경 약관에 동의하지 않는 이용자는 서비스 이용을 중단하고 이용계약을 해지할 수 있습니다.</li>
+      <li>공지 기간 내에 이용자가 거부 의사를 표시하지 않으면 변경된 약관에 동의한 것으로 봅니다.</li>
+      <li>이 약관에 동의하는 것은 정기적으로 사이트를 방문하여 약관의 변경사항을 확인하는 것에 동의함을 의미합니다.</li>
+    </ol>
+  </div>
+
+  <div class="policy-article" id="art3">
+    <h2 class="policy-article__title">제3조 (용어의 정의)</h2>
+    <p>이 약관에서 사용하는 용어의 정의는 다음과 같습니다.</p>
+    <ul>
+      <li>"이용자"란 사이트에 접속하여 이 약관에 따라 회사가 제공하는 서비스를 이용하는 회원 및 비회원을 말합니다.</li>
+      <li>"회원"이란 사이트에 개인정보를 제공하여 회원등록을 한 자로서, 회사의 정보를 지속적으로 제공받으며 회사가 제공하는 서비스를 계속적으로 이용할 수 있는 자를 말합니다.</li>
+      <li>"비회원"이란 회원으로 등록하지 않고 회사가 제공하는 서비스를 이용하는 자를 말합니다.</li>
+      <li>"세미나"란 회사 또는 회사가 위탁한 주최자가 제공하는 강연, 리트리트, 이벤트 등 오프라인·온라인 프로그램을 말합니다.</li>
+      <li>"예약"이란 이용자가 사이트를 통해 특정 세미나의 참가 신청을 완료한 상태를 말합니다.</li>
+      <li>"콘텐츠"란 사이트에 게시된 텍스트, 이미지, 영상, 파일 등 일체의 정보를 말합니다.</li>
+    </ul>
+  </div>
+
+  <div class="policy-article" id="art4">
+    <h2 class="policy-article__title">제4조 (약관 외 준칙)</h2>
+    <ol>
+      <li>이 약관은 회사가 제공하는 서비스에 관한 별도의 이용안내, 운영정책 등과 함께 적용됩니다.</li>
+      <li>이 약관에 명시되지 않은 사항에 대해서는 「전자상거래 등에서의 소비자보호에 관한 법률」, 「약관의 규제에 관한 법률」, 「개인정보 보호법」 등 관련 법령 및 회사가 정한 세부 이용지침에 따릅니다.</li>
+      <li>개별 서비스에 대한 별도 약관 또는 운영정책이 있을 경우 해당 내용이 본 약관에 우선하여 적용됩니다.</li>
+    </ol>
+  </div>
+
+  <div class="policy-article" id="art5">
+    <h2 class="policy-article__title">제5조 (이용자에 대한 통지)</h2>
+    <ol>
+      <li>회사가 이용자에게 통지하는 경우, 이용자가 등록한 이메일 또는 연락처(문자, 카카오 알림톡 등)를 통해 할 수 있습니다.</li>
+      <li>불특정 다수의 이용자에 대한 통지는 7일 이상 사이트 공지사항에 게시함으로써 개별 통지에 갈음할 수 있습니다. 다만, 이용자 본인의 거래와 관련하여 중대한 영향을 미치는 사항은 개별 통지합니다.</li>
+    </ol>
+  </div>
+
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 제2장 서비스 이용계약의 체결 -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="chapter-heading" id="ch2">제2장 서비스 이용계약의 체결</div>
+
+  <div class="policy-article" id="art6">
+    <h2 class="policy-article__title">제6조 (서비스이용계약의 체결)</h2>
+    <ol>
+      <li>이용계약은 이용자가 이 약관의 내용에 동의하고 회원가입 신청을 완료한 후 회사가 이를 승낙함으로써 성립합니다.</li>
+      <li>이용계약의 성립 시기는 회사가 가입 완료를 신청 절차상에 표시한 시점으로 합니다.</li>
+      <li>이용자는 회원가입 또는 비회원 예약 신청 시 이 약관을 읽고 '동의' 체크 또는 버튼 클릭을 통해 약관에 동의한 것으로 봅니다. 약관에 동의하지 않는 경우 서비스 이용 및 예약 신청이 제한됩니다.</li>
+      <li>만 14세 미만의 경우 법정대리인의 동의가 필요하며, 법정대리인의 동의 없이 가입한 경우 법정대리인 또는 본인이 이를 취소할 수 있습니다.</li>
+      <li>비회원의 경우 회원가입 없이 세미나를 신청할 수 있으나, 일부 서비스는 회원에게만 제공될 수 있습니다.</li>
+    </ol>
+  </div>
+
+  <div class="policy-article" id="art7">
+    <h2 class="policy-article__title">제7조 (서비스이용신청)</h2>
+    <ol>
+      <li>이용자는 사이트에서 정한 양식에 따라 이름, 이메일, 연락처 등 필수 정보를 기입하고 서비스 이용을 신청합니다.</li>
+      <li>이용자는 실명 및 실제 정보를 기입하여야 합니다. 허위 정보를 기재한 경우 서비스 이용이 제한되거나 예약이 취소될 수 있으며, 이로 인한 불이익은 본인이 부담합니다.</li>
+      <li>타인의 정보를 도용하여 이용신청을 한 경우, 회사는 해당 계약을 취소하거나 해지할 수 있으며, 관련 법령에 따라 처리합니다.</li>
+    </ol>
+  </div>
+
+  <div class="policy-article" id="art8">
+    <h2 class="policy-article__title">제8조 (이용신청의 승낙 및 제한)</h2>
+    <ol>
+      <li>회사는 이용자의 신청에 대하여 특별한 사유가 없는 한 이를 승낙합니다.</li>
+      <li>회사는 다음 각 호의 경우 이용신청을 승낙하지 않거나 사후에 이용계약을 해지할 수 있습니다.
+        <ul>
+          <li>가입 신청 시 허위 사실을 기재한 경우</li>
+          <li>타인의 명의를 도용하거나 정보를 도용한 경우</li>
+          <li>관련 법령 또는 이 약관을 위반한 경우</li>
+          <li>기타 회사가 정한 이용 기준에 적합하지 않다고 판단되는 경우</li>
+        </ul>
+      </li>
+      <li>회사는 서비스 이용 신청이 정원 초과, 기술적 장애 등의 사유로 승낙이 어려운 경우 이용자에게 그 사유를 통보합니다.</li>
+    </ol>
+  </div>
+
+  <div class="policy-article" id="art9">
+    <h2 class="policy-article__title">제9조 (개인정보보호)</h2>
+    <ol>
+      <li>회사는 이용자의 개인정보를 「개인정보 보호법」 및 관련 법령에 따라 보호하며, 회사의 개인정보처리방침에 따라 처리합니다.</li>
+      <li>회사의 개인정보처리방침은 사이트 내에 별도로 게시되어 있으며, 이용자는 이를 언제든지 확인할 수 있습니다.</li>
+      <li>회사는 이용자의 개인정보를 개인정보처리방침에 명시된 목적 외에 사용하지 않으며, 제3자에게 무단으로 제공하지 않습니다.</li>
+      <li>이용자는 언제든지 자신의 개인정보 열람·수정·삭제를 요청할 수 있으며, 회사는 이를 지체 없이 처리합니다.</li>
+    </ol>
+  </div>
+
+  <div class="policy-article" id="art10">
+    <h2 class="policy-article__title">제10조 (회원정보의 관리)</h2>
+    <ol>
+      <li>회원은 이름, 이메일, 연락처 등 가입 정보에 변경이 있는 경우 즉시 사이트 내 '프로필 수정' 기능을 통해 수정하여야 합니다.</li>
+      <li>회원이 정보 변경을 지체하여 발생하는 불이익에 대해 회사는 책임을 지지 않습니다.</li>
+      <li>회원은 ID와 비밀번호를 타인과 공유하거나 양도하여서는 안 됩니다. 이를 위반하여 발생한 손해에 대해 회사는 책임을 지지 않습니다.</li>
+    </ol>
+  </div>
+
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 제3장 서비스의 내용 및 이용 -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="chapter-heading" id="ch3">제3장 서비스의 내용 및 이용</div>
+
+  <div class="policy-article" id="art11">
+    <h2 class="policy-article__title">제11조 (서비스의 내용)</h2>
+    <ol>
+      <li>회사는 다음과 같은 서비스를 제공합니다.
+        <ul>
+          <li>세미나·리트리트·이벤트 일정 안내 및 온라인 예약 서비스</li>
+          <li>세미나 관련 정보 및 콘텐츠 제공</li>
+          <li>온라인 결제 및 환불 처리 서비스</li>
+          <li>회원 마이페이지(신청 내역, 프로필 수정, 비밀번호 변경 등)</li>
+          <li>기타 회사가 정하는 서비스</li>
+        </ul>
+      </li>
+      <li>회사는 서비스의 내용을 변경·추가·중단할 수 있으며, 이 경우 변경된 내용을 사전에 공지합니다.</li>
+      <li>서비스는 연중무휴 1일 24시간 제공을 원칙으로 합니다. 다만, 시스템 점검·보수·교체, 천재지변, 기타 불가피한 사유로 서비스를 일시 중단할 수 있으며, 이 경우 사전 또는 사후에 공지합니다.</li>
+    </ol>
+  </div>
+
+  <div class="policy-article" id="art12">
+    <h2 class="policy-article__title">제12조 (세미나 예약)</h2>
+    <ol>
+      <li>이용자는 사이트의 예약 페이지를 통해 세미나를 신청할 수 있습니다.</li>
+      <li>예약은 이용자가 예약 신청을 완료하고, 결제가 확인된 시점에 최종 성립합니다. 무통장입금의 경우 회사가 입금을 확인한 시점에 예약이 확정됩니다.</li>
+      <li>세미나 정원이 초과된 경우 예약이 제한되며, 대기 예약 접수 여부는 세미나별로 다를 수 있습니다.</li>
+      <li>다음 각 호의 경우 회사는 예약을 취소하거나 거절할 수 있습니다.
+        <ul>
+          <li>허위 정보로 예약한 경우</li>
+          <li>결제가 지정 기간 내에 완료되지 않은 경우 (무통장입금)</li>
+          <li>매크로, 자동화 프로그램 등 부정한 방법으로 예약한 경우</li>
+          <li>이용자가 본 약관의 의무를 위반한 경우</li>
+        </ul>
+      </li>
+      <li>예약 확정 후에는 회사가 지정한 연락 수단(SMS, 이메일, 카카오톡 등)을 통해 예약 확정 안내를 발송합니다.</li>
+      <li>미성년자(만 18세 미만)의 세미나 참가 신청은 온라인으로 접수되지 않으며, 반드시 사전에 회사에 전화 또는 이메일로 문의하신 후 현장 접수 및 결제를 진행하여야 합니다.</li>
+    </ol>
+  </div>
+
+  <div class="policy-article" id="art13">
+    <h2 class="policy-article__title">제13조 (결제)</h2>
+    <ol>
+      <li>세미나 예약 시 회사가 정한 방법으로 참가비를 결제하여야 합니다.</li>
+      <li>현재 제공되는 결제 수단은 다음과 같습니다.
+        <ul>
+          <li>무통장입금(계좌이체): 예약 완료 후 안내된 계좌로 지정 기간 내 입금</li>
+          <li>카카오페이 결제: 온라인 간편결제 (예정)</li>
+        </ul>
+      </li>
+      <li>무통장입금의 경우 예약 신청일로부터 영업일 기준 2일 이내에 입금하지 않으면 예약이 자동 취소될 수 있습니다.</li>
+      <li>결제 시 입력한 정보(계좌정보, 결제수단 등)의 오류로 인한 불이익은 이용자 본인이 부담합니다.</li>
+      <li>고액 결제(20만원 이상)의 경우 할부 선택이 가능하며, 할부 수수료 등 세부 조건은 카드사 기준에 따릅니다.</li>
+      <li>결제 완료 후에는 현금영수증 또는 세금계산서 발급을 요청할 수 있습니다.</li>
+    </ol>
+  </div>
+
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 제4장 취소 및 환불 -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="chapter-heading" id="ch4">제4장 취소 및 환불</div>
+
+  <div class="policy-article" id="art14">
+    <h2 class="policy-article__title">제14조 (취소 및 환불 — 일반 원칙)</h2>
+    <ol>
+      <li>이용자는 예약 완료 후 언제든지 취소를 신청할 수 있으며, 취소 신청은 사이트 내 1:1문의 또는 고객센터(이메일·전화)를 통해 접수합니다.</li>
+      <li>환불 처리는 취소 신청 확인일 기준으로 적용되며, 영업일 기준 3~5일 이내에 환불 조치합니다.</li>
+      <li>결제 또는 입금일로부터 7일 이내는 전자상거래 등 법령에 따라 전액 환불이 가능합니다.</li>
+      <li>환불 규정은 공정거래위원회 표준약관 기준을 따르며, 결제 또는 입금일로부터 7일이 경과한 경우 취소 및 환불은 아래 기준을 적용합니다.</li>
+    </ol>
+
+    <div class="refund-table-wrap">
+      <table class="refund-table">
+        <thead>
+          <tr>
+            <th>취소 시점</th>
+            <th>환불 금액</th>
+            <th>위약금</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>세미나 30일 ~ 15일 이전</td>
+            <td>결제금액의 70%</td>
+            <td>30% (위약금 10만원 기준)</td>
+          </tr>
+          <tr>
+            <td>세미나 14일 ~ 7일 이전</td>
+            <td>결제금액의 50%</td>
+            <td>50% (위약금 15만원 기준)</td>
+          </tr>
+          <tr>
+            <td>세미나 6일 ~ 3일 이전</td>
+            <td>결제금액의 30%</td>
+            <td>70% (위약금 21만원 기준)</td>
+          </tr>
+          <tr>
+            <td>세미나 2일 전 ~ 당일</td>
+            <td>환불 불가</td>
+            <td>100%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      위 환불 기준은 세미나별 특수 정책이 없는 경우에 적용됩니다. 세미나별 특별 환불 정책이 있는 경우 해당 세미나 상세 페이지에 별도로 고지합니다.
+    </div>
+  </div>
+
+  <div class="policy-article" id="art15">
+    <h2 class="policy-article__title">제15조 (환불 불가 예외 및 특수 상황)</h2>
+    <ol>
+      <li>다음 각 호에 해당하는 경우에는 취소 시점과 무관하게 전액 환불을 원칙으로 합니다. (단, 증빙 자료 제출 필수)
+        <ul>
+          <li>천재지변(태풍, 지진, 홍수 등), 국가 재난 상황으로 참가가 불가능한 경우</li>
+          <li>갑작스러운 입원·수술 등 불가항력적 의료 사유 (진단서 또는 입원확인서 제출)</li>
+          <li>회사 또는 주최측 사정으로 세미나가 취소·일정 변경되는 경우</li>
+        </ul>
+      </li>
+      <li>다음 각 호에 해당하는 경우에는 환불이 제한됩니다.
+        <ul>
+          <li>단순 변심(세미나 내용, 강사, 일정 등에 대한 사전 미확인 포함)</li>
+          <li>이용자 본인의 개인 사정(출장, 여행, 약속 등)</li>
+          <li>이용자가 허위 정보를 기재하거나 약관을 위반한 경우</li>
+        </ul>
+      </li>
+      <li>일부 세미나(리트리트, 해외 연계 프로그램 등)는 준비 비용의 특성상 별도의 환불 기준이 적용될 수 있으며, 이 경우 사전에 별도 고지합니다.</li>
+    </ol>
+  </div>
+
+  <div class="policy-article" id="art16">
+    <h2 class="policy-article__title">제16조 (참가권 양도)</h2>
+    <ol>
+      <li>이용자는 환불 대신 제3자에게 참가권을 양도할 수 있습니다.</li>
+      <li>양도는 세미나 개최일 3일 전까지 회사에 사전 통보하여야 하며, 양도 대상자의 정보(이름, 연락처)를 회사에 제공하여야 합니다.</li>
+      <li>양도에 따른 책임은 양도인과 양수인이 공동으로 부담하며, 양수인이 약관에 동의한 것으로 봅니다.</li>
+      <li>양도된 참가권의 재양도는 회사의 사전 동의가 있는 경우에만 허용됩니다.</li>
+    </ol>
+  </div>
+
+  <div class="policy-article" id="art17">
+    <h2 class="policy-article__title">제17조 (환불 처리 방법)</h2>
+    <ol>
+      <li>계좌이체(무통장입금): 이용자가 입금한 계좌로 환불 처리. 환불 계좌가 다를 경우 별도 계좌 정보를 제출하여야 합니다.</li>
+      <li>카드 결제: 카드사 기준에 따라 처리되며, 카드사 사정에 따라 환불 소요 기간이 달라질 수 있습니다.</li>
+      <li>환불 처리 완료 후 이메일 또는 문자로 안내합니다.</li>
+      <li>환불 지연 시 소비자기본법 및 관련 법령에 따른 지연이자가 발생할 수 있습니다.</li>
+    </ol>
+  </div>
+
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 제5장 계약 당사자의 의무 -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="chapter-heading" id="ch5">제5장 계약 당사자의 의무</div>
+
+  <div class="policy-article" id="art18">
+    <h2 class="policy-article__title">제18조 (회사의 의무)</h2>
+    <ol>
+      <li>회사는 관련 법령과 이 약관에 따라 지속적이고 안정적인 서비스를 제공하기 위해 최선을 다합니다.</li>
+      <li>회사는 이용자의 개인정보를 개인정보처리방침에 따라 안전하게 보호하며, 동의 없이 제3자에게 제공하지 않습니다.</li>
+      <li>회사는 이용자로부터 제기된 의견이나 불만이 정당하다고 인정할 경우 이를 신속히 처리하고 결과를 통보합니다. 처리가 어려운 경우 그 사유와 처리 일정을 안내합니다.</li>
+      <li>회사는 서비스 이용과 관련하여 이용자가 납부한 결제금액에 대해 투명하게 관리하며, 환불 요청 시 정해진 기준에 따라 처리합니다.</li>
+      <li>회사는 서비스 장애 발생 시 신속히 복구하며, 장애로 인해 발생한 이용자 피해를 최소화하기 위해 노력합니다.</li>
+      <li>회사는 세미나 개최 취소·일정 변경 등이 발생하는 경우 이용자에게 즉시 통보하고 전액 환불 등 적절한 조치를 취합니다.</li>
+    </ol>
+  </div>
+
+  <div class="policy-article" id="art19">
+    <h2 class="policy-article__title">제19조 (이용자의 의무)</h2>
+    <ol>
+      <li>이용자는 다음 행위를 하여서는 안 됩니다.
+        <ul>
+          <li>허위 정보 등록 또는 타인의 정보 도용</li>
+          <li>회사 또는 제3자의 지식재산권 침해 (콘텐츠 무단 복제·배포·판매 등)</li>
+          <li>매크로, 자동화 프로그램 등 비정상적인 방법을 통한 예약 또는 서비스 이용</li>
+          <li>회사의 사전 동의 없이 서비스를 영리 목적으로 이용하는 행위</li>
+          <li>서비스 운영 방해, 해킹, 서버 부하 유발 등 기술적 침해 행위</li>
+          <li>음란, 폭력적, 차별적 콘텐츠를 게시하거나 유포하는 행위</li>
+          <li>다른 이용자에게 피해를 주거나 희롱·위협하는 행위</li>
+          <li>세미나에서 취득한 모든 정보(기도·호흡법 등 프로그램 내용, 다른 참가자의 개인정보 및 발언, 회사 자료·신청 폼·홈페이지 내 비공개 정보 등)를 제3자에게 누설·공개·전용하는 행위</li>
+          <li>회사의 사전 허가 없이 세미나 중 녹음·녹화·촬영·스크린샷을 하거나, 이를 SNS 등 온·오프라인 미디어에 게재·전재하는 행위</li>
+          <li>관련 법령 또는 공서양속에 위반되는 행위</li>
+        </ul>
+      </li>
+      <li>이용자는 이 약관 및 관련 법령을 준수하여야 하며, 위반 시 발생하는 법적 책임은 본인이 부담합니다.</li>
+      <li>이용자는 서비스 이용 중 취득한 정보를 회사의 사전 동의 없이 외부에 유포하거나 상업적으로 이용할 수 없습니다.</li>
+    </ol>
+  </div>
+
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 제6장 서비스 이용 제한 -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="chapter-heading" id="ch6">제6장 서비스 이용 제한</div>
+
+  <div class="policy-article" id="art20">
+    <h2 class="policy-article__title">제20조 (서비스 이용 제한)</h2>
+    <ol>
+      <li>회사는 이용자가 이 약관을 위반하거나 서비스의 정상적인 운영을 방해한 경우, 다음 각 호의 조치를 취할 수 있습니다.
+        <ul>
+          <li>경고: 위반 행위에 대해 시정 요구</li>
+          <li>일시적 이용 제한: 일정 기간 서비스 이용 제한</li>
+          <li>영구적 이용 제한: 이용계약 해지 및 재가입 제한</li>
+        </ul>
+      </li>
+      <li>위 조치 시 회사는 이메일, 문자 등의 방법으로 이용자에게 사유를 명시하여 사전 통지합니다. 다만, 긴급하거나 법령상 통지가 불가능한 경우 사후 통지할 수 있습니다.</li>
+      <li>이용자는 제1항에 따른 조치에 이의가 있을 경우 고객센터를 통해 이의를 제기할 수 있으며, 회사는 이를 검토한 후 결과를 통보합니다.</li>
+      <li>이용 제한으로 인해 예약이 취소되는 경우, 이용자 귀책 사유로 인한 취소이므로 환불 규정의 위약금이 적용될 수 있습니다.</li>
+    </ol>
+  </div>
+
+  <div class="policy-article" id="art21">
+    <h2 class="policy-article__title">제21조 (서비스 이용 해지)</h2>
+    <ol>
+      <li>이용자는 언제든지 사이트 내 '회원탈퇴' 메뉴 또는 고객센터를 통해 이용계약을 해지할 수 있습니다.</li>
+      <li>회원 탈퇴 후에도 관련 법령에 따라 보존이 필요한 정보는 개인정보처리방침에 따라 일정 기간 보관됩니다.</li>
+      <li>진행 중인 예약이 있는 경우 탈퇴 전에 예약 취소 및 환불 처리를 완료하여야 합니다.</li>
+      <li>회원 탈퇴 후 재가입은 가능하나, 이전 이용 기록은 복구되지 않습니다.</li>
+    </ol>
+  </div>
+
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 제7장 콘텐츠 및 지식재산권 -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="chapter-heading" id="ch7">제7장 콘텐츠 및 지식재산권</div>
+
+  <div class="policy-article" id="art22">
+    <h2 class="policy-article__title">제22조 (콘텐츠의 이용)</h2>
+    <ol>
+      <li>사이트에 게시된 모든 콘텐츠(텍스트, 이미지, 영상, 서비스 설명 등)의 저작권은 회사 또는 정당한 권리자에게 귀속됩니다.</li>
+      <li>이용자는 회사의 사전 서면 동의 없이 콘텐츠를 복제, 배포, 수정, 판매하거나 제3자에게 제공하여서는 안 됩니다.</li>
+      <li>이용자가 사이트 내에 직접 게시한 후기, 댓글 등의 저작권은 해당 이용자에게 귀속되나, 회사는 서비스 홍보·운영 목적으로 이를 비영리적으로 활용할 수 있습니다.</li>
+      <li>이용자가 타인의 저작권, 상표권 등 지식재산권을 침해한 경우 발생하는 모든 법적 책임은 해당 이용자가 부담합니다.</li>
+    </ol>
+  </div>
+
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 제8장 책임 제한 -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="chapter-heading" id="ch8">제8장 책임 제한</div>
+
+  <div class="policy-article" id="art23">
+    <h2 class="policy-article__title">제23조 (회사의 책임 제한)</h2>
+    <ol>
+      <li>회사는 다음 각 호의 경우 서비스 제공 의무를 면하거나 책임이 제한됩니다.
+        <ul>
+          <li>천재지변, 전쟁, 국가비상사태, 감염병 확산 등 불가항력적 사유</li>
+          <li>기간통신사업자의 서비스 중단, 정전 등 회사의 귀책 없는 사유</li>
+          <li>이용자의 귀책 사유로 인한 서비스 이용 장애</li>
+          <li>이용자가 허위 정보를 기재하거나 불법 행위를 한 경우</li>
+        </ul>
+      </li>
+      <li>회사는 세미나 중 제공되는 정보가 특정 효능·효과를 보증하지 않으며, 이를 근거로 한 이용자의 의사결정(직업 변경, 투자, 의료 결정 등)에 대해 책임을 지지 않습니다.</li>
+      <li>회사는 이용자가 세미나를 통해 얻은 정보의 정확성·완전성에 대해 보증하지 않으며, 이로 인한 손해에 대해 책임을 지지 않습니다.</li>
+      <li>회사의 책임이 인정되는 경우라도 회사의 배상 범위는 해당 이용자가 실제 납부한 서비스 이용 금액을 한도로 합니다. 단, 회사의 고의 또는 중대한 과실로 인한 손해는 그러하지 아니합니다.</li>
+      <li>회사 사이트에 링크된 외부 사이트의 콘텐츠, 개인정보처리방침 등에 대해 회사는 책임을 지지 않습니다.</li>
+    </ol>
+  </div>
+
+  <div class="policy-article" id="art24">
+    <h2 class="policy-article__title">제24조 (손해배상)</h2>
+    <ol>
+      <li>회사의 고의 또는 과실로 인하여 이용자에게 손해가 발생한 경우, 회사는 관련 법령에 따라 손해를 배상합니다.</li>
+      <li>이용자의 고의 또는 과실로 인하여 회사에 손해가 발생한 경우, 이용자는 회사에 그 손해를 배상하여야 합니다.</li>
+      <li>이용자가 이 약관을 위반하거나 불법 행위로 인해 회사에 손해를 끼친 경우, 회사가 이를 해결하기 위해 지출한 비용(법률 비용 포함)도 손해배상의 범위에 포함될 수 있습니다.</li>
+      <li>회사는 무료로 제공하는 서비스에 대해서는 손해배상 책임을 부담하지 않습니다. 다만, 회사의 고의 또는 중대한 과실이 있는 경우는 그러하지 아니합니다.</li>
+    </ol>
+  </div>
+
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- 제9장 분쟁 해결 -->
+  <!-- ══════════════════════════════════════ -->
+  <div class="chapter-heading" id="ch9">제9장 분쟁 해결</div>
+
+  <div class="policy-article" id="art25">
+    <h2 class="policy-article__title">제25조 (분쟁의 해결)</h2>
+    <ol>
+      <li>회사는 이용자의 불만 및 피해 구제 요청을 신속하게 처리하기 위해 고객센터를 운영합니다.</li>
+      <li>이용자는 분쟁 발생 시 다음 기관에 분쟁 조정을 신청할 수 있습니다.
+        <ul>
+          <li>한국소비자원 (www.kca.go.kr / 1372)</li>
+          <li>공정거래위원회 (www.ftc.go.kr / 1372)</li>
+          <li>전자거래분쟁조정위원회 (www.ecmc.or.kr / 1661-5714)</li>
+        </ul>
+      </li>
+      <li>회사와 이용자 간 발생한 분쟁에 대해 소송이 제기될 경우, 관련 법령에서 정한 절차에 따릅니다.</li>
+    </ol>
+  </div>
+
+  <div class="policy-article" id="art26">
+    <h2 class="policy-article__title">제26조 (재판권 및 준거법)</h2>
+    <ol>
+      <li>이 약관과 관련한 모든 분쟁의 준거법은 대한민국 법령으로 합니다.</li>
+      <li>이 약관과 관련하여 회사와 이용자 간에 분쟁이 발생하여 소송이 제기되는 경우, 민사소송법에 따른 관할 법원을 제1심 법원으로 합니다. 다만, 당사자 간 합의로 관할 법원을 달리 정할 수 있습니다.</li>
+    </ol>
+  </div>
+
+
+  <!-- 부칙 -->
+  <div class="addendum">
+    <h3>부칙</h3>
+    <p>이 약관은 2026년 4월 12일부터 시행합니다.</p>
+    <p>공고일: 2026년 4월 12일 &nbsp;&nbsp;&nbsp; 시행일: 2026년 4월 12일</p>
+  </div>
+
+</div><!-- /.policy-wrap -->
+
+<div class="standalone-footer">
+  <a href="index.html" class="btn-home">홈으로 돌아가기</a>
+  <a href="javascript:history.back()" class="btn-back">이전 페이지</a>
+</div>
+
+</body>
+</html>

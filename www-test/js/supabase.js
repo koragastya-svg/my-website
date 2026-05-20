@@ -1,0 +1,334 @@
+/* ========================================
+   supabase.js - Genspark tables/ API 래퍼
+   한국 아가스티아 협회
+   v3 - 응답 파싱 강화 + 디버그 로그
+======================================== */
+
+const SB = (() => {
+
+  async function _req(path, method = 'GET', body = null) {
+    if (typeof url === "string" && url.startsWith("/")) {
+      url = window.location.origin + url;
+    }
+    if (typeof path === "string" && path.startsWith("/")) {
+      path = window.location.origin + path;
+    }
+    const opts = {
+      method,
+      headers: { 'Content-Type': 'application/json' }
+    };
+    if (body !== null) opts.body = JSON.stringify(body);
+    return await fetch(path, opts);
+  }
+
+  /* ── HTML 엔티티 디코드 (rich_text 필드가 &quot; 등으로 인코딩되는 경우 복원) ── */
+  function _decodeHtmlEntities(str) {
+    if (typeof str !== 'string') return str;
+    return str
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>');
+  }
+
+  /* ── JSON 필드 안전 정규화 (문자열이면 디코드, 배열/객체면 그대로) ── */
+  function _safeJsonField(val) {
+    if (val === null || val === undefined) return val;
+    if (Array.isArray(val) || (typeof val === 'object')) return val;
+    if (typeof val === 'string') return _decodeHtmlEntities(val);
+    return val;
+  }
+
+  /* ── ID 필드 정규화 (gs_id, _id 등을 id로 통일) ── */
+  function _normalizeRow(row) {
+    if (!row || typeof row !== 'object') return row;
+    // JSON 필드 디코딩 (survey_fields, pledge_items 등)
+    const JSON_FIELDS = ['survey_fields', 'pledge_items', 'form_notices', 'content', 'fingerprint_data'];
+    const cleaned = { ...row };
+    JSON_FIELDS.forEach(f => { if (cleaned[f] !== undefined) cleaned[f] = _safeJsonField(cleaned[f]); });
+    // ID 정규화
+    if (cleaned.id) return cleaned;
+    if (row.gs_id) return { ...cleaned, id: row.gs_id };
+    if (row._id) return { ...cleaned, id: row._id };
+    if (row.record_id) return { ...cleaned, id: row.record_id };
+    return cleaned;
+  }
+
+  /* ── 응답에서 rows 배열 추출 (모든 응답 형식 지원) ── */
+  function _rows(d) {
+    if (!d) return [];
+    let arr = null;
+    if (Array.isArray(d)) arr = d;
+    else if (d.data && Array.isArray(d.data)) arr = d.data;
+    else if (d.rows && Array.isArray(d.rows)) arr = d.rows;
+    else if (d.items && Array.isArray(d.items)) arr = d.items;
+    else if (d.results && Array.isArray(d.results)) arr = d.results;
+    else if (d.id) arr = [d];
+    else {
+      // 객체인 경우 (예: {0: {...}, 1: {...}})
+      const vals = Object.values(d);
+      if (vals.length && typeof vals[0] === 'object') arr = vals;
+    }
+    if (!arr) return [];
+    // 각 row의 id 정규화
+    return arr.map(_normalizeRow).filter(r => r && typeof r === 'object');
+  }
+
+  /* ── 응답에서 단일 row 추출 ── */
+  function _one(d) {
+    if (!d) return null;
+    let row = null;
+    if (d.id || d.gs_id || d._id) {
+      row = d;
+    } else if (d.data) {
+      const x = d.data;
+      if (Array.isArray(x)) row = x[0] || null;
+      else if (x && (x.id || x.gs_id || x._id)) row = x;
+    } else if (Array.isArray(d)) {
+      row = d[0] || null;
+    }
+    return row ? _normalizeRow(row) : null;
+  }
+
+  /* ── JS 정렬 ── */
+  function _sort(rows, order) {
+    if (!order || !rows || !rows.length) return rows;
+    const parts = order.split('.');
+    const field = parts[0];
+    const dir = (parts[1] || 'desc') === 'asc' ? 1 : -1;
+    return [...rows].sort((a, b) => {
+      const av = a[field] ?? '';
+      const bv = b[field] ?? '';
+      if (av < bv) return -1 * dir;
+      if (av > bv) return 1 * dir;
+      return 0;
+    });
+  }
+
+  /* ── 목록 조회 ── */
+  async function getAll(table, { limit = 500, offset = 0, order = 'created_at.desc' } = {}) {
+    try {
+      const page = offset > 0 ? Math.floor(offset / limit) + 1 : 1;
+      // sort 파라미터 미사용 (Genspark API 미지원) → JS 정렬
+      const url = `/tables/${table}?limit=${limit}&page=${page}`;
+      const res = await _req(url);
+      if (!res.ok) {
+        console.error(`[SB] getAll 실패 (${table}) HTTP ${res.status}`);
+        return [];
+      }
+      let json;
+      try {
+        json = await res.json();
+      } catch(pe) {
+        console.error(`[SB] getAll JSON 파싱 실패 (${table})`, pe);
+        return [];
+      }
+      const rows = _rows(json);
+      if (rows.length === 0 && json && typeof json === 'object') {
+        // 파싱 디버그
+        console.warn(`[SB] getAll (${table}) 빈 배열 반환. 원본:`, JSON.stringify(json).slice(0, 200));
+      }
+      return _sort(rows, order);
+    } catch(e) {
+      console.error(`[SB] getAll 오류 (${table})`, e.message);
+      return [];
+    }
+  }
+
+  /* ── 단건 조회 (id) ── */
+  async function getOne(table, id) {
+    try {
+      const res = await _req(`/tables/${table}/${id}`);
+      if (!res.ok) {
+        console.error(`[SB] getOne 실패 (${table}/${id}) HTTP ${res.status}`);
+        return null;
+      }
+      const json = await res.json();
+      return _one(json);
+    } catch(e) {
+      console.error(`[SB] getOne 오류 (${table}/${id})`, e.message);
+      return null;
+    }
+  }
+
+  /* ── 컬럼 기준 단건 조회 ── */
+  async function findOne(table, col, val) {
+    try {
+      // search 파라미터로 먼저 시도
+      try {
+        const res = await _req(`/tables/${table}?search=${encodeURIComponent(String(val))}&limit=200`);
+        if (res.ok) {
+          const rows = _rows(await res.json());
+          const found = rows.find(r => String(r[col]) === String(val));
+          if (found) return found;
+        }
+      } catch(_) {}
+      // fallback: 전체 로드 후 필터
+      const allRows = await getAll(table, { limit: 500, order: 'created_at.asc' });
+      return allRows.find(r => String(r[col]) === String(val)) || null;
+    } catch(e) {
+      console.error(`[SB] findOne 오류 (${table} ${col}=${val})`, e.message);
+      return null;
+    }
+  }
+
+  /* ── 컬럼 기준 다건 조회 ── */
+  async function findMany(table, col, val, { limit = 500, order = 'created_at.desc' } = {}) {
+    try {
+      const rows = await getAll(table, { limit, order });
+      return rows.filter(r => String(r[col]) === String(val));
+    } catch(e) { return []; }
+  }
+
+  /* ── 생성 ── */
+  async function insert(table, data) {
+    let res;
+    try {
+      res = await _req(`/tables/${table}`, 'POST', data);
+    } catch(netErr) {
+      console.error(`[SB] insert 네트워크 오류 (${table})`, netErr);
+      throw new Error(`네트워크 오류: ${netErr.message}`);
+    }
+    if (!res.ok) {
+      let errText = '';
+      try { errText = await res.text(); } catch(_) {}
+      console.error(`[SB] insert 실패 (${table}) HTTP ${res.status}`, errText);
+      throw new Error(`저장 실패 (${res.status})${errText ? ': ' + errText.slice(0, 200) : ''}`);
+    }
+    try {
+      const result = await res.json();
+      return _one(result) || result;
+    } catch(_) { return {}; }
+  }
+
+  /* ── 수정 (id 기준) - PATCH → PUT → POST 순서로 시도 ── */
+  async function update(table, id, data) {
+    if (!id) {
+      console.error(`[SB] update 호출 시 id가 없음 (${table})`);
+      throw new Error('수정할 ID가 없습니다. 저장 후 다시 시도해주세요.');
+    }
+    console.log(`[SB] update (${table}/${id})`, data);
+
+    // 시도할 메서드 순서: PATCH → PUT → POST(/{id})
+    const methods = ['PATCH', 'PUT', 'POST'];
+    let lastErr = null;
+
+    for (const method of methods) {
+      let res;
+      try {
+        const url = `/tables/${table}/${id}`;
+        res = await _req(url, method, data);
+      } catch(netErr) {
+        lastErr = netErr;
+        continue;
+      }
+      if (res.status === 405 || res.status === 404) {
+        console.warn(`[SB] update ${method} ${res.status}, 다음 방법 시도 (${table}/${id})`);
+        continue;
+      }
+      if (!res.ok) {
+        let errText = '';
+        try { errText = await res.text(); } catch(_) {}
+        console.error(`[SB] update 실패 (${table}/${id}) HTTP ${res.status}`, errText);
+        throw new Error(`수정 실패 (${res.status})${errText ? ': ' + errText.slice(0, 100) : ''}`);
+      }
+      console.log(`[SB] update 성공 (${method} ${table}/${id})`);
+      try {
+        const result = await res.json();
+        return _one(result) || result;
+      } catch(_) { return {}; }
+    }
+
+    // 모든 방법 실패 시 마지막 수단: POST tables/{table} with id in body
+    console.warn(`[SB] update: 모든 메서드 실패, POST+id 시도 (${table}/${id})`);
+    try {
+      const res = await _req(`/tables/${table}`, 'POST', { ...data, id });
+      if (res.ok) {
+        const result = await res.json().catch(() => ({}));
+        return _one(result) || result;
+      }
+      let errText = ''; try { errText = await res.text(); } catch(_) {}
+      throw new Error(`수정 실패 (${res.status}): ${errText.slice(0,100)}`);
+    } catch(e) {
+      throw lastErr ? new Error(`네트워크 오류: ${lastErr.message}`) : e;
+    }
+  }
+
+  /* ── 삭제 (id 기준) - DELETE → PUT{deleted} → PATCH{deleted} 순서 ── */
+  async function remove(table, id) {
+    if (!id) {
+      console.error(`[SB] remove 호출 시 id가 없음 (${table})`);
+      return false;
+    }
+    console.log(`[SB] remove (${table}/${id})`);
+    try {
+      // 1) DELETE 시도
+      const res = await _req(`/tables/${table}/${id}`, 'DELETE');
+      if (res.ok || res.status === 204) {
+        console.log(`[SB] DELETE 성공 (${table}/${id})`);
+        return true;
+      }
+
+      // 2) 405/404이면 PUT soft-delete
+      if (res.status === 405 || res.status === 404) {
+        console.warn(`[SB] DELETE ${res.status}, PUT soft-delete 시도 (${table}/${id})`);
+        const res2 = await _req(`/tables/${table}/${id}`, 'PUT', { deleted: true });
+        if (res2.ok) return true;
+
+        // 3) PATCH soft-delete
+        if (res2.status === 405 || res2.status === 404) {
+          console.warn(`[SB] PUT ${res2.status}, PATCH soft-delete 시도 (${table}/${id})`);
+          const res3 = await _req(`/tables/${table}/${id}`, 'PATCH', { deleted: true });
+          if (res3.ok) return true;
+        }
+      }
+      console.error(`[SB] remove 실패 (${table}/${id}) 최종 HTTP ${res.status}`);
+      return false;
+    } catch(e) {
+      console.error(`[SB] remove 오류 (${table}/${id})`, e.message);
+      return false;
+    }
+  }
+
+  /* ── site_content upsert ── */
+  async function upsertContent(key, content, label = '', section = '', sort_order = 0) {
+    try {
+      const existing = await findOne('site_content', 'key', key);
+      if (existing && existing.id) {
+        // key 포함 전체 필드 전달 → PUT/PATCH 어느 방식이든 key 유실 방지
+        return await update('site_content', existing.id, {
+          key,
+          content,
+          label: existing.label || label || key,
+          section: existing.section || section,
+          sort_order: existing.sort_order ?? sort_order
+        });
+      } else {
+        return await insert('site_content', { key, content, label: label || key, section, sort_order });
+      }
+    } catch(e) {
+      console.error(`[SB] upsertContent 오류 (${key})`, e.message);
+      throw e;
+    }
+  }
+
+  /* ── site_content 전체 → key:row 맵 ── */
+  async function loadContentMap(limit = 500) {
+    try {
+      const rows = await getAll('site_content', { limit, order: 'sort_order.asc' });
+      const map = {};
+      rows.forEach(r => { if (r && r.key) map[r.key] = r; });
+      return map;
+    } catch(e) {
+      console.error('[SB] loadContentMap 오류', e.message);
+      return {};
+    }
+  }
+
+  return {
+    getAll, getOne, findOne, findMany,
+    insert, update, remove,
+    upsertContent, loadContentMap
+  };
+})();
