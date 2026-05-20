@@ -7732,6 +7732,50 @@
   }
 
   let _allLeafReadings = [];
+  let _userFpMap = {}; // user_id → users.fingerprint_data (지문 fallback용)
+
+  /* users.fingerprint_data(JSON 문자열/객체)에서 표시 가능한 이미지 src 추출 */
+  function _fpFromUserData(raw) {
+    if (!raw) return '';
+    let fp = raw;
+    if (typeof raw === 'string') {
+      const decode = (s) => s.replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&#x2F;/g,'/');
+      try { fp = JSON.parse(raw); }
+      catch(e) { try { fp = JSON.parse(decode(raw)); } catch(e2) { fp = null; } }
+    }
+    if (fp && typeof fp === 'object' && typeof fp.dataUrl === 'string') return fp.dataUrl;
+    if (typeof raw === 'string' && (raw.indexOf('data:') === 0 || raw.indexOf('/uploads/') === 0)) return raw;
+    return '';
+  }
+
+  /* 표시 가능한 지문 src(데이터: 또는 /uploads/)만 통과시킨다 */
+  function _displayableFp(v) {
+    return (typeof v === 'string' && (v.indexOf('data:') === 0 || v.indexOf('/uploads/') === 0)) ? v : '';
+  }
+
+  /**
+   * 잎 리딩 row의 지문 이미지 src를 결정한다.
+   * 우선순위: 1) 자신의 fingerprint_image  2) 같은 group_id 다른 row의 fingerprint_image
+   *           3) users.fingerprint_data fallback
+   * 표시 가능한 값은 data: 또는 /uploads/ 경로만.
+   */
+  function resolveLeafFp(r) {
+    if (!r) return '';
+    let fp = _displayableFp(r.fingerprint_image);
+    if (fp) return fp;
+    // 같은 group_id의 다른 row에서 탐색
+    if (r.group_id) {
+      const sibling = (_allLeafReadings || []).find(x =>
+        x.group_id === r.group_id && _displayableFp(x.fingerprint_image));
+      if (sibling) return _displayableFp(sibling.fingerprint_image);
+    }
+    // users 테이블 fallback
+    if (r.user_id && _userFpMap[r.user_id]) {
+      fp = _fpFromUserData(_userFpMap[r.user_id]);
+      if (fp) return fp;
+    }
+    return '';
+  }
 
   async function loadLeafReadings() {
     document.getElementById('leaf-tbody').innerHTML = '<tr class="empty-row"><td colspan="9">로딩 중...</td></tr>';
@@ -7740,11 +7784,16 @@
       _allLeafReadings = raw.filter(r => !r.deleted);
       _allLeafReadings.sort((a,b) => b.created_at - a.created_at);
 
-      // username 매핑 (users 테이블에서 아이디 조회)
+      // username 매핑 (users 테이블에서 아이디 조회) + 지문 fallback 맵 구성
       try {
         const users = await SB.getAll('users', { limit: 1000 });
         const uMap = {};
-        users.forEach(u => { if (u.id) uMap[u.id] = u.username || u.email || ''; });
+        _userFpMap = {};
+        users.forEach(u => {
+          if (!u.id) return;
+          uMap[u.id] = u.username || u.email || '';
+          if (u.fingerprint_data) _userFpMap[u.id] = u.fingerprint_data;
+        });
         _allLeafReadings.forEach(r => {
           if (r.user_id && uMap[r.user_id]) r.username = uMap[r.user_id];
         });
@@ -8128,14 +8177,16 @@
     const userMemo = sepIdx >= 0 ? rawMemo.slice(0, sepIdx).trim() : rawMemo.trim();
     const adminMemo= sepIdx >= 0 ? rawMemo.slice(sepIdx + MEMO_MARKER.length).trim() : '';
 
-    // ── 지문 이미지 (대표 row) ──
-    const hasFp = rep.fingerprint_image && rep.fingerprint_image.startsWith('data:');
-    const fpSection = hasFp
+    // ── 지문 이미지 (대표 row → 같은 group_id row → users fallback) ──
+    // 묶음 신청은 첫 row에만 URL이 저장되므로 그룹 내 모든 row를 탐색한다.
+    let fpImage = '';
+    for (const gr of rows) { fpImage = resolveLeafFp(gr); if (fpImage) break; }
+    const fpSection = fpImage
       ? `<div style="margin-top:8px;border-radius:8px;overflow:hidden;border:1px solid #e2e8f0;max-height:240px;display:flex;align-items:center;justify-content:center;background:#f8f9fa;">
-           <img src="${rep.fingerprint_image}" alt="지문" style="max-width:100%;max-height:240px;object-fit:contain;">
+           <img src="${fpImage}" alt="지문" style="max-width:100%;max-height:240px;object-fit:contain;">
          </div>
          <div style="margin-top:5px;text-align:right;">
-           <a href="${rep.fingerprint_image}" download="fingerprint_${rep.user_name||'unknown'}.png"
+           <a href="${fpImage}" download="fingerprint_${rep.user_name||'unknown'}.png"
              style="font-size:0.72rem;color:var(--gold);text-decoration:none;font-weight:600;">⬇️ 다운로드</a>
          </div>`
       : `<div style="font-size:0.8rem;color:var(--text-light);padding:6px 0;">지문 이미지 없음</div>`;
@@ -8659,14 +8710,14 @@
     const userMemo  = sepIdx >= 0 ? rawMemo.slice(0, sepIdx).trim() : rawMemo.trim();
     const adminMemo = sepIdx >= 0 ? rawMemo.slice(sepIdx + MEMO_MARKER.length).trim() : '';
 
-    // 지문 이미지
-    const hasFp = r.fingerprint_image && r.fingerprint_image.startsWith('data:');
-    const fpSection = hasFp
+    // 지문 이미지 (자신 → 같은 group_id row → users fallback, data:/uploads/ 만 표시)
+    const fpImage = resolveLeafFp(r);
+    const fpSection = fpImage
       ? `<div style="margin-top:8px;border-radius:8px;overflow:hidden;border:1px solid #e2e8f0;max-height:260px;display:flex;align-items:center;justify-content:center;background:#f8f9fa;">
-           <img src="${r.fingerprint_image}" alt="지문" style="max-width:100%;max-height:260px;object-fit:contain;">
+           <img src="${fpImage}" alt="지문" style="max-width:100%;max-height:260px;object-fit:contain;">
          </div>
          <div style="margin-top:6px;text-align:right;">
-           <a href="${r.fingerprint_image}" download="fingerprint_${r.user_name||'unknown'}.png"
+           <a href="${fpImage}" download="fingerprint_${r.user_name||'unknown'}.png"
              style="font-size:0.75rem;color:var(--gold);text-decoration:none;font-weight:600;">⬇️ 다운로드</a>
          </div>`
       : `<div style="font-size:0.8rem;color:var(--text-light);padding:8px 0;">지문 이미지 없음</div>`;
@@ -9672,7 +9723,8 @@
   /* 지문 이미지 모달 뷰어 */
   function viewFingerprintImg(recordId) {
     const rec = _allLeafReadings.find(r => r.id === recordId);
-    if (!rec || !rec.fingerprint_image) { alert('지문 이미지가 없습니다.'); return; }
+    const fpImage = resolveLeafFp(rec);
+    if (!rec || !fpImage) { alert('지문 이미지가 없습니다.'); return; }
 
     // 기존 모달 제거
     const existing = document.getElementById('fp-modal-overlay');
@@ -9690,12 +9742,12 @@
         '<div style="font-weight:600;font-size:0.95rem;">🖐️ 지문 이미지 — ' + (rec.user_name || '-') + ' (' + (rec.gender || '') + ')</div>' +
         '<button onclick="document.getElementById(\'fp-modal-overlay\').remove()" style="background:none;border:none;font-size:1.4rem;cursor:pointer;color:#666;">&times;</button>' +
       '</div>' +
-      '<img src="' + rec.fingerprint_image + '" alt="지문 이미지" style="width:100%;max-height:400px;object-fit:contain;border-radius:8px;border:1px solid #e2e8f0;">' +
+      '<img src="' + fpImage + '" alt="지문 이미지" style="width:100%;max-height:400px;object-fit:contain;border-radius:8px;border:1px solid #e2e8f0;">' +
       '<div style="margin-top:12px;font-size:0.78rem;color:#718096;">' +
         '신청자: ' + (rec.user_name||'-') + ' · 성별: ' + (rec.gender||'-') + ' · ' + (rec.chapter_label||rec.chapter||'-') + ' · ' + (rec.appointment_date||'날짜 미정') +
       '</div>' +
       '<div style="margin-top:12px;text-align:right;">' +
-        '<a href="' + rec.fingerprint_image + '" download="fingerprint_' + (rec.user_name||'unknown') + '.png" class="btn btn--gold btn--sm">⬇️ 다운로드</a>' +
+        '<a href="' + fpImage + '" download="fingerprint_' + (rec.user_name||'unknown') + '.png" class="btn btn--gold btn--sm">⬇️ 다운로드</a>' +
       '</div>';
     overlay.appendChild(box);
     document.body.appendChild(overlay);
