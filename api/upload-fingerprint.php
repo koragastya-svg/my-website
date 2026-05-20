@@ -64,13 +64,13 @@ if ($file['size'] > $MAX_BYTES) {
 }
 
 // 허용 확장자 / MIME
-$ALLOWED_EXT  = ['jpg', 'jpeg', 'png', 'webp'];
-$ALLOWED_MIME = ['image/jpeg', 'image/png', 'image/webp'];
+$ALLOWED_EXT  = ['jpg', 'jpeg', 'png'];
+$ALLOWED_MIME = ['image/jpeg', 'image/png'];
 
 $origName = $file['name'] ?? '';
 $ext = strtolower(pathinfo($origName, PATHINFO_EXTENSION));
 if (!in_array($ext, $ALLOWED_EXT, true)) {
-    fail('허용되지 않는 확장자입니다. (jpg, jpeg, png, webp 만 가능)');
+    fail('허용되지 않는 확장자입니다. (jpg, jpeg, png 만 가능)');
 }
 
 // 실제 MIME 검사 (가능한 경우)
